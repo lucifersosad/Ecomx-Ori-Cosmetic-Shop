@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<meta charset="UTF-8">
+</head>
+
+<body>
+	<div th:fragment="header">
+		<nav class="navbar sticky-top navbar-expand-lg">
+			<div class="container">
+				<!--Logo-->
+				<a href="/" class="navbar-brand waves-effect rounded">
+					ORI COSMESTICS
+				</a>
+				<!--For smartphones menu-->
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+					aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+					<i class="fas fa-bars" style="color:#fff; font-size:26px;"></i>
+				</button>
+				<!--Left-->
+				<div class="collapse navbar-collapse" id="navbarContent">
+					<ul class="navbar-nav">
+						<li class="nav-item"><a class="nav-link waves-effect rounded" aria-current="page"
+								href="/">Home</a>
+						</li>
+						<li class="nav-item"><a class="nav-link waves-effect rounded" href="/product">Product</a></li>
+					</ul>
+					<ul class="navbar-nav mr-auto" style="margin-left:70px">
+						<li class="custom_item">
+							<form class="form-inline" th:action="@{/search}" method="get">
+								<div class="search-box">
+									<button type="submit" class="btn-search" onclick="this.blur();"><i
+											class="fas fa-search"></i></button>
+									<input type="text" name="keyword" class="input-search"
+										placeholder="Type to Search..." required />
+								</div>
+							</form>
+						</li>
+					</ul>
+					<!-- Right -->
+					<ul class="navbar-nav nav-flex-icons">
+						<li class="nav-item">
+							<!--                    <a sec:authorize="isAuthenticated()" href="/basket" class="nav-link waves-effect rounded">
+                        <em class="fa fa-shopping-cart"></em>
+                        <span class="clearfix d-none d-sm-inline-block">[[#{navbar.cart}]]</span>
+                    </a>-->
+							<a sec:authorize="isAnonymous()" class="nav-link waves-effect waves-light rounded"
+								data-toggle="modal" href="#loginModal" role="button">
+								<em class="fa fa-shopping-cart"></em>
+								<span class="clearfix d-none d-sm-inline-block">Cart</span></span>
+							</a>
+						</li>
+						<!--Profile dropdown-->
+						<li class="nav-item dropdown ml-3" sec:authorize="isAnonymous()">
+							<a sec:authorize="isAnonymous()" class="nav-link waves-effect waves-light rounded"
+								data-toggle="modal" href="#loginModal" role="button">
+								<span class="fas fa-user text-white"></span>
+							</a>
+						</li>
+						<!--                <li class="nav-item dropdown ml-3" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle waves-effect waves-light text-white font-weight-bold rounded"
+                       id="navbarDropdownMenuLink-4" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false"><span class="fas fa-user text-white"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-cyan animated slideIn text-center"
+                         aria-labelledby="navbarDropdownMenuLink-4">
+                        <a class="text-danger dropdown-item waves-effect waves-light rounded" href="/admin"
+                           sec:authorize="hasAuthority('ADMIN')">[[#{navbar.admin}]]</a>
+                        <a class="dropdown-item waves-effect waves-light" href="/profile"
+                           sec:authorize="isAuthenticated()">[[#{navbar.myAccount}]]</a>
+                        <a class="dropdown-item waves-effect waves-light" href="/orders"
+                           sec:authorize="isAuthenticated()">[[#{navbar.myOrders}]]</a>
+                        <a class="dropdown-item waves-effect waves-light" href="/logout"
+                           sec:authorize="isAuthenticated()">[[#{navbar.logout}]]</a>
+                    </div>
+                </li>-->
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+</body>
+
+</html>
