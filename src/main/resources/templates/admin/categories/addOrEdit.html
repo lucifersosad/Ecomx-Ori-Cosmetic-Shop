@@ -30,12 +30,12 @@
 
 								<div class="mb-3">
 
-									<label for="categoryId" class="form-label">Category ID:</label>
+									<label for="cateId" class="form-label">Category ID:</label>
 
 									<input type="hidden" th:value="${category.isEdit}">
 
 									<input type="text" readonly="readonly" class="form-control"
-										th:value="${category.categoryId}" id="categoryId" th:name="categoryId"
+										th:value="${category.cateId}" id="cateId" th:name="cateId"
 										aria-describedby="categoryIdid">
 
 								</div>
@@ -44,8 +44,17 @@
 
 									<label for="categoryname" class="form-label">Category Name:</label>
 
-									<input type="text" class="form-control" th:value="${category.categoryName}"
-										id="categoryName" th:name="categoryName" aria-describedby="nameid">
+									<input type="text" class="form-control" th:value="${category.name}"
+										id="name" th:name="name">
+
+								</div>
+								
+								<div class="mb-3">
+
+									<label for="logo" class="form-label">Category Logo:</label>
+
+									<input type="text" class="form-control" th:value="${category.logo}"
+										id="logo" th:name="logo">
 
 								</div>
 

@@ -24,20 +24,20 @@
 					<table border="1" width="100%">
 						<thead>
 							<tr>
-								<th>categoryId</th>
-								<th>categoryName</th>
-								<th>icon</th>
-								<th>action</th>
+								<th>Category ID</th>
+								<th>Category Name</th>
+								<th>Logo</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="item : ${categories}">
-								<td th:text="${item.categoryId}"></td>
-								<td th:text="${item.categoryName}"></td>
-								<td th:text="${item.icon}"></td>
+								<td th:text="${item.cateId}"></td>
+								<td th:text="${item.name}"></td>
+								<td th:text="${item.logo}"></td>
 								<td>
-									<a th:href="@{'/admin/categories/edit/' + ${item.categoryId}}">Edit</a> || <a
-										th:href="@{'/admin/categories/delete/' + ${item.categoryId}}">Delete</a>
+									<a th:href="@{'/admin/categories/edit/' + ${item.cateId}}">Edit</a> || <a
+										th:href="@{'/admin/categories/delete/' + ${item.cateId}}">Delete</a>
 								</td>
 							</tr>
 						</tbody>

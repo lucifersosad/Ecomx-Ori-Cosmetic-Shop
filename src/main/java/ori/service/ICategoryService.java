@@ -7,13 +7,13 @@ import ori.entity.Category;
 
 public interface ICategoryService {
 
-	void deleteById(Long id);
+	void deleteById(Integer id);
 
 	long count();
 
-	Optional<Category> findById(Long id);
+	Optional<Category> findById(Integer id);
 
-	List<Category> findAllById(Iterable<Long> ids);
+	List<Category> findAllById(Iterable<Integer> ids);
 
 	List<Category> findAll();
 

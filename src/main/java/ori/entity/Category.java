@@ -20,9 +20,11 @@ public class Category implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long categoryId;
-	@Column(columnDefinition = "varchar(200)")
-	private String categoryName;
-	private String icon;
+	@Column(name = "cateid")
+	private Integer cateId;
+	@Column(name = "name")
+	private String name;
+	@Column(name = "logo")
+	private String logo;
 
 }

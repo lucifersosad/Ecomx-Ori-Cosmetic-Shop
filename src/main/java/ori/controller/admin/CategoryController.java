@@ -58,11 +58,11 @@ public class CategoryController {
 
 	}
 	
-	@GetMapping("edit/{categoryId}")
+	@GetMapping("edit/{cateId}")
 
-	public ModelAndView edit(ModelMap model, @PathVariable("categoryId") Long categoryId) {
+	public ModelAndView edit(ModelMap model, @PathVariable("cateId") Integer cateId) {
 
-		Optional<Category> optCategory = categoryService.findById(categoryId);
+		Optional<Category> optCategory = categoryService.findById(cateId);
 
 		CategoryModel cateModel = new CategoryModel();
 
@@ -130,7 +130,7 @@ public class CategoryController {
 
 	@GetMapping("delete/{categoryId}")
 
-	public ModelAndView delet(ModelMap model, @PathVariable("categoryId") Long categoryId) {
+	public ModelAndView delet(ModelMap model, @PathVariable("categoryId") Integer categoryId) {
 
 		categoryService.deleteById(categoryId);
 

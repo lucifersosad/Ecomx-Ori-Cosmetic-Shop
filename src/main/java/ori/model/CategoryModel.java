@@ -16,7 +16,7 @@ import lombok.*;
 
 public class CategoryModel {
 
-private Long categoryId;
+private Integer cateId;
 
 //validate
 
@@ -24,9 +24,9 @@ private Long categoryId;
 
 @Length(min=5)
 
-private String categoryName;
+private String name;
 
-private String icon;
+private String logo;
 
 private MultipartFile imageFile;
 
