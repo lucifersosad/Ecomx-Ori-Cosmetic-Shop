@@ -29,12 +29,12 @@ public class CategoryServiceImpl implements ICategoryService {
 	}
 
 	@Override
-	public List<Category> findAllById(Iterable<Long> ids) {
+	public List<Category> findAllById(Iterable<Integer> ids) {
 		return categoryRepository.findAllById(ids);
 	}
 
 	@Override
-	public Optional<Category> findById(Long id) {
+	public Optional<Category> findById(Integer id) {
 		return categoryRepository.findById(id);
 	}
 
@@ -44,7 +44,7 @@ public class CategoryServiceImpl implements ICategoryService {
 	}
 
 	@Override
-	public void deleteById(Long id) {
+	public void deleteById(Integer id) {
 		categoryRepository.deleteById(id);
 	}
 	
