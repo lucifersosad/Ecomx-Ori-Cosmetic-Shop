@@ -3,7 +3,6 @@
 	layout:decorate="~{web/layout-default.html}">
 
 <body>
-
 	<!--Thêm dòng này vào-->
 	<div layout:fragment="content">
 		<div class="container">
@@ -14,8 +13,8 @@
 				</div>
 				<h3>Tạo mới đơn hàng</h3>
 				<div class="table-responsive">
-					<form action="/api/payment/create" id="frmCreateOrder" method="post">
-						<div class="form-group">
+					<form action="/api/payment/create" id="frmCreateOrder" method="post">  
+						<div class="form-group">	
 							<label for="amount">Số tiền</label>
 							<input class="form-control" data-val="true"
 								data-val-number="The field Amount must be a number."
@@ -77,9 +76,8 @@
 				});
 			</script>
 		</div>
-		
-	</div>
 
+	</div>
 </body>
 
 </html>

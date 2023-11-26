@@ -29,119 +29,67 @@ public class CategoryController {
 	ICategoryService categoryService;
 	
 	@RequestMapping("")
-
 	public String list(ModelMap model) {
-
 		//gọi hàm findAll() trong service
-
 		List<Category> list = categoryService.findAll();
-
 		//chuyển dữ liệu từ list lên biến categories
-
 		model.addAttribute("categories", list);
-
 		return "admin/categories/list";
-
 	}
 
 	@GetMapping("add")
-
 	public String add(ModelMap model) {
-
 		CategoryModel cateModel = new CategoryModel();
-
 		cateModel.setIsEdit(false);
-
 		model.addAttribute("category", cateModel);
-
 		return "admin/categories/addOrEdit";
-
 	}
 	
 	@GetMapping("edit/{cateId}")
-
 	public ModelAndView edit(ModelMap model, @PathVariable("cateId") Integer cateId) {
-
 		Optional<Category> optCategory = categoryService.findById(cateId);
-
 		CategoryModel cateModel = new CategoryModel();
-
 		if (optCategory.isPresent()) {
-
 			Category entity = optCategory.get();
-
 			BeanUtils.copyProperties(entity, cateModel);
-
 			cateModel.setIsEdit(true);
-
 			model.addAttribute("category", cateModel);
-
 			return new ModelAndView("admin/categories/addOrEdit", model);
-
 		}
-
 		model.addAttribute("message", "Category is not existed!!!!");
-
 		return new ModelAndView("forward:/admin/categories", model);
-
 	}
 
 	@PostMapping("saveOrUpdate")
-
 	public ModelAndView saveOrUpdate(ModelMap model, @Valid @ModelAttribute("category") CategoryModel cateMdoel, BindingResult result) {
-
 		if (result.hasErrors()) {
-
 			return new ModelAndView("admin/categories/addOrEdit");
-
 		}
-
 		Category entity = new Category();
-
 		//copy từ Model sang Entity
-
 		BeanUtils.copyProperties(cateMdoel, entity);
-
 		//gọi hàm save trong service
-
 		categoryService.save(entity);
-
 		//đưa thông báo về cho biến message
-
 		String message = "";
-
 		if (cateMdoel.getIsEdit() == true) {
-
 			message = "Category is Edited!!!!!!!!";
-
 		} else {
-
 			message = "Category is saved!!!!!!!!";
-
 		}
-
 		model.addAttribute("message", message);
-
 		//redirect về URL controller
-
 		return new ModelAndView("forward:/admin/categories", model);
-
 	}
 
 	@GetMapping("delete/{categoryId}")
-
 	public ModelAndView delet(ModelMap model, @PathVariable("categoryId") Integer categoryId) {
-
 		categoryService.deleteById(categoryId);
-
 		model.addAttribute("message", "Category is deleted!!!!");
-
 		return new ModelAndView("redirect:/admin/categories", model);
-
 	}
-
 //	@GetMapping("search")
-//
+	//
 //	public String search(ModelMap model, @RequestParam(name = "name", required = false) String name) {
 //
 //		List<Category> list = null;

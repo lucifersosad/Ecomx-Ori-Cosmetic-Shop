@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class Config {
 	public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = "http://localhost:8888/web/payment/vnpay_return.html";
+    public static String vnp_ReturnUrl = "http://localhost:8888/api/payment/return";
     public static String vnp_TmnCode = "M8IEGRE2";
     public static String secretKey = "XGQTYPCIATVOJJNAVFGGGSBTKMKWTSZU";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
@@ -101,7 +101,7 @@ public class Config {
             return "";
         }
     }
-
+    
     public static String getIpAddress(HttpServletRequest request) {
         String ipAdress;
         try {
@@ -114,7 +114,7 @@ public class Config {
         }
         return ipAdress;
     }
-    
+
     public static String getRandomNumber(int len) {
         Random rnd = new Random();
         String chars = "0123456789";

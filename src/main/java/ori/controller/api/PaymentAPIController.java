@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,11 +42,11 @@ public class PaymentAPIController {
         String vnp_Command = "pay";
         String orderType = "other";
         long total = Integer.parseInt(req.getParameter("amount"))*100;
-
+        
         
         String vnp_TxnRef = Config.getRandomNumber(8);
         String vnp_IpAddr = Config.getIpAddress(req);
-        
+
         String vnp_TmnCode = Config.vnp_TmnCode;
         
         Map<String, String> vnp_Params = new HashMap<>();
@@ -55,17 +55,20 @@ public class PaymentAPIController {
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(total));
         vnp_Params.put("vnp_CurrCode", "VND");
+        
         if (bankCode != null && !bankCode.isEmpty()) {
             vnp_Params.put("vnp_BankCode", bankCode);
-        }     
+        }
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", orderType);
+
+
         if (locate != null && !locate.isEmpty()) {
             vnp_Params.put("vnp_Locale", locate);
         } else {
             vnp_Params.put("vnp_Locale", "vn");
-        }    
+        }
         vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
@@ -107,5 +110,30 @@ public class PaymentAPIController {
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;                   
         return new ResponseEntity<Response>(new Response(true, "success", paymentUrl), HttpStatus.OK);
     }
+	@GetMapping("/return")
+	public ResponseEntity<?> transaction(
+			@Validated @RequestParam("vnp_Amount") long amount,
+			@Validated @RequestParam("vnp_BankCode") String bankCode,
+			@Validated @RequestParam("vnp_CardType") String cardType,
+			@Validated @RequestParam("vnp_OrderInfo") String orderInfo,
+			@Validated @RequestParam("vnp_PayDate") String payDate,
+			@Validated @RequestParam("vnp_ResponseCode") String responseCode,
+			@Validated @RequestParam("vnp_TmnCode") String tmnCode,
+			@Validated @RequestParam("vnp_TransactionNo") String transactionNo,
+			@Validated @RequestParam("vnp_TransactionStatus") String transactionStatus,
+			@Validated @RequestParam("vnp_TxnRef") String txnRef,
+			@Validated @RequestParam("vnp_SecureHash") String secureHash			
+			){
 
+		if (responseCode.equals("00")) {
+			return new ResponseEntity<Response>(new Response(true, "Successfully", ""), HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<Response>(new Response(true, "Failed", ""), HttpStatus.OK);
+		}
+		
+	}
+		
+		
+	
 }
