@@ -968,3 +968,6 @@ and */
     }
 }
 
+.slick-arrow::before {
+	color: #D94454 !important;
+}

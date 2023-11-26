@@ -19,5 +19,7 @@ public interface IProductService {
 	<S extends Product> S save(S entity);
 	
 	List<Product> findTop10();
+	
+	List<Product> findProductsMostSaleByCategory();
 
 }

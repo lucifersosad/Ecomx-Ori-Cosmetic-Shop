@@ -50,4 +50,9 @@ public class ProductServiceImpl implements IProductService  {
 		Pageable pageable = PageRequest.of(0, 10);
 		return productRepository.findAll(pageable).toList();
 	}
+	
+	@Override
+	public List<Product> findProductsMostSaleByCategory() {
+		return productRepository.findProductsMostSaleByCategory();
+	}
 }
