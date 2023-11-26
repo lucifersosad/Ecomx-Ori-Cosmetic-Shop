@@ -7,6 +7,8 @@ import ori.entity.Product;
 public interface IProductService {
 
 	void delete(Product entity);
+	
+	void deleteById(Integer id);
 
 	long count();
 
