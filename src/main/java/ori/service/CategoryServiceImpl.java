@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import ori.entity.Category;
@@ -48,5 +50,10 @@ public class CategoryServiceImpl implements ICategoryService {
 		categoryRepository.deleteById(id);
 	}
 	
+	@Override
+	public List<Category> findTop10() {
+		Pageable pageable = PageRequest.of(0, 10);
+		return categoryRepository.findAll(pageable).toList();
+	}
 	
 }
