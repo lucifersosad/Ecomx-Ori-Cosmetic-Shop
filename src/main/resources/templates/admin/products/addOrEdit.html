@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="container-fluid">
-					<form action="/admin/products/saveOrUpdate" method="POST">
+					<form action="/admin/products/saveOrUpdate" th:object="${product}" method="POST">
 
 						<div class="card">
 
@@ -97,7 +97,7 @@
 
 									<label for="category" class="form-label">Category:</label>
 
-									<select id="category" name="cateid">
+									<select id="category" th:field="*{cateId}">
 										<option th:each="category : ${categories}" 
 									            th:value="${category.cateId}"
 									            th:text="${category.name}">
@@ -109,7 +109,7 @@
 
 									<label for="brand" class="form-label">Brand:</label>
 
-									<select id="brand" name="brandid">
+									<select id="brand" th:field="*{brandId}">
 										<option th:each="brand : ${brands}" 
 									            th:value="${brand.brandId}" 
 									            th:text="${brand.name}">

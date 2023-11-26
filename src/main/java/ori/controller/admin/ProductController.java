@@ -18,7 +18,6 @@ import jakarta.validation.Valid;
 import ori.entity.Brand;
 import ori.entity.Category;
 import ori.entity.Product;
-import ori.model.CategoryModel;
 import ori.model.ProductModel;
 import ori.service.IBrandService;
 import ori.service.ICategoryService;
@@ -99,10 +98,11 @@ public class ProductController {
 			return new ModelAndView("admin/products/addOrEdit");
 
 		}
-
 		Product entity = new Product();
 
 		BeanUtils.copyProperties(proModel, entity);
+		entity.setCategory(categoryService.findById(proModel.getCateId()).get());
+		entity.setBrand(brandService.findById(proModel.getBrandId()).get());
 
 		productService.save(entity);
 
