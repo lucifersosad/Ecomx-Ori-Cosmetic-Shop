@@ -29,10 +29,12 @@ import ori.model.Response;
 
 @RestController
 @RequestMapping("/api/payment")
-public class PaymentController {
+public class PaymentAPIController {
 
 	@PostMapping(path = "/create")
 	public ResponseEntity<?> createPayment(@Validated @RequestParam("amount") int amount,
+			@Validated @RequestParam("bankCode") String bankCode,
+			@Validated @RequestParam("language") String locate,
 			HttpServletRequest req
 			) throws IOException {
 		
@@ -43,7 +45,6 @@ public class PaymentController {
 
         
         String vnp_TxnRef = Config.getRandomNumber(8);
-        String vnp_IpAddr = Config.getIpAddress(req);
 
         String vnp_TmnCode = Config.vnp_TmnCode;
         
@@ -53,13 +54,18 @@ public class PaymentController {
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(totalAmount));
         vnp_Params.put("vnp_CurrCode", "VND");
-        vnp_Params.put("vnp_BankCode", "NCB");       
+        if (bankCode != null && !bankCode.isEmpty()) {
+            vnp_Params.put("vnp_BankCode", bankCode);
+        }     
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", orderType);
-        vnp_Params.put("vnp_Locale", "vn");      
+        if (locate != null && !locate.isEmpty()) {
+            vnp_Params.put("vnp_Locale", locate);
+        } else {
+            vnp_Params.put("vnp_Locale", "vn");
+        }    
         vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
-        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
