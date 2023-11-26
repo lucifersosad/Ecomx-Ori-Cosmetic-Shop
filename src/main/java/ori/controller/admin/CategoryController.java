@@ -32,11 +32,11 @@ public class CategoryController {
 
 	public String list(ModelMap model) {
 
-//gọi hàm findAll() trong service
+		//gọi hàm findAll() trong service
 
 		List<Category> list = categoryService.findAll();
 
-//chuyển dữ liệu từ list lên biến categories
+		//chuyển dữ liệu từ list lên biến categories
 
 		model.addAttribute("categories", list);
 
@@ -98,15 +98,15 @@ public class CategoryController {
 
 		Category entity = new Category();
 
-//copy từ Model sang Entity
+		//copy từ Model sang Entity
 
 		BeanUtils.copyProperties(cateMdoel, entity);
 
-//gọi hàm save trong service
+		//gọi hàm save trong service
 
 		categoryService.save(entity);
 
-//đưa thông báo về cho biến message
+		//đưa thông báo về cho biến message
 
 		String message = "";
 
@@ -122,7 +122,7 @@ public class CategoryController {
 
 		model.addAttribute("message", message);
 
-//redirect về URL controller
+		//redirect về URL controller
 
 		return new ModelAndView("forward:/admin/categories", model);
 
