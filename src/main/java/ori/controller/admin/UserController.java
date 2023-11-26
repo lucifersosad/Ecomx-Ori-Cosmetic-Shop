@@ -2,6 +2,7 @@ package ori.controller.admin;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -28,9 +29,11 @@ public class UserController {
 	@Autowired(required=true)
 	IUserService userService;
 	@RequestMapping("")
-	public String list(ModelMap model) {
-		List<User> list = userService.findAll();
+	public String list(ModelMap model, @RequestParam(name="pageNo", defaultValue = "1") Integer pageNo) {
+		Page<User> list = userService.getAll(pageNo); 
 		model.addAttribute("user",list);
+		model.addAttribute("totalPage",list.getTotalPages());
+		model.addAttribute("currentPage",pageNo);
 		return "admin/users/list";
 	}
 	@GetMapping("add")
