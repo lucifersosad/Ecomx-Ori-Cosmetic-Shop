@@ -14,13 +14,13 @@
 				</div>
 				<h3>Tạo mới đơn hàng</h3>
 				<div class="table-responsive">
-					<form action="/vnpay_jsp/vnpayajax" id="frmCreateOrder" method="post">
+					<form action="/api/payment/create" id="frmCreateOrder" method="post">
 						<div class="form-group">
 							<label for="amount">Số tiền</label>
 							<input class="form-control" data-val="true"
 								data-val-number="The field Amount must be a number."
 								data-val-required="The Amount field is required." id="amount" max="100000000" min="1"
-								name="amount" type="number" value="10000" />
+								name="amount" type="number" th:value="${amount}" />
 						</div>
 						<h4>Chọn phương thức thanh toán</h4>
 						<div class="form-group">
@@ -30,7 +30,7 @@
 
 							<h5>Cách 2: Tách phương thức tại site của đơn vị kết nối</h5>
 
-							<input type="radio" id="bankCode" name="bankCode" value="VNBANK">
+							<input type="radio" id="bankCode" name="bankCode" value="NCB">
 							<label for="bankCode">Thanh toán qua thẻ ATM/Tài khoản nội địa</label><br>
 
 						</div>
@@ -52,20 +52,20 @@
 			<link href="https://pay.vnpay.vn/lib/vnpay/vnpay.css" rel="stylesheet" />
 			<script src="https://pay.vnpay.vn/lib/vnpay/vnpay.min.js"></script>
 			<script type="text/javascript">
-				$("#frmCreateOrder").submit(function () {
-					var postData = $("#frmCreateOrder").serialize();
-
+				$("#frmCreateOrder").submit(function (e) {
+					var postData =  new FormData(this);
+					var submitUrl = $("#frmCreateOrder").attr("action");
 					$.ajax({
 						type: "POST",
-						url: contextPath + '/api/payment/create',
+						url: submitUrl,
 						data: postData,
 						dataType: 'JSON',
-						success: function (x) {
-							if (x.code === '00') {
+						success: function (data) {
+							if (data.status) {
 								if (window.vnpay) {
-									vnpay.open({width: 768, height: 600, url: x.data});
+									vnpay.open({width: 768, height: 600, url: data.body});
 								} else {
-									location.href = x.data;
+									location.href = data.body;
 								}
 								return false;
 							} else {
@@ -77,8 +77,9 @@
 				});
 			</script>
 		</div>
-
+		
 	</div>
+
 </body>
 
 </html>
