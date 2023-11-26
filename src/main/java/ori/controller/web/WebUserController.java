@@ -25,11 +25,6 @@ public class WebUserController {
 	@Autowired(required=true)
 	IUserService userService;
 	
-	@RequestMapping(value = {"/"})
-	public String trangchu() {
-		return "/web/index";
-	}
-	
 	@GetMapping("edit/{userId}")
 	public ModelAndView edit(ModelMap model, @PathVariable("userId") Integer userId) {
 		Optional<User> optUser = userService.findById(userId);
