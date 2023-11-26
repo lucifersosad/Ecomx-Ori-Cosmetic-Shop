@@ -48,7 +48,13 @@ public class UserServiceImpl implements IUserService{
 	public void deleteById(Integer id) {
 		userRepository.deleteById(id);
 	}
-	
+
+	@Override
+	public Optional<User> findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	@Override
 	public User updateUser(User model) {
 		Integer userid = model.getUserId();
 		User user = userRepository.findById(userid).get();
@@ -56,5 +62,14 @@ public class UserServiceImpl implements IUserService{
 		model.setIsAdmin(user.getIsAdmin());
 		return userRepository.save(model);
 	}
+	@Override
+	public User updateAddress(String email,String newAddress) {
+		
+		User user = userRepository.findByEmail(email).get();
+		user.setAddress(newAddress);
+		return userRepository.save(user);
+	}
+
+	
 	
 }

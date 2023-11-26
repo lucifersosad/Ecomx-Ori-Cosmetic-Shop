@@ -1,4 +1,6 @@
-package ori.controller.admin;
+package ori.controller.web;
+
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,40 +12,25 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.validation.Valid;
-
-import java.util.List;
-import java.util.Optional;
-
 import ori.entity.User;
 import ori.model.UserModel;
 import ori.service.IUserService;
 
 @Controller
-@RequestMapping("admin/users")
-public class UserController {
+@RequestMapping("web/users")
+public class WebUserController {
 	@Autowired(required=true)
 	IUserService userService;
-	@RequestMapping("")
-	public String list(ModelMap model) {
-		List<User> list = userService.findAll();
-		model.addAttribute("user",list);
-		return "admin/users/list";
+	
+	@RequestMapping(value = {"/"})
+	public String trangchu() {
+		return "/web/index";
 	}
-	@GetMapping("add")
-
-	public String add(ModelMap model) {
-		UserModel userModel = new UserModel();
-		userModel.setIsEdit(false);
-		model.addAttribute("user", userModel);
-		return "admin/users/addOrEdit";
-	}
-
+	
 	@GetMapping("edit/{userId}")
-
 	public ModelAndView edit(ModelMap model, @PathVariable("userId") Integer userId) {
 		Optional<User> optUser = userService.findById(userId);
 		UserModel userModel = new UserModel();
@@ -52,16 +39,16 @@ public class UserController {
 			BeanUtils.copyProperties(entity, userModel);
 			userModel.setIsEdit(true);
 			model.addAttribute("user", userModel);
-			return new ModelAndView("admin/users/addOrEdit", model);
+			return new ModelAndView("web/users/addOrEdit", model);
 		}
 		model.addAttribute("message", "User is not existed!!!!");
-		return new ModelAndView("forward:/admin/users", model);
+		return new ModelAndView("forward:/web/users/", model);
 
 	}
 	@PostMapping("saveOrUpdate")
 	public ModelAndView saveOrUpdate(ModelMap model, @Valid @ModelAttribute("user") UserModel userModel, BindingResult result) {
 		if (result.hasErrors()) {
-			return new ModelAndView("admin/users/error");
+			return new ModelAndView("web/users/error");
 		}
 		User entity = new User();
 
@@ -76,14 +63,8 @@ public class UserController {
 		}
 		model.addAttribute("message", message);
 //redirect về URL controller
-		return new ModelAndView("forward:/admin/users", model);
+		return new ModelAndView("forward:/web/users/", model);
 
-	}
-	@GetMapping("delete/{userId}")
-	public ModelAndView delet(ModelMap model, @PathVariable("userId") Integer userId) {
-		userService.deleteById(userId);
-		model.addAttribute("message", "User is deleted!!!!");
-		return new ModelAndView("redirect:/admin/users", model);
 	}
 	@GetMapping("/infor/{email}/{password}")
 	public ModelAndView infor(ModelMap model, @PathVariable("email") String email, @PathVariable("password") String password) {
@@ -93,11 +74,24 @@ public class UserController {
 	        User user = optUser.get();
 	        if (user.getPassword().equals(password)) {
 	            model.addAttribute("user", user);
-	            return new ModelAndView("admin/users/infor", model);
+	            return new ModelAndView("web/users/infor", model);
 	        }
 	    }
 	    model.addAttribute("message", "User is not existed!!!!");
-	    return new ModelAndView("forward:/admin/users", model);
+	    return new ModelAndView("forward:/web/users", model);
 	}
+	@GetMapping("/updateAddress/{email}")
+	public ModelAndView updateAddress(ModelMap model, @PathVariable("email") String email) {
+		Optional<User> optUser = userService.findByEmail(email);
 
+	    if (optUser.isPresent()) {
+	        User user = optUser.get();
+	            model.addAttribute("user", user);
+	            return new ModelAndView("web/users/updateAddress", model);
+	        
+	    }
+	    model.addAttribute("message", "User is not existed!!!!");
+	    return new ModelAndView("forward:/web/users/", model);
+	}
+	
 }

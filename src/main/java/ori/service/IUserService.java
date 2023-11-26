@@ -21,5 +21,11 @@ public interface IUserService {
 	Page<User> findAll(Pageable pageable);
 
 	<S extends User> S save(S entity);
+
 	User updateUser(User model);
+
+	Optional<User> findByEmail(String email);
+
+	User updateAddress(String email, String newAddress);
+	
 }
