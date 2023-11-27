@@ -60,4 +60,14 @@ public class ProductServiceImpl implements IProductService  {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<Product> findByBrand(Integer brandId) {
+		return productRepository.findByBrand(brandId);
+	}
+
+	@Override
+	public List<Product> findByCategory(Integer cateId) {
+		return productRepository.findByCategory(cateId);
+	}
 }
