@@ -23,5 +23,9 @@ public interface IProductService {
 	List<Product> findTop10();
 	
 	List<Product> findProductsMostSaleByCategory();
+	
+    List<Product> findByBrand(Integer brandId);
+    
+    List<Product> findByCategory(Integer cateId);
 
 }
