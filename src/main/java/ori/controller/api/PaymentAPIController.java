@@ -13,26 +13,35 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import ori.config.Config;
+import ori.entity.Payment;
 import ori.model.Response;
+import ori.service.IPaymentService;
 
 
 @RestController
 @RequestMapping("/api/payment")
 public class PaymentAPIController {
-
+	@Autowired
+	IPaymentService paymentService;
+	
 	@PostMapping(path = "/create")
 	public ResponseEntity<?> createPayment(@Validated @RequestParam("amount") int amount,
+			
 			@Validated @RequestParam("bankCode") String bankCode,
 			@Validated @RequestParam("language") String locate,
 			HttpServletRequest req
@@ -42,8 +51,7 @@ public class PaymentAPIController {
         String vnp_Command = "pay";
         String orderType = "other";
         long total = Integer.parseInt(req.getParameter("amount"))*100;
-        
-        
+               
         String vnp_TxnRef = Config.getRandomNumber(8);
         String vnp_IpAddr = Config.getIpAddress(req);
 
@@ -60,7 +68,10 @@ public class PaymentAPIController {
             vnp_Params.put("vnp_BankCode", bankCode);
         }
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
+//        if (orderId == null || orderId.isEmpty()) {
+//        	orderId = "001";
+//        }
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + "001xx" + ". So tien:" + total);
         vnp_Params.put("vnp_OrderType", orderType);
 
 
@@ -110,28 +121,32 @@ public class PaymentAPIController {
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;                   
         return new ResponseEntity<Response>(new Response(true, "success", paymentUrl), HttpStatus.OK);
     }
-	@GetMapping("/return")
-	public ResponseEntity<?> transaction(
-			@Validated @RequestParam("vnp_Amount") long amount,
-			@Validated @RequestParam("vnp_BankCode") String bankCode,
-			@Validated @RequestParam("vnp_CardType") String cardType,
-			@Validated @RequestParam("vnp_OrderInfo") String orderInfo,
-			@Validated @RequestParam("vnp_PayDate") String payDate,
-			@Validated @RequestParam("vnp_ResponseCode") String responseCode,
-			@Validated @RequestParam("vnp_TmnCode") String tmnCode,
-			@Validated @RequestParam("vnp_TransactionNo") String transactionNo,
-			@Validated @RequestParam("vnp_TransactionStatus") String transactionStatus,
-			@Validated @RequestParam("vnp_TxnRef") String txnRef,
-			@Validated @RequestParam("vnp_SecureHash") String secureHash			
+	@GetMapping("/ipn")
+	public ModelAndView transaction(ModelMap model,
+			@RequestParam Map<String, String> queryParams	
 			){
-
-		if (responseCode.equals("00")) {
-			return new ResponseEntity<Response>(new Response(true, "Successfully", ""), HttpStatus.OK);
+		if (queryParams.get("vnp_ResponseCode").equals("00")) {
+			Payment payment = new Payment();
+			payment.setAmount(Long.parseLong(queryParams.get("vnp_Amount")));
+			payment.setOrderInfo(queryParams.get("vnp_OrderInfo"));
+			payment.setPayDate(queryParams.get("vnp_PayDate"));
+			payment.setPayStatus(true);
+			paymentService.save(payment);
+			model.addAttribute("params", queryParams);			
+		}
+		return new ModelAndView("forward:/api/payment/return", model);
+	}
+	
+	@GetMapping("/return")
+	public ResponseEntity<?> info(
+			@RequestParam Map<String, String> queryParams	
+			){
+		if (queryParams.get("vnp_ResponseCode").equals("00")) {
+			return new ResponseEntity<Response>(new Response(true, "Successfully", queryParams), HttpStatus.OK);
 		}
 		else {
-			return new ResponseEntity<Response>(new Response(true, "Failed", ""), HttpStatus.OK);
-		}
-		
+			return new ResponseEntity<Response>(new Response(true, "Failed", queryParams), HttpStatus.OK);
+		}		
 	}
 		
 		

@@ -1,52 +1,63 @@
 package ori.controller.admin;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import ori.model.Response;
+import jakarta.servlet.http.HttpServletRequest;
+import ori.config.Config;
+import ori.entity.Payment;
+import ori.service.IPaymentService;
+
 
 @Controller
-
-@RequestMapping("payment")
 public class PaymentController {
-	@GetMapping("index")
+	@Autowired
+	IPaymentService paymentService;
+	
+	@GetMapping("/payment/index")
 	public String index() {
 		return "web/payment/index";
 	}
 	
-	@GetMapping("option")
+	@GetMapping("/payment/option")
 	public String list(ModelMap model) {
 		int amount = 20000;
 		model.addAttribute("amount",amount);
 		return "web/payment/vnpay_pay";
 	}
-	@GetMapping("/return")
-	public String transaction(
-			ModelMap model,
-			@Validated @RequestParam("vnp_Amount") long amount,
-			@Validated @RequestParam("vnp_BankCode") String bankCode,
-			@Validated @RequestParam("vnp_CardType") String cardType,
-			@Validated @RequestParam("vnp_OrderInfo") String orderInfo,
-			@Validated @RequestParam("vnp_PayDate") String payDate,
-			@Validated @RequestParam("vnp_ResponseCode") String responseCode,
-			@Validated @RequestParam("vnp_TmnCode") String tmnCode,
-			@Validated @RequestParam("vnp_TransactionNo") String transactionNo,
-			@Validated @RequestParam("vnp_TransactionStatus") String transactionStatus,
-			@Validated @RequestParam("vnp_TxnRef") String txnRef,
-			@Validated @RequestParam("vnp_SecureHash") String secureHash			
-			){
-		return "web/payment/vnpay_return";
-	}
-//	@PostMapping(path ="create")
-//	public ModelAndView createPayment() {
-//		return ModelAndView();
-//	}
+//	@GetMapping("/{pathVariable:.*ipn.*}")
+//	public ModelAndView transaction(ModelMap model,
+//			@RequestParam Map<String, String> queryParams	
+//			){
+//		if (queryParams.get("vnp_ResponseCode").equals("00")) {
+//			Payment payment = new Payment();
+//			payment.setAmount(Long.parseLong(queryParams.get("vnp_Amount")));
+//			payment.setOrderInfo(queryParams.get("vnp_OrderInfo"));
+//			payment.setPayDate(queryParams.get("vnp_PayDate"));
+//			payment.setPayStatus(true);
+//			paymentService.save(payment);
+//			model.addAttribute("params", queryParams);			
+//		}
+//		return new ModelAndView("forward:/api/payment/return", model);
+//    }
+//	@GetMapping("/**")
+//	public String transaction(HttpServletRequest request){
+//		String requestURI = request.getRequestURI();
+//	    if (requestURI.contains("ipn"))
+//		return "web/payment/vnpay_pay";
+//	    else return "web/payment/vnpay_pay";
+//    }
 }
