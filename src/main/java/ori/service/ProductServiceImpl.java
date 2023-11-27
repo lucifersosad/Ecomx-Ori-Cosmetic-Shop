@@ -57,8 +57,7 @@ public class ProductServiceImpl implements IProductService  {
 
 	@Override
 	public List<Product> findProductsMostSaleByCategory() {
-		// TODO Auto-generated method stub
-		return null;
+		return productRepository.findProductsMostSaleByCategory();
 	}
 
 	@Override
