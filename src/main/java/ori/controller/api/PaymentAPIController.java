@@ -38,7 +38,6 @@ import ori.service.IPaymentService;
 public class PaymentAPIController {
 	@Autowired
 	IPaymentService paymentService;
-	
 	@PostMapping(path = "/create")
 	public ResponseEntity<?> createPayment(@Validated @RequestParam("amount") int amount,
 			
@@ -46,24 +45,19 @@ public class PaymentAPIController {
 			@Validated @RequestParam("language") String locate,
 			HttpServletRequest req
 			) throws IOException {
-		
 		String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        long total = Integer.parseInt(req.getParameter("amount"))*100;
-               
+        long total = Integer.parseInt(req.getParameter("amount"))*100;            
         String vnp_TxnRef = Config.getRandomNumber(8);
         String vnp_IpAddr = Config.getIpAddress(req);
-
         String vnp_TmnCode = Config.vnp_TmnCode;
-        
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(total));
-        vnp_Params.put("vnp_CurrCode", "VND");
-        
+        vnp_Params.put("vnp_CurrCode", "VND");       
         if (bankCode != null && !bankCode.isEmpty()) {
             vnp_Params.put("vnp_BankCode", bankCode);
         }
@@ -121,34 +115,4 @@ public class PaymentAPIController {
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;                   
         return new ResponseEntity<Response>(new Response(true, "success", paymentUrl), HttpStatus.OK);
     }
-	@GetMapping("/ipn")
-	public ModelAndView transaction(ModelMap model,
-			@RequestParam Map<String, String> queryParams	
-			){
-		if (queryParams.get("vnp_ResponseCode").equals("00")) {
-			Payment payment = new Payment();
-			payment.setAmount(Long.parseLong(queryParams.get("vnp_Amount")));
-			payment.setOrderInfo(queryParams.get("vnp_OrderInfo"));
-			payment.setPayDate(queryParams.get("vnp_PayDate"));
-			payment.setPayStatus(true);
-			paymentService.save(payment);
-			model.addAttribute("params", queryParams);			
-		}
-		return new ModelAndView("forward:/api/payment/return", model);
-	}
-	
-	@GetMapping("/return")
-	public ResponseEntity<?> info(
-			@RequestParam Map<String, String> queryParams	
-			){
-		if (queryParams.get("vnp_ResponseCode").equals("00")) {
-			return new ResponseEntity<Response>(new Response(true, "Successfully", queryParams), HttpStatus.OK);
-		}
-		else {
-			return new ResponseEntity<Response>(new Response(true, "Failed", queryParams), HttpStatus.OK);
-		}		
-	}
-		
-		
-	
 }

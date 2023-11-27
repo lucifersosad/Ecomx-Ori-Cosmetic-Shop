@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{web/layout-default.html}">
 
+<body>
+	<!--Thêm dòng này vào-->
+	<div layout:fragment="content">
+		<div class="container">
+			<section class="row gx-3 mt-5 mb-5">
+				<div th:if="${payStatus == '1'}">
+					<label th:text="'Quý khách thanh toán thành công. Số tiền ' + ${message} + ' VND'"></label>
+				</div>
+				<div th:if="${payStatus == '0'}">
+					<label th:text="${message}"></label>
+				</div>
+			</section>
+		</div>
+	</div>
 </body>
+
 </html>
