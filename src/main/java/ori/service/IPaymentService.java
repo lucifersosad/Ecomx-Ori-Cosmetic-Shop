@@ -18,4 +18,6 @@ public interface IPaymentService {
 
 	List<Payment> findAll();
 
+	<S extends Payment> S save(S entity);
+
 }

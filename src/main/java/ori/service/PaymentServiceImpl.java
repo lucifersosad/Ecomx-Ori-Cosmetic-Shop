@@ -40,5 +40,11 @@ public class PaymentServiceImpl  implements IPaymentService{
 	public long count() {
 		return paymentRepository.count();
 	}
+
+	@Override
+	public <S extends Payment> S save(S entity) {
+		return paymentRepository.save(entity);
+	}
+	
 	
 }
