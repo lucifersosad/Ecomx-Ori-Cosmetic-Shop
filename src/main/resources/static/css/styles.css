@@ -19,10 +19,13 @@ a {
 	color: #2f2f2f;
 	text-decoration: underline;
 }
+a {
+	text-decoration: none !important;
+}
 
 a:hover {
 	color: #2f2f2f;
-	text-decoration: none;
+	text-decoration: none !important;
 }
 
 a.more {
@@ -41,5 +44,5 @@ ul {
 }
 
 .slick-arrow::before {
-	color: #D94454 !important;
+	color: #FBA1B7 !important;
 }
