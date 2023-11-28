@@ -8,513 +8,125 @@
 	<div layout:fragment="content">
 
 		<!--Viết nội dung từ đây-->
-		<div class="container">
-			<section class="row gx-3 mt-5 mb-5">
-				<div class="col-lg-9">
-					<div class="card-banner p-5 bg-primary rounded-5" style="height: 350px;">
-						<div style="max-width: 500px;">
-							<h2 class="text-white">
-								Great products with <br />
-								best deals
-							</h2>
-							<p class="text-white">No matter how far along you are in your sophistication as an amateur
-								astronomer, there is always one.</p>
-							<a href="#" class="btn btn-light shadow-0 text-primary"> View more </a>
-						</div>
-					</div>
-				</div>
-				<aside class="col-lg-3">
-					<div class="card-banner h-100 rounded-5" style="background-color: #f87217;">
-						<div class="card-body text-center pb-5">
-							<h5 class="pt-5 text-white">Amazing Gifts</h5>
-							<p class="text-white">No matter how far along you are in your sophistication</p>
-							<a href="#" class="btn btn-outline-light"> View more </a>
-						</div>
-					</div>
-				</aside>
-			</section>
-			
-		<section class="mt-5 mb-7">
-			<h1 class="text-center mb-3">Nhãn hàng</h1>
+		<div class="hero-carousel" >
+			<div style="height: 600px;">
+				<img class="img-fluid" th:src="@{https://thocosmetics.com/wp-content/uploads/2023/11/banner-3.png}"/>
+			</div>
+			<div style="height: 600px;">
+				<img class="img-fluid" th:src="@{https://thocosmetics.com/wp-content/uploads/2023/11/banner-2.png}"/>
+			</div>
+			<div style="height: 600px;">
+				<img class="img-fluid" th:src="@{https://thocosmetics.com/wp-content/uploads/2023/11/banner-4.png}"/>
+			</div>
+			<div style="height: 600px;">
+				<img class="img-fluid" th:src="@{https://thocosmetics.com/wp-content/uploads/2023/11/banner-5.png}"/>
+			</div>
+		</div>
+		
+		<div class="container">	
+			<section class="mb-5">
+				<h3 class="section-title section-title-center mt-5 mb-5">
+					<b></b>
+					<span class="section-title-main">Nhãn hàng</span>
+					<b></b>
+				</h3>
 				<div class="brand-carousel">
 					<div class="card" style="width: 16rem;" th:each="brand : ${brands}">
-  						<img th:src="${brand.logo}" class="card-img-top" alt="brand_logo">
-  					</div>
-				</div>
-		</section>
-		
-		<section class="mt-5 mb-7">
-			<h1 class="text-center mb-3">Danh mục nổi bật</h1>
-			<div class="category-carousel">
-				<div class="card" style="width: 16rem;" th:each="category : ${categories}">
-					<img th:src="${category.logo}" class="card-img-top" alt="category_logo">
-					<div class="card-body">
-						<h5 class="card-title">[[${category.name}]]</h5>	  
+						<img th:src="${brand.logo}" class="card-img-top" alt="brand_logo">
 					</div>
-			</div>
-		</section>
-		
-		<section class="container mt-5 mb-5">
-			<h1 class="text-center mb-5">Sản phẩm giảm giá sâu</h1>
-			<div class="row">
-				<div class="col-lg-3 col-md-6 col-sm-6" th:each="product : ${products}">
-					<div class="card my-2 shadow-0">
-						<a href="#" class="">
-							<div class="mask" style="height: 50px;">
-								<div class="d-flex justify-content-start align-items-start h-100 m-2">
-									<h6><span class="badge bg-danger pt-1" th:text="${'Sale: ' + product.sale + '%'}"></span></h6>
-								</div>
-							</div>
-							<img th:src="${product.image_link}"
-								class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-						</a>
-						<div class="card-body p-0 pt-3">
-							<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-									class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-							<h5 class="card-title">[(${product.name})]</h5>
-							<p class="card-text mb-0"><strong>Còn lại: </strong>[(${product.stock})]</p>
-							<p class="card-text mb-0"><strong>Danh mục: </strong>[(${product.category.name})]</p>
-							<p class="card-text mb-0">
-								<strong>Giá:</strong>
-								<span class="text-decoration-line-through" th:text="${#numbers.formatDecimal(product.price, 0, 0)} + '.000 VND'"></span>
-								<span class="text-danger" th:text="${#numbers.formatDecimal(product.price * (100 - product.sale) / 100, 0, 0) } + '.000 VND'"></span>
-							</p>
-							
-							<p class="text-muted">[(${product.brand.name})]</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-			<!-- category -->
-			<section>
-				<div class="container pt-5">
-					<nav class="row gy-4">
-						<div class="col-lg-6 col-md-12">
-							<div class="row">
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-couch fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Interior items</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-basketball-ball fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Sport and travel</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-ring fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Jewellery</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-clock fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Accessories</div>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-12">
-							<div class="row">
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-car-side fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Automobiles</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-home fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Home items</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-guitar fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Musical items</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-book fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Book, reading</div>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-12">
-							<div class="row">
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-baby-carriage fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Kid's toys</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-paw fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Pet items</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-tshirt fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Men's clothing</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-shoe-prints fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Men's clothing</div>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-12">
-							<div class="row">
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-mobile fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Smartphones</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-tools fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Tools</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-pencil-ruler fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Education</div>
-									</a>
-								</div>
-								<div class="col-3">
-									<a href="#" class="text-center d-flex flex-column justify-content-center">
-										<button type="button" class="btn btn-outline-secondary mx-auto p-3 mb-2"
-											data-mdb-ripple-color="dark">
-											<i class="fas fa-warehouse fa-xl fa-fw"></i>
-										</button>
-										<div class="text-dark">Other items</div>
-									</a>
-								</div>
-							</div>
-						</div>
-					</nav>
 				</div>
 			</section>
-			<!-- category -->
-
-			<!-- Products -->
-			<section>
-				<div class="container my-5">
-					<header class="mb-4">
-						<h3>New products</h3>
-					</header>
-
-					<div class="row">
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<div class="mask" style="height: 50px;">
-										<div class="d-flex justify-content-start align-items-start h-100 m-2">
-											<h6><span class="badge bg-danger pt-1">New</span></h6>
-										</div>
+			
+			<section class="row mt-5 py-5">
+				<div class="col-md-6 col-12">
+					<h3>
+						Đôi nét về chúng tôi
+					</h3>
+					<p>
+						<span style="font-weight: 400;">Chào mừng bạn đến với </span>
+						<b>Ori Cosmetics</b>
+						<span style="font-weight: 400;"> 
+							– nơi nâng tầm vẻ đẹp tự nhiên và tự tin. Chúng tôi là một doanh nghiệp đam mê về mỹ phẩm, cam kết mang đến cho bạn những sản phẩm chất lượng hàng đầu và dịch vụ tận tâm.
+						</span>
+					</p>
+					<p>
+						<span style="font-weight: 400;">Tại </span>
+						<b>Ori Cosmetics</b>
+						<span style="font-weight: 400;">
+							, chúng tôi hiểu rằng làn da là vốn quý giá của mỗi người, và việc chăm sóc da là một phần quan trọng trong cuộc sống. Chính vì vậy, chúng tôi tự hào cung cấp một loạt sản phẩm mỹ phẩm tự nhiên và chăm sóc da chất lượng cao, từ các thương hiệu uy tín trên thị trường.		
+						</span>
+					</p>
+					<p>
+						<span style="font-weight: 400;">Không chỉ làm đẹp bên ngoài, chúng tôi còn coi trọng việc tạo dựng niềm tin và tự tin bên trong bạn. Chúng tôi sẵn sàng tư vấn và hỗ trợ bạn trong việc lựa chọn sản phẩm phù hợp nhất cho làn da của bạn.</span>
+					</p>
+					<p>
+						<span style="font-weight: 400;">Chất lượng và sự hài lòng của khách hàng luôn là ưu tiên hàng đầu tại </span>
+						<b>Ori Cosmetics</b>
+						<span style="font-weight: 400;">. Chúng tôi cam kết đem đến trải nghiệm mua sắm đáng nhớ và giúp bạn thực hiện cuộc hành trình làm đẹp của riêng mình. Hãy đồng hành cùng chúng tôi và khám phá vẻ đẹp tự nhiên tại </span>
+						<b>Ori Cosmetics</b>
+						<span style="font-weight: 400;"> ngay hôm nay!</span>
+					</p>
+				</div>
+				<div class="col-md-6 col-12">
+					<div class="text-end">
+						<img class="img-fluid" th:src="@{https://thocosmetics.com/wp-content/uploads/2023/11/Thiet-ke-chua-co-ten.jpg}">
+					</div>
+				</div>
+			</section>
+			
+			<section class="mt-5 mb-7">
+				<h3 class="section-title section-title-center mt-5 mb-5">
+					<b></b>
+					<span class="section-title-main">Danh mục nổi bật</span>
+					<b></b>
+				</h3>
+				<div class="category-carousel">
+					<div class="card" style="width: 16rem;" th:each="category : ${categories}">
+						<img th:src="${category.logo}" class="card-img-top" alt="category_logo">
+						<div class="card-body">
+							<h5 class="card-title">[[${category.name}]]</h5>	  
+						</div>
+				</div>
+			</section>
+			
+			<section class="container mt-5 mb-5">
+				<h3 class="section-title section-title-center mt-5 mb-5">
+					<b></b>
+					<span class="section-title-main">Sản phẩm giảm giá sâu</span>
+					<b></b>
+				</h3>
+				<div class="row">
+					<div class="col-lg-3 col-md-6 col-sm-6" th:each="product : ${products}">
+						<div class="card my-2 shadow-0">
+							<a href="#" class="">
+								<div class="mask" style="height: 50px;">
+									<div class="d-flex justify-content-start align-items-start h-100 m-2">
+										<h6><span class="badge bg-danger pt-1" th:text="${'Sale: ' + product.sale + '%'}"></span></h6>
 									</div>
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/1.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-3">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$29.95</h5>
-									<p class="card-text mb-0">GoPro action camera 4K</p>
-									<p class="text-muted">
-										Model: X-200
-									</p>
 								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<div class="mask" style="height: 50px;">
-										<div class="d-flex justify-content-start align-items-start h-100 m-2">
-											<h6><span class="badge pt-1" style="background-color: #f87217;">Offer</span>
-											</h6>
-										</div>
-									</div>
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/2.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-2">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$590.00</h5>
-									<p class="card-text mb-0">Canon EOS professional</p>
-									<p class="text-muted">
-										Capacity: 128GB
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/3.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-2">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$29.95</h5>
-									<p class="card-text mb-0">Modern product name here</p>
-									<p class="text-muted">
-										Sizes: S, M, XL
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/4.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-2">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$1099.00</h5>
-									<p class="card-text mb-0">Apple iPhone 13 Pro max</p>
-									<p class="text-muted">
-										Color: Black, Memory: 128GB
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/5.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-2">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$29.95</h5>
-									<p class="card-text mb-0">Modern product name here</p>
-									<p class="text-muted">
-										Sizes: S, M, XL
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/6.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-2">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$29.95</h5>
-									<p class="card-text mb-0">Modern product name here</p>
-									<p class="text-muted">
-										Model: X-200
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/7.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-2">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$29.95</h5>
-									<p class="card-text mb-0">Modern product name here</p>
-									<p class="text-muted">
-										Sizes: S, M, XL
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-2">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$29.95</h5>
-									<p class="card-text mb-0">Modern product name here</p>
-									<p class="text-muted">
-										Material: Jeans
-									</p>
-								</div>
+								<img th:src="${product.image_link}"
+									class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
+							</a>
+							<div class="card-body p-0 pt-3">
+								<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
+										class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
+								<h5 class="card-title">[(${product.name})]</h5>
+								<p class="card-text mb-0"><strong>Còn lại: </strong>[(${product.stock})]</p>
+								<p class="card-text mb-0"><strong>Danh mục: </strong>[(${product.category.name})]</p>
+								<p class="card-text mb-0">
+									<strong>Giá:</strong>
+									<span class="text-decoration-line-through" th:text="${#numbers.formatDecimal(product.price, 0, 0)} + '.000 VND'"></span>
+									<span class="text-danger" th:text="${#numbers.formatDecimal(product.price * (100 - product.sale) / 100, 0, 0) } + '.000 VND'"></span>
+								</p>							
+								<p class="text-muted">[(${product.brand.name})]</p>
 							</div>
 						</div>
 					</div>
 				</div>
 			</section>
-			<!-- Products -->
-
-			<!-- Features -->
-			<section>
-				<div class="container">
-					<div class="card p-4 bg-primary">
-						<div class="row align-items-center">
-							<div class="col">
-								<h4 class="mb-0 text-white">Best products and brands in store</h4>
-								<p class="mb-0 text-white-50">Trendy products and text to build on the card title</p>
-							</div>
-							<div class="col-auto"><a class="btn btn-white text-primary shadow-0" href="#">Discover</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-			<!-- Features -->
-
-			<!-- Recommended -->
-			<section>
-				<div class="container my-5">
-					<header class="mb-4">
-						<h3>Recommended</h3>
-					</header>
-
-					<div class="row">
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-3">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$17.00</h5>
-									<p class="card-text mb-0">Blue jeans shorts for men</p>
-									<p class="text-muted">
-										Sizes: S, M, XL
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-2">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$9.50</h5>
-									<p class="card-text mb-0">Slim fit T-shirt for men</p>
-									<p class="text-muted">
-										Sizes: S, M, XL
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-2">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$29.95</h5>
-									<p class="card-text mb-0">Modern product name here</p>
-									<p class="text-muted">
-										Sizes: S, M, XL
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="card my-2 shadow-0">
-								<a href="#" class="">
-									<img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/12.webp"
-										class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
-								</a>
-								<div class="card-body p-0 pt-2">
-									<a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
-											class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
-									<h5 class="card-title">$29.95</h5>
-									<p class="card-text mb-0">Modern product name here</p>
-									<p class="text-muted">
-										Material: Jeans
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-			<!-- Recommended -->
-			<!-- row //end -->
+			
+			
 		</div>
-
 	</div>
 </body>
 
