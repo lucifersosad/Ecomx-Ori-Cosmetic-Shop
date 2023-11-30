@@ -25,7 +25,7 @@ public class HomeController {
 	@Autowired
 	IProductService productService;
 
-	@GetMapping(value = {""})
+	@GetMapping()
 	public String trangchu(ModelMap model) {
 		List<Product> products = productService.findProductsMostSaleByCategory(); 
 		List<Brand> brands = brandService.findAll();
@@ -36,8 +36,13 @@ public class HomeController {
 		return "web/index";
 	}
 	
-	@GetMapping(value = {"checkout"})
+	@GetMapping(value = "checkout")
 	public String checkout(ModelMap model) {
 		return "web/checkout";
+	}
+	
+	@GetMapping(value = "cart")
+	public String cart(ModelMap model) {
+		return "web/cart";
 	}
 }

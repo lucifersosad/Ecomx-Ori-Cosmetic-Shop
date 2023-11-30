@@ -263,6 +263,89 @@ ul {
 
 .checkout__couppon-card {
 	border: 2px dashed #FBA1B7;
-	padding: 15px 30px 30px 30px ;
-	
+	padding: 15px 30px 30px 30px ;	
 }
+
+.site-section .product-name {
+	max-width: 300px;
+}
+
+.site-section .product-name p {
+	text-align: start;
+	margin-bottom: 0;
+}
+.site-section .btn {
+	height: 43px;
+	font-size: 16px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.site-section .btn-block{
+	width: 100%;
+}
+
+.site-section .btn-auto{
+	height: auto !important;
+}
+
+.site-section .btn-primary{
+    color: #fff;
+    background-color: #FBA1B7;
+    border-color: #FBA1B7;
+}
+
+.site-section .btn-outline-primary{
+	color: #FBA1B7;
+    background-color: transparent;
+    background-image: none;
+    border-color: #FBA1B7;
+}
+
+.site-section .btn-grey{
+	color: #ccc;
+    background-color: transparent;
+    background-image: none;
+    border-color: #ccc;
+}
+
+.site-section .btn-yellow{
+	color: #fff;
+    background-color: #ffdbaa;
+    border-color: #ffdbaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.site-section .form-control {
+	height: 43px;
+	border: 1px solid #ddd !important;
+}
+
+.site-blocks-table {
+  overflow: auto; }
+  .site-blocks-table .product-thumbnail {
+    width: 110px; }
+  .site-blocks-table thead th {
+    padding: 30px;
+    text-align: center;
+    border-width: 1px !important;
+    vertical-align: middle;
+    color: #212529;
+    font-size: 16px; }
+  .site-blocks-table td {
+    padding: 20px;
+    text-align: center;
+    vertical-align: middle;
+    color: #212529; }
+  .site-blocks-table tbody tr:first-child td {
+    border-top: 1px solid #ee4266 !important; }
+
+.site-block-order-table th {
+  border-top: none !important;
+  border-bottom-width: 1px !important; }
+
+.site-block-order-table td, .site-block-order-table th {
+  color: #000; }

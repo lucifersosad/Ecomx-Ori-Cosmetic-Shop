@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{web/layout-default.html}">
+
+<body>
+	
+	<!--Thêm dòng này vào-->
+	<div layout:fragment="content">
+		<div class="site-section mt-5">
+	      <div class="container">
+	        <div class="row mb-5">
+	          <form class="col-md-12" method="post">
+	            <div class="site-blocks-table">
+	              <table class="table table-bordered">
+	                <thead>
+	                  <tr>
+	                    <th class="product-thumbnail"></th>
+	                    <th class="product-name">Sản phẩm</th>
+	                    <th class="product-price">Giá</th>
+	                    <th class="product-quantity">Số lượng</th>
+	                    <th class="product-total">Tổng</th>
+	                    <th class="product-remove">Hủy sản phẩm</th>
+	                  </tr>
+	                </thead>
+	                <tbody>
+	                  <tr>
+	                    <td class="product-thumbnail">
+	                      <img th:src="@{https://media.hcdn.vn/catalog/product/p/r/promotions-auto-mua-1-tang-1-son-duong-bioderma-dang-sap-lam-diu-moi-kho-nut-ne-4g_QNmeaSs1Ki4aTMGa_img_380x380_64adc6_fit_center.png}" alt="Image" class="img-fluid">
+	                    </td>
+	                    <td class="product-name">
+	                      <p class="text-black">[Mua 2 Tặng 1] Son Dưỡng Bioderma Dạng Sáp Làm Dịu Môi Khô, Nứt Nẻ 4g </p>
+	                    </td>
+	                    <td>49.000 VND</td>
+	                    <td class="">
+	                      <div class="input-group" style="max-width: 120px;margin-left: auto;margin-right:auto;">
+	                        <div class="input-group-prepend">
+	                          <button class="btn btn-outline-primary js-btn-minus btn-quantity" style="border-top-right-radius: 0;border-bottom-right-radius: 0;" type="button">&minus;</button>
+	                        </div>
+	                        <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+	                        <div class="input-group-append">
+	                          <button class="btn btn-outline-primary js-btn-plus btn-quantity" style="border-top-left-radius: 0;border-bottom-left-radius: 0;" type="button">&plus;</button>
+	                        </div>
+	                      </div>
+	
+	                    </td>
+	                    <td>49.000 VND</td>
+	                    <td><a href="#" class="btn btn-primary btn-auto btn-sm">X</a></td>
+	                  </tr>
+	
+	                  <tr>
+	                    <td class="product-thumbnail">
+	                      <img th:src="@{https://media.hcdn.vn/catalog/product/g/o/google-shopping-mieng-dan-mui-lot-mun-men-s-biore-4-mieng-mau-trang_img_380x380_64adc6_fit_center.jpg}" alt="Image" class="img-fluid">
+	                    </td>
+	                    <td class="product-name">
+							<p class="text-black"><span>Mặt Nạ Dermal Chiết Xuất Trà Xanh Làm Săn Chắc Da 23g</span></p>
+	                    </td>
+	                    <td>49.000 VND</td>
+	                    <td>
+	                      <div class="input-group" style="max-width: 120px;margin-left: auto;margin-right:auto">
+	                        <div class="input-group-prepend">
+	                          <button class="btn btn-outline-primary js-btn-minus" style="border-top-right-radius: 0;border-bottom-right-radius: 0;" type="button">&minus;</button>
+	                        </div>
+	                        <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+	                        <div class="input-group-append">
+	                          <button class="btn btn-outline-primary js-btn-plus" style="border-top-left-radius: 0;border-bottom-left-radius: 0;" type="button">&plus;</button>
+	                        </div>
+	                      </div>
+	
+	                    </td>
+	                    <td>49.000 VND</td>
+	                    <td><a href="#" class="btn btn-primary btn-sm btn-auto">X</a></td>
+	                  </tr>
+	                </tbody>
+	              </table>
+	            </div>
+	          </form>
+	        </div>
+	
+	        <div class="row">
+	          <div class="col-md-6">
+	            <div class="row mb-5">
+	              <div class="col-md-6 mb-3 mb-md-0">
+	                <button class="btn btn-primary btn-sm btn-block">Cập nhật giỏ hàng</button>
+	              </div>
+	              <div class="col-md-6">
+	                <button class="btn btn-outline-primary btn-sm btn-block">← Tiếp tục xem sản phẩm</button>
+	              </div>
+	            </div>
+	            <div class="row">
+	              <div class="col-md-12">
+	                <label class="text-black h4" for="coupon">Coupon</label>
+	                <p>Enter your coupon code if you have one.</p>
+	              </div>
+	              <div class="col-md-8 mb-3 mb-md-0">
+	                <input type="text" class="form-control py-3" id="coupon" placeholder="Mã ưu đãi">
+	              </div>
+	              <div class="col-md-4">
+	                <button class="btn btn-primary btn-sm px-4 btn-grey">Áp dụng</button>
+	              </div>
+	            </div>
+	          </div>
+	          <div class="col-md-6 pl-5">
+	            <div class="row justify-content-end">
+	              <div class="col-md-7">
+	                <div class="row">
+	                  <div class="col-md-12 text-end border-bottom mb-5">
+	                    <h4 class="text-black text-uppercase">Cart Totals</h4> 
+	                  </div>
+	                </div>
+	                <div class="row mb-3">
+	                  <div class="col-md-6">
+	                    <span class="text-black">Subtotal</span>
+	                  </div>
+	                  <div class="col-md-6 text-end">
+	                    <strong class="text-black">$230.00</strong>
+	                  </div>
+	                </div>
+	                <div class="row mb-5">
+	                  <div class="col-md-6">
+	                    <span class="text-black">Total</span>
+	                  </div>
+	                  <div class="col-md-6 text-end">
+	                    <strong class="text-black">$230.00</strong>
+	                  </div>
+	                </div>
+	
+	                <div class="row">
+	                  <div class="col-md-12">
+	                    <a class="btn btn-primary btn-block btn-yellow" th:href="@{checkout}">Tiến hành thanh toán</a>
+	                  </div>
+	                </div>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+</body>
+
+</html>

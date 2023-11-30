@@ -51,7 +51,7 @@ public class ProductWebController {
 		model.addAttribute("listCate", listCate);
 		model.addAttribute("detailPro", proModel);
 		model.addAttribute("listBrand", listBrand);
-		return new ModelAndView("web/detailProduct/detailProduct", model);
+		return new ModelAndView("web/product-detail", model);
 		
 	}
 }
