@@ -44,9 +44,9 @@ public class AuthAPIController {
         user.setPasswordSalt(appUtil.generateSalt());
         user.setPasswordHash(appUtil.generatePasswordHash(user.getPasswordHash(), user));
         Roles role = roleRepository.findById(1).orElse(null);
-        Set<Roles> set = new HashSet<>();
-        set.add(role);
-        user.setRoles(set);
+
+
+
         userRepository.save(user);
         return ResponseEntity.ok(user);
     }

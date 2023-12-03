@@ -78,8 +78,8 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                     auth -> auth
-                            .requestMatchers(antMatcher("/admin")).hasAnyAuthority(UserRole.ADMIN.getRoleName())
-//                            .requestMatchers(antMatcher("/home")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())
+                            .requestMatchers(antMatcher("/admin/**")).hasAnyAuthority(UserRole.ADMIN.getRoleName())
+                            .requestMatchers(antMatcher("/home")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())
 //                            .requestMatchers(antMatcher("/"))
                             .requestMatchers(antMatcher("/api/**"))
                             .permitAll()
