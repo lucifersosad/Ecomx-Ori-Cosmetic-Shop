@@ -17,6 +17,7 @@ import ori.entity.Roles;
 import ori.entity.User;
 import ori.model.LoginRequest;
 import ori.model.SignUpRequest;
+import ori.repository.RoleRepository;
 import ori.service.IUserService;
 import ori.utils.AppUtil;
 
@@ -24,10 +25,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
+
 @Controller
 @Slf4j
 public class AuthController {
 
+    @Autowired
+    RoleRepository roleRepository;
     @Autowired
     IUserService userService;
     @Autowired
@@ -72,16 +76,22 @@ public class AuthController {
             result.rejectValue("email", null, "There is already an account registered with that email");
         }
         Set<Roles> role = new HashSet<>();
+        Roles roleuser =roleRepository.findById(1).orElse(null);
+        if(roleuser !=null){
+            role.add(roleuser);
+        }
+
 //        role.add(Roles.builder()
 //                .role(UserRole.ADMIN)
 //                .build());
-        role.add(Roles.builder()
-                .role(UserRole.USER)
-                .build());
+
+//               role.add(Roles.builder()
+//                .role(UserRole.USER)
+//                .build());
 
         user = User.builder()
                 .active(false)
-                .username("Duy Duc")
+                .username(".")
                 .address(userReq.getAddress())
                 .phone(userReq.getPhone())
                 .email(userReq.getEmail())

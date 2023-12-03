@@ -103,7 +103,7 @@ public class SecurityConfiguration {
                 .logout(l -> l.invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-                        .logoutSuccessUrl("/auth/login?logout")
+                        .logoutSuccessUrl("/auth/login-logouted")
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
