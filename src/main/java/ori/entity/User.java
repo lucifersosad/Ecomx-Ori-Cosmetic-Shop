@@ -31,4 +31,6 @@ public class User implements Serializable{/**
 	@Column(name="is_admin")
 	private Boolean isAdmin;
 	
+
+	
 }
