@@ -38,17 +38,17 @@ import ori.service.IPaymentService;
 public class PaymentAPIController {
 	@Autowired
 	IPaymentService paymentService;
-	@PostMapping(path = "/create")
-	public ResponseEntity<?> createPayment(@Validated @RequestParam("amount") int amount,
+	@GetMapping(path = "/create")
+	public ResponseEntity<?> createPayment(
 			
-			@Validated @RequestParam("bankCode") String bankCode,
-			@Validated @RequestParam("language") String locate,
 			HttpServletRequest req
 			) throws IOException {
+		//@Validated @RequestParam("amount") int amount,
 		String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        long total = Integer.parseInt(req.getParameter("amount"))*100;            
+        //long total = Integer.parseInt(req.getParameter("amount"))*100;  
+        long total = 100000*100;  
         String vnp_TxnRef = Config.getRandomNumber(8);
         String vnp_IpAddr = Config.getIpAddress(req);
         String vnp_TmnCode = Config.vnp_TmnCode;
@@ -57,23 +57,15 @@ public class PaymentAPIController {
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(total));
-        vnp_Params.put("vnp_CurrCode", "VND");       
-        if (bankCode != null && !bankCode.isEmpty()) {
-            vnp_Params.put("vnp_BankCode", bankCode);
-        }
+        vnp_Params.put("vnp_CurrCode", "VND");            
+        vnp_Params.put("vnp_BankCode", "NCB");        
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
 //        if (orderId == null || orderId.isEmpty()) {
 //        	orderId = "001";
 //        }
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + "001xx" + ". So tien:" + total);
         vnp_Params.put("vnp_OrderType", orderType);
-
-
-        if (locate != null && !locate.isEmpty()) {
-            vnp_Params.put("vnp_Locale", locate);
-        } else {
-            vnp_Params.put("vnp_Locale", "vn");
-        }
+        vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
