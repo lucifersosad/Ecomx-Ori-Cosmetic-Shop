@@ -58,7 +58,7 @@ public class WebUserController {
 		}
 		model.addAttribute("message", message);
 //redirect về URL controller
-		return new ModelAndView("forward:/web/users/", model);
+		return new ModelAndView("/web/users/infor", model);
 
 	}
 	@GetMapping("/infor/{email}/{password}")
@@ -68,12 +68,15 @@ public class WebUserController {
 	    if (optUser.isPresent()) {
 	        User user = optUser.get();
 	        if (user.getPassword().equals(password)) {
-	            model.addAttribute("user", user);
+	        	UserModel userModel = new UserModel();
+	        	BeanUtils.copyProperties(user, userModel);
+				userModel.setIsEdit(true);
+	            model.addAttribute("user", userModel);
 	            return new ModelAndView("web/users/infor", model);
 	        }
 	    }
 	    model.addAttribute("message", "User is not existed!!!!");
-	    return new ModelAndView("forward:/web/users", model);
+	    return new ModelAndView("forward:/web/users/error", model);
 	}
 	@GetMapping("/updateAddress/{email}")
 	public ModelAndView updateAddress(ModelMap model, @PathVariable("email") String email) {
