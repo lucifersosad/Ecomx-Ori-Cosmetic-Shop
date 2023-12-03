@@ -1,7 +1,10 @@
 package ori.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,16 +13,22 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements Serializable{/**
+@Builder
+public class User implements Serializable {/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="userid")
 	private Integer userId;
-	@Column(name="password")
-	private String password;
+	@Column(name="passwordHash")
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String passwordHash;
+	@Column(name="passwordSalt")
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String passwordSalt;
 	@Column(name="fullname")
 	private String fullName;
 	@Column(name="email")
@@ -28,7 +37,19 @@ public class User implements Serializable{/**
 	private String phone;
 	@Column(name="address")
 	private String address;
-	@Column(name="is_admin")
-	private Boolean isAdmin;
+	@Column(name="active")
+	private Boolean active;
+	@Column(name="username")
+	private String username;
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(
+		name = "users_roles",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id")
+	)
+	private Set<Roles> roles = new HashSet<>();
+
 	
+
 }

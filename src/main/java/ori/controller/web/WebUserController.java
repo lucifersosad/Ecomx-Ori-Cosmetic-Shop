@@ -67,7 +67,7 @@ public class WebUserController {
 
 	    if (optUser.isPresent()) {
 	        User user = optUser.get();
-	        if (user.getPassword().equals(password)) {
+	        if (user.getPasswordHash().equals(password)) {
 	            model.addAttribute("user", user);
 	            return new ModelAndView("web/users/infor", model);
 	        }

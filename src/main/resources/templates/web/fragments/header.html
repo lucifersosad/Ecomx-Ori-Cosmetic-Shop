@@ -45,15 +45,15 @@
                         <em class="fa fa-shopping-cart"></em>
                         <span class="clearfix d-none d-sm-inline-block">[[#{navbar.cart}]]</span>
                     </a>-->
-							<a sec:authorize="isAnonymous()" class="nav-link waves-effect waves-light rounded"
+							<a sec:authorize="" class="nav-link waves-effect waves-light rounded"
 								data-toggle="modal" href="#loginModal" role="button">
 								<em class="fa fa-shopping-cart"></em>
 								<span class="clearfix d-none d-sm-inline-block">Cart</span></span>
 							</a>
 						</li>
 						<!--Profile dropdown-->
-						<li class="nav-item dropdown ml-3" sec:authorize="isAnonymous()">
-							<a sec:authorize="isAnonymous()" class="nav-link waves-effect waves-light rounded"
+						<li class="nav-item dropdown ml-3" sec:authorize="">
+							<a sec:authorize="" class="nav-link waves-effect waves-light rounded"
 								data-toggle="modal" href="#loginModal" role="button">
 								<span class="fas fa-user text-white"></span>
 							</a>

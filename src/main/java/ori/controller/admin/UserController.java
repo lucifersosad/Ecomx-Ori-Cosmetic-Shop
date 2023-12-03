@@ -94,7 +94,7 @@ public class UserController {
 
 	    if (optUser.isPresent()) {
 	        User user = optUser.get();
-	        if (user.getPassword().equals(password)) {
+	        if (user.getPasswordHash().equals(password)) {
 	            model.addAttribute("user", user);
 	            return new ModelAndView("admin/users/infor", model);
 	        }
@@ -102,5 +102,6 @@ public class UserController {
 	    model.addAttribute("message", "User is not existed!!!!");
 	    return new ModelAndView("forward:/admin/users", model);
 	}
+
 
 }

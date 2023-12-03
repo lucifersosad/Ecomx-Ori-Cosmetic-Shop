@@ -29,5 +29,9 @@ public interface IUserService {
 	User updateAddress(String email, String newAddress);
 
 	Page<User> getAll(Integer pageNo);
-	
+
+
+
+
+	Optional<User> getByUserNameOrEmail(String username);
 }

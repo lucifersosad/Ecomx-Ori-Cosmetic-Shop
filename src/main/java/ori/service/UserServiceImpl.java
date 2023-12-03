@@ -59,8 +59,8 @@ public class UserServiceImpl implements IUserService{
 	public User updateUser(User model) {
 		Integer userid = model.getUserId();
 		User user = userRepository.findById(userid).get();
-		model.setPassword(user.getPassword());
-		model.setIsAdmin(user.getIsAdmin());
+		model.setPasswordHash(user.getPasswordHash());
+//		model.setIsAdmin(user.getIsAdmin());
 		return userRepository.save(model);
 	}
 	@Override
@@ -71,10 +71,25 @@ public class UserServiceImpl implements IUserService{
 		return userRepository.save(user);
 	}
 	@Override
-	public Page<User> getAll(Integer pageNo){
+	public Page<User> getAll(Integer pageNo) {
 		Pageable pageable = PageRequest.of(pageNo-1, 100);
 		return userRepository.findAll(pageable);
 	}
 	
-	
+	public User login(String email, String passwd) {
+		User user = userRepository.findByEmail(email).get();
+		if (user != null && passwd.equals(user.getPasswordHash())) {
+			return user;
+		}
+		return null;
+	}
+
+
+
+	@Override
+	public Optional<User> getByUserNameOrEmail(String username) {
+		return userRepository.findByUsernameOrEmail(username);
+	}
+
+
 }
