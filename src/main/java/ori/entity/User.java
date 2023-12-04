@@ -18,6 +18,8 @@ public class User implements Serializable{/**
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="userid")
 	private Integer userId;
+	@Column(name="username")
+	private String userName;
 	@Column(name="password")
 	private String password;
 	@Column(name="fullname")
@@ -30,5 +32,6 @@ public class User implements Serializable{/**
 	private String address;
 	@Column(name="is_admin")
 	private Boolean isAdmin;
-	
+	@Column(name="active")
+	private Boolean active;
 }

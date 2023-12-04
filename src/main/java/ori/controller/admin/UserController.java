@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -36,8 +37,8 @@ public class UserController {
 		model.addAttribute("currentPage",pageNo);
 		return "admin/users/list";
 	}
-	@GetMapping("add")
 
+	@GetMapping("add")
 	public String add(ModelMap model) {
 		UserModel userModel = new UserModel();
 		userModel.setIsEdit(false);
@@ -88,19 +89,39 @@ public class UserController {
 		model.addAttribute("message", "User is deleted!!!!");
 		return new ModelAndView("redirect:/admin/users", model);
 	}
-	@GetMapping("/infor/{email}/{password}")
-	public ModelAndView infor(ModelMap model, @PathVariable("email") String email, @PathVariable("password") String password) {
+	@GetMapping("/infor/{email}")
+	public ModelAndView infor(ModelMap model, @PathVariable("email") String email) {
 	    Optional<User> optUser = userService.findByEmail(email);
 
 	    if (optUser.isPresent()) {
-	        User user = optUser.get();
-	        if (user.getPassword().equals(password)) {
-	            model.addAttribute("user", user);
+	    	 User user = optUser.get();
+	        	UserModel userModel = new UserModel();
+	        	BeanUtils.copyProperties(user, userModel);
+				userModel.setIsEdit(true);
+	            model.addAttribute("user", userModel);
 	            return new ModelAndView("admin/users/infor", model);
-	        }
 	    }
+	    
 	    model.addAttribute("message", "User is not existed!!!!");
 	    return new ModelAndView("forward:/admin/users", model);
 	}
+	@GetMapping("/profile")
+	public ModelAndView info(ModelMap model, HttpSession session) {
+	    Object userEmail = session.getAttribute("userEmail");
+
+	    if (userEmail != null) {
+	        Optional<User> optUser = userService.findByEmail(userEmail.toString());
+
+	        if (optUser.isPresent()) {
+	            User user = optUser.get();
+	            model.addAttribute("user", user);
+	            return new ModelAndView("admin/users/profile", model);
+	        }
+	    }
+
+	    model.addAttribute("message", "User is not logged in!");
+	    return new ModelAndView("forward:/admin/users", model);
+	}
+
 
 }
