@@ -13,34 +13,32 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.annotation.Validated;
+
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
+
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import ori.config.Config;
-import ori.entity.Payment;
+
 import ori.model.Response;
-import ori.service.IPaymentService;
+
 
 
 @RestController
 @RequestMapping("/api/payment")
-public class PaymentAPIController {
-	@Autowired
-	IPaymentService paymentService;
+public class VNPAYAPIController {
+
+
 	@GetMapping(path = "/create")
-	public ResponseEntity<?> createPayment(
-			
+	public ResponseEntity<?> createPayment(			
 			HttpServletRequest req
 			) throws IOException {
 		//@Validated @RequestParam("amount") int amount,

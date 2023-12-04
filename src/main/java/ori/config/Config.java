@@ -21,7 +21,10 @@ public class Config {
     public static String vnp_TmnCode = "M8IEGRE2";
     public static String secretKey = "XGQTYPCIATVOJJNAVFGGGSBTKMKWTSZU";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
-
+    public static String userid = "";
+    public static String shipping_method = "";
+    
+    
     public static String md5(String message) {
         String digest = null;
         try {

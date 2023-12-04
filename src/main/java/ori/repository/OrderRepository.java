@@ -3,9 +3,11 @@ package ori.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import ori.entity.Payment;
+import ori.entity.Order;
+
+
 
 @Repository
-public interface PaymentRepository extends JpaRepository<Payment,Integer> {
-	
+public interface OrderRepository extends JpaRepository<Order, Integer>{
+
 }

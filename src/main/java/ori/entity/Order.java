@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,13 +18,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "orders")
 public class Order implements Serializable{/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "orderId")
 	private Integer orderId;
 	@Column(name = "order_date")
 	private String order_date;
@@ -32,10 +33,10 @@ public class Order implements Serializable{/**
 	@Column(name = "shipping_method")
 	private String shipping_method;
 	@Column(name = "order_status")
-	private String order_status;
+	private int order_status;
 	@Column(name = "order_total")
-	private String total;
-//	@ManyToOne
-//	@JoinColumn(name="userId")
-//	private User userId;
+	private Double order_total;
+	@ManyToOne
+	@JoinColumn(name="userid")
+	private User userId;
 }
