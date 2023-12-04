@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ori.entity.Brand;
 import ori.entity.Category;
 import ori.entity.Product;
-import ori.model.CategoryModel;
+
 import ori.model.ProductModel;
 import ori.service.IProductService;
 
@@ -44,7 +44,6 @@ public class ProductWebController {
 
 		List<Product> listBrand = proService.findByBrand(enityBrand.getBrandId());
 		List<Product> listCate = proService.findByCategory(enityCate.getCateId());
-		
 		for (Product product : listBrand) {
 			System.out.println(product.getName());
 		}
