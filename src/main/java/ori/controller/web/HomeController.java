@@ -8,12 +8,15 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
 import ori.entity.Brand;
 import ori.entity.Category;
 import ori.entity.Product;
 import ori.service.IBrandService;
 import ori.service.ICategoryService;
 import ori.service.IProductService;
+
+
 
 @RequestMapping(value = {"/", "home"})
 @Controller
