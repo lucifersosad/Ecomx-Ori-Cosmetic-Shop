@@ -8,9 +8,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import ori.entity.ShoppingSession;
+import ori.entity.ShoppingSessionKey;
 
 @Repository
-public interface ShoppingSessionRepository extends JpaRepository<ShoppingSession, Integer>{
+public interface ShoppingSessionRepository extends JpaRepository<ShoppingSession, ShoppingSessionKey>{
 
 	@Query(value = "SELECT * FROM shopping_session where  userId = :id limit 4", nativeQuery = true)
 	List<ShoppingSession> findByUser(@Param("id") Integer userId);

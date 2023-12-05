@@ -1,34 +1,57 @@
 package ori.entity;
-import java.io.Serializable;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.MapsId;
 
-@Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ShoppingSession implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "shopsesid")
-	private Integer shopSesId;
+@Entity(name = "shopping_session")
+public class ShoppingSession {
+	@EmbeddedId
+    private ShoppingSessionKey id;
 	
 	@ManyToOne
-	@JoinColumn(name="userid")
-	private User user;
+    @MapsId("proId")
+    @JoinColumn(name = "proid")
+    private Product product;
 	
 	@ManyToOne
-	@JoinColumn(name="proid")
-	private Product product;
+    @MapsId("userId")
+    @JoinColumn(name = "userid")
+    private User user;
+	
+	String date;
+
+	public ShoppingSessionKey getId() {
+		return id;
+	}
+
+	public void setId(ShoppingSessionKey id) {
+		this.id = id;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
 }
