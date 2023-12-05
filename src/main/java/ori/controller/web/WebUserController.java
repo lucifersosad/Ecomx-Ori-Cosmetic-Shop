@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.validation.Valid;
@@ -61,35 +62,53 @@ public class WebUserController {
 		return new ModelAndView("/web/users/infor", model);
 
 	}
-	@GetMapping("/infor/{email}/{password}")
-	public ModelAndView infor(ModelMap model, @PathVariable("email") String email, @PathVariable("password") String password) {
+	@GetMapping("/infor/{email}")
+	public ModelAndView infor(ModelMap model, @PathVariable("email") String email) {
 	    Optional<User> optUser = userService.findByEmail(email);
 
 	    if (optUser.isPresent()) {
 	        User user = optUser.get();
-	        if (user.getPassword().equals(password)) {
-	        	UserModel userModel = new UserModel();
-	        	BeanUtils.copyProperties(user, userModel);
-				userModel.setIsEdit(true);
-	            model.addAttribute("user", userModel);
-	            return new ModelAndView("web/users/infor", model);
-	        }
-	    }
-	    model.addAttribute("message", "User is not existed!!!!");
-	    return new ModelAndView("forward:/web/users/error", model);
-	}
-	@GetMapping("/updateAddress/{email}")
-	public ModelAndView updateAddress(ModelMap model, @PathVariable("email") String email) {
-		Optional<User> optUser = userService.findByEmail(email);
-
-	    if (optUser.isPresent()) {
-	        User user = optUser.get();
-	            model.addAttribute("user", user);
-	            return new ModelAndView("web/users/updateAddress", model);
-	        
+        	UserModel userModel = new UserModel();
+        	BeanUtils.copyProperties(user, userModel);
+			userModel.setIsEdit(true);
+			String add = userModel.getAddress();
+			String[] tmp = add.split(",");
+            if(tmp.length != 3) {
+            	 model.addAttribute("town",tmp[0]);
+            }else {
+            	model.addAttribute("city",tmp[0]);
+                model.addAttribute("district",tmp[1]);
+                model.addAttribute("town",tmp[2]);
+            }
+			model.addAttribute("user", userModel);
+            return new ModelAndView("web/users/infor", model);
+	       
 	    }
 	    model.addAttribute("message", "User is not existed!!!!");
 	    return new ModelAndView("forward:/web/users/", model);
 	}
+	@PostMapping("/updateAddress/{email}")
+	public ModelAndView updateAddress(ModelMap model,
+	                                   @PathVariable("email") String email,
+	                                   @RequestParam("city") String city,
+	                                   @RequestParam("district") String district,
+	                                   @RequestParam("town") String town) {
+	    Optional<User> optUser = userService.findByEmail(email);
+
+	    if (optUser.isPresent()) {
+	        User user = optUser.get();
+	        UserModel userModel = new UserModel();
+        	BeanUtils.copyProperties(user, userModel);
+        	userModel.setIsEdit(true);
+	        String address = city + ", " + district + ", " + town;
+	        user.setAddress(address);
+	        userService.updateUser(user);
+	        model.addAttribute("message", "Address is updated!!!");
+	        model.addAttribute("user", userModel);
+	        return new ModelAndView("forward:web/users/infor", model);
+	    }
+	    return new ModelAndView("forward:/web/users/", model);
+	}
+
 	
 }
