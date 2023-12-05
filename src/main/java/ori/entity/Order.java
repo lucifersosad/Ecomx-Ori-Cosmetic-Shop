@@ -26,16 +26,18 @@ public class Order implements Serializable{/**
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer orderId;
-	@Column(name = "order_date")
-	private String order_date;
+	@Column(name = "date")
+	private String date;
 	@Column(name = "payment_method")
 	private String payment_method;
 	@Column(name = "shipping_method")
 	private String shipping_method;
-	@Column(name = "order_status")
-	private int order_status;
-	@Column(name = "order_total")
-	private Double order_total;
+	@Column(name = "status")
+	private int status;
+	@Column(name = "total")
+	private Double total;
+	@Column(name = "currency")
+	private String currency;
 	@ManyToOne
 	@JoinColumn(name="userid")
 	private User userId;

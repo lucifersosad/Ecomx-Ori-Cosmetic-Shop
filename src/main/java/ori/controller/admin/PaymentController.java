@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
-import ori.config.Config;
+import ori.config.VNPAYConfig;
 import ori.entity.Order;
 
 import ori.entity.User;
@@ -47,8 +47,8 @@ public class PaymentController {
 	public String list(ModelMap model) {
 		int amount = 20000;
 		model.addAttribute("amount", amount);
-		Config.userid = "1";
-		Config.shipping_method = "Standard";
+		VNPAYConfig.userid = "1";
+		VNPAYConfig.shipping_method = "Standard";
 		return "web/payment/vnpay_pay";
 	}
 
@@ -79,7 +79,7 @@ public class PaymentController {
 		if (fields.containsKey("vnp_SecureHash")) {
 			fields.remove("vnp_SecureHash");
 		}
-		String signValue = Config.hashAllFields(fields);
+		String signValue = VNPAYConfig.hashAllFields(fields);
 		String payStatus = "", message = "";
 		if (signValue.equals(vnp_SecureHash)) {
 			boolean checkOrderId = true; // Kiểm tra có đơn hàng này hay không
@@ -90,17 +90,18 @@ public class PaymentController {
 					if (checkOrderStatus) {
 						if ("00".equals(queryParams.get("vnp_ResponseCode"))) {
 							Order order = new Order();
-							Optional<User> optUser = userService.findById(Integer.parseInt(Config.userid));
+							Optional<User> optUser = userService.findById(Integer.parseInt(VNPAYConfig.userid));
 							User user = new User();
 							if (optUser.isPresent()) {
 								 user = optUser.get();
 							}
 							order.setUserId(user);
-							order.setOrder_date(queryParams.get("vnp_PayDate"));
+							order.setDate(queryParams.get("vnp_PayDate"));
 							order.setPayment_method("VNPAY");
-							order.setShipping_method(Config.shipping_method);
-							order.setOrder_status(1);
-							order.setOrder_total(Double.parseDouble(queryParams.get("vnp_Amount")));
+							order.setShipping_method(VNPAYConfig.shipping_method);
+							order.setStatus(1);
+							order.setTotal(Double.parseDouble(queryParams.get("vnp_Amount")));
+							order.setCurrency("VND");
 							payStatus = "1";
 							message = queryParams.get("vnp_Amount");
 							orderService.save(order);

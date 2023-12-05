@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import ori.config.Config;
+import ori.config.VNPAYConfig;
 
 import ori.model.Response;
 
@@ -47,9 +47,9 @@ public class VNPAYAPIController {
         String orderType = "other";
         //long total = Integer.parseInt(req.getParameter("amount"))*100;  
         long total = 100000*100;  
-        String vnp_TxnRef = Config.getRandomNumber(8);
-        String vnp_IpAddr = Config.getIpAddress(req);
-        String vnp_TmnCode = Config.vnp_TmnCode;
+        String vnp_TxnRef = VNPAYConfig.getRandomNumber(8);
+        String vnp_IpAddr = VNPAYConfig.getIpAddress(req);
+        String vnp_TmnCode = VNPAYConfig.vnp_TmnCode;
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
@@ -64,7 +64,7 @@ public class VNPAYAPIController {
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + "001xx" + ". So tien:" + total);
         vnp_Params.put("vnp_OrderType", orderType);
         vnp_Params.put("vnp_Locale", "vn");
-        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+        vnp_Params.put("vnp_ReturnUrl", VNPAYConfig.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
@@ -100,9 +100,9 @@ public class VNPAYAPIController {
             }
         }
         String queryUrl = query.toString();
-        String vnp_SecureHash = Config.hmacSHA512(Config.secretKey, hashData.toString());
+        String vnp_SecureHash = VNPAYConfig.hmacSHA512(VNPAYConfig.secretKey, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
-        String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;                   
+        String paymentUrl = VNPAYConfig.vnp_PayUrl + "?" + queryUrl;                   
         return new ResponseEntity<Response>(new Response(true, "success", paymentUrl), HttpStatus.OK);
     }
 }
