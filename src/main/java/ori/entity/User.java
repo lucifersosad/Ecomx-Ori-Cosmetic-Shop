@@ -1,7 +1,6 @@
 package ori.entity;
 
 import java.io.Serializable;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,9 +9,8 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements Serializable{/**
-	 * 
-	 */
+public class User implements Serializable{
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
