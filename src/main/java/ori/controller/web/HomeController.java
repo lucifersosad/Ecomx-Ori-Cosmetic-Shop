@@ -35,14 +35,4 @@ public class HomeController {
 		model.addAttribute("products", products);
 		return "web/index";
 	}
-	
-	@GetMapping(value = "checkout")
-	public String checkout(ModelMap model) {
-		return "web/checkout";
-	}
-	
-	@GetMapping(value = "cart")
-	public String cart(ModelMap model) {
-		return "web/cart";
-	}
 }

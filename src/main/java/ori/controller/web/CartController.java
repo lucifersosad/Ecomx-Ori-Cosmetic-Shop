@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import ori.entity.Cart;
 import ori.service.ICartService;
@@ -15,7 +15,7 @@ import ori.service.IProductService;
 import ori.service.IUserService;
 
 @Controller
-
+@RequestMapping("cart")
 public class CartController {
 	@Autowired(required=true)
 	IUserService userService;
@@ -23,7 +23,8 @@ public class CartController {
 	ICartService cartService;
 	@Autowired(required=true)
 	IProductService productService;
-    @GetMapping("/cart")
+	
+    @GetMapping("")
 	public String viewCart(Model model) {
         //UserModel user = (UserModel) session.getAttribute("account");
         List<Cart> list= cartService.findByUserId(1);
