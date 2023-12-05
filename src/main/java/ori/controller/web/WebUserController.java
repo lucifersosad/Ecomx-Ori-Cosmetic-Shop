@@ -71,14 +71,15 @@ public class WebUserController {
         	UserModel userModel = new UserModel();
         	BeanUtils.copyProperties(user, userModel);
 			userModel.setIsEdit(true);
-			String add = userModel.getAddress();
+			String add = user.getAddress();
 			String[] tmp = add.split(",");
-            if(tmp.length != 3) {
-            	 model.addAttribute("town",tmp[0]);
+            if(tmp.length == 4) {
+            	 model.addAttribute("subAdd",tmp[0]);
+            	 model.addAttribute("city",tmp[3]);
+                 model.addAttribute("district",tmp[2]);
+                 model.addAttribute("town",tmp[1]);
             }else {
-            	model.addAttribute("city",tmp[0]);
-                model.addAttribute("district",tmp[1]);
-                model.addAttribute("town",tmp[2]);
+
             }
 			model.addAttribute("user", userModel);
             return new ModelAndView("web/users/infor", model);
