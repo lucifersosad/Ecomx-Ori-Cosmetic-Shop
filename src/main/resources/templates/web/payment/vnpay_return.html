@@ -8,10 +8,36 @@
 		<div class="container">
 			<section class="row gx-3 mt-5 mb-5">
 				<div th:if="${payStatus == '1'}">
-					<label th:text="'Quý khách thanh toán thành công. Số tiền ' + ${message} + ' VND'"></label>
+					<div class="vh-50 d-flex justify-content-center align-items-center">
+						<div class="col-md-4">
+							<div class="border border-3 border-success"></div>
+							<div class="card  bg-white shadow p-5">
+								<div class="text-center">
+									<h1>Thank You !</h1>
+									<p>Your order has been successfully paid.</p>
+									<a class="btn btn-outline-success" th:href="@{/home}">Back Home</a>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div th:if="${payStatus == '0'}">
-					<label th:text="${message}"></label>
+					<div class="ui middle aligned center aligned grid">
+						<div class="ui eight wide column">
+							<form class="ui large form">
+								<div class="ui icon negative message">
+									<i class="warning icon"></i>
+									<div class="content">
+										<div class="header">
+											Oops! Something went wrong.
+										</div>
+										<p th:text="${message}"></p>
+									</div>
+								</div>
+								<a class="ui large teal submit fluid button" th:href="@{/home}">Back Cart</a>
+							</form>
+						</div>
+					</div>
 				</div>
 			</section>
 		</div>
