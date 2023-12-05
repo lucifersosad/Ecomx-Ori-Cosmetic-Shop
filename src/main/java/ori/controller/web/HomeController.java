@@ -15,7 +15,7 @@ import ori.service.IBrandService;
 import ori.service.ICategoryService;
 import ori.service.IProductService;
 
-@RequestMapping(value = {"/", "home"})
+@RequestMapping(value = {"", "home"})
 @Controller
 public class HomeController {
 	@Autowired

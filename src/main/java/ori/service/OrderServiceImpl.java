@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import ori.entity.Order;
+import ori.model.OrderModel;
 import ori.repository.OrderRepository;
 
 @Service
@@ -73,4 +74,3 @@ public class OrderServiceImpl implements IOrderService{
 
 	}
 }
-import ori.model.OrderModel;

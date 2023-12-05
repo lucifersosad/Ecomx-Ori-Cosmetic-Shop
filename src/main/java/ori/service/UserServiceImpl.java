@@ -67,8 +67,8 @@ public class UserServiceImpl implements IUserService {
 				if (model.getFullName() != null && !model.getFullName().isEmpty()) {
 					user.setFullName(model.getFullName());
 				}
-				if (model.getUserName() != null && !model.getUserName().isEmpty()) {
-					user.setUserName(model.getUserName());
+				if (model.getUsername() != null && !model.getUsername().isEmpty()) {
+					user.setUsername(model.getUsername());
 				}
 				if (model.getEmail() != null && !model.getEmail().isEmpty()) {
 					user.setEmail(model.getEmail());
