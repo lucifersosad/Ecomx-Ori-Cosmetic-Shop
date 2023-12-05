@@ -100,4 +100,16 @@ public class UserServiceImpl implements IUserService {
 		return userRepository.findAll(pageable);
 	}
 
+	public User login(String email, String passwd) {
+		User user = userRepository.findByEmail(email).get();
+		if (user != null && passwd.equals(user.getPasswordHash())) {
+			return user;
+		}
+		return null;
+	}
+
+	@Override
+	public Optional<User> getByUserNameOrEmail(String username) {
+		return userRepository.findByUsernameOrEmail(username);
+	}
 }

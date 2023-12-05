@@ -1,22 +1,15 @@
 package ori.repository;
 
-
-
-
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import ori.entity.Order;
+import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import ori.model.OrderModel;
-
-
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer>{
-
 	@Query(value = "SELECT IFNULL(sum(order_total), 0) as total_month\r\n"
 			+ "FROM `order` \r\n"
 			+ "WHERE MONTH(order_date) = MONTH(CURRENT_DATE()) AND order_status=1;", nativeQuery = true)
@@ -33,6 +26,4 @@ public interface OrderRepository extends JpaRepository<Order, Integer>{
 			+ "WHERE quarter(order_date) = quarter(CURRENT_DATE())\r\n"
 			+ "AND order_status=1;", nativeQuery = true)
     int revenueOnCurrentQuarter();
-	
-
 }

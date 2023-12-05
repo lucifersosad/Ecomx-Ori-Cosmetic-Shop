@@ -13,34 +13,32 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.annotation.Validated;
+
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
+
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import ori.config.Config;
-import ori.entity.Payment;
+
+import ori.config.VNPAYConfig;
+
 import ori.model.Response;
-import ori.service.IPaymentService;
+
 
 
 @RestController
 @RequestMapping("/api/payment")
-public class PaymentAPIController {
-	@Autowired
-	IPaymentService paymentService;
+public class VNPAYAPIController {
+
+
 	@GetMapping(path = "/create")
-	public ResponseEntity<?> createPayment(
-			
+	public ResponseEntity<?> createPayment(			
 			HttpServletRequest req
 			) throws IOException {
 		//@Validated @RequestParam("amount") int amount,
@@ -49,9 +47,9 @@ public class PaymentAPIController {
         String orderType = "other";
         //long total = Integer.parseInt(req.getParameter("amount"))*100;  
         long total = 100000*100;  
-        String vnp_TxnRef = Config.getRandomNumber(8);
-        String vnp_IpAddr = Config.getIpAddress(req);
-        String vnp_TmnCode = Config.vnp_TmnCode;
+        String vnp_TxnRef = VNPAYConfig.getRandomNumber(8);
+        String vnp_IpAddr = VNPAYConfig.getIpAddress(req);
+        String vnp_TmnCode = VNPAYConfig.vnp_TmnCode;
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
@@ -66,7 +64,7 @@ public class PaymentAPIController {
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + "001xx" + ". So tien:" + total);
         vnp_Params.put("vnp_OrderType", orderType);
         vnp_Params.put("vnp_Locale", "vn");
-        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+        vnp_Params.put("vnp_ReturnUrl", VNPAYConfig.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
@@ -102,9 +100,9 @@ public class PaymentAPIController {
             }
         }
         String queryUrl = query.toString();
-        String vnp_SecureHash = Config.hmacSHA512(Config.secretKey, hashData.toString());
+        String vnp_SecureHash = VNPAYConfig.hmacSHA512(VNPAYConfig.secretKey, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
-        String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;                   
+        String paymentUrl = VNPAYConfig.vnp_PayUrl + "?" + queryUrl;                   
         return new ResponseEntity<Response>(new Response(true, "success", paymentUrl), HttpStatus.OK);
     }
 }

@@ -6,34 +6,39 @@ import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jakarta.servlet.http.HttpServletRequest;
-import ori.config.Config;
-import ori.entity.Payment;
-import ori.model.Response;
-import ori.service.IPaymentService;
+
+import ori.config.VNPAYConfig;
+import ori.entity.Order;
+
+import ori.entity.User;
+
+import ori.service.IOrderService;
+
+import ori.service.IUserService;
 
 @Controller
 @RequestMapping("/payment")
 public class PaymentController {
 	@Autowired
-	IPaymentService paymentService;
-
+	IOrderService orderService;
+	@Autowired
+	IUserService userService;
 	@GetMapping("/index")
+	
 	public String index() {
 		return "web/payment/index";
 	}
@@ -42,17 +47,19 @@ public class PaymentController {
 	public String list(ModelMap model) {
 		int amount = 20000;
 		model.addAttribute("amount", amount);
+		VNPAYConfig.userid = "1";
+		VNPAYConfig.shipping_method = "Standard";
 		return "web/payment/vnpay_pay";
 	}
 
 	@GetMapping("/ipn")
 	public String  transaction(@RequestParam Map<String, String> queryParams, RedirectAttributes redirectAttributes) {
 		Map<String, String> fields = new HashMap<>();
-
+		
 		for (Map.Entry<String, String> entry : queryParams.entrySet()) {
 			String fieldName = entry.getKey();
 			String fieldValue = entry.getValue();
-
+			
 			try {
 				fieldName = URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString());
 				fieldValue = URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString());
@@ -72,7 +79,7 @@ public class PaymentController {
 		if (fields.containsKey("vnp_SecureHash")) {
 			fields.remove("vnp_SecureHash");
 		}
-		String signValue = Config.hashAllFields(fields);
+		String signValue = VNPAYConfig.hashAllFields(fields);
 		String payStatus = "", message = "";
 		if (signValue.equals(vnp_SecureHash)) {
 			boolean checkOrderId = true; // Kiểm tra có đơn hàng này hay không
@@ -82,21 +89,23 @@ public class PaymentController {
 				if (checkAmount) {
 					if (checkOrderStatus) {
 						if ("00".equals(queryParams.get("vnp_ResponseCode"))) {
-							Payment payment = new Payment();
-							payment.setAmount(Long.parseLong(queryParams.get("vnp_Amount")));
-							payment.setOrderInfo(queryParams.get("vnp_OrderInfo"));
-							payment.setPayDate(queryParams.get("vnp_PayDate"));
-							payment.setPayStatus(true);
+							Order order = new Order();
+							Optional<User> optUser = userService.findById(Integer.parseInt(VNPAYConfig.userid));
+							User user = new User();
+							if (optUser.isPresent()) {
+								 user = optUser.get();
+							}
+							order.setUserId(user);
+							order.setDate(queryParams.get("vnp_PayDate"));
+							order.setPayment_method("VNPAY");
+							order.setShipping_method(VNPAYConfig.shipping_method);
+							order.setStatus(1);
+							order.setTotal(Double.parseDouble(queryParams.get("vnp_Amount")));
+							order.setCurrency("VND");
 							payStatus = "1";
 							message = queryParams.get("vnp_Amount");
-							paymentService.save(payment);
+							orderService.save(order);
 						} else {
-							Payment payment = new Payment();
-							payment.setAmount(Long.parseLong(queryParams.get("vnp_Amount")));
-							payment.setOrderInfo(queryParams.get("vnp_OrderInfo"));
-							payment.setPayDate(queryParams.get("vnp_PayDate"));
-							payment.setPayStatus(false);
-							paymentService.save(payment);
 							payStatus = "0";
 							message = "Thanh toán không thành công";
 						}
