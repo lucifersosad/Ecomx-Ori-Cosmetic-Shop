@@ -35,11 +35,6 @@ public class PaypalAPIController {
 	public static final String SUCCESS_URL = "pay/success";
 	public static final String CANCEL_URL = "pay/cancel";
 	public static final double unit = (double) 0.000041;
-	@GetMapping("/")
-	public String home() {
-		return "web/paypal/home";
-	}
-
 	@GetMapping("/pay")
 	public String payment(@ModelAttribute("order") Order order) {
 		try {
