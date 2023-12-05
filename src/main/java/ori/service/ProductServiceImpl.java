@@ -61,12 +61,12 @@ public class ProductServiceImpl implements IProductService  {
 	}
 
 	@Override
-	public List<Product> findByBrand(Integer brandId) {
-		return productRepository.findByBrand(brandId);
+	public List<Product> findByBrand(Integer brandId, float proPrice) {
+		return productRepository.findByBrand(brandId, proPrice);
 	}
 
 	@Override
-	public List<Product> findByCategory(Integer cateId) {
-		return productRepository.findByCategory(cateId);
+	public List<Product> findByCategory(Integer cateId, float proPrice) {
+		return productRepository.findByCategory(cateId, proPrice);
 	}
 }
