@@ -12,6 +12,6 @@ import ori.entity.ShoppingSession;
 @Repository
 public interface ShoppingSessionRepository extends JpaRepository<ShoppingSession, Integer>{
 
-	@Query(value = "SELECT * FROM shopping_session where  userId = :id limit 3", nativeQuery = true)
+	@Query(value = "SELECT * FROM shopping_session where  userId = :id limit 4", nativeQuery = true)
 	List<ShoppingSession> findByUser(@Param("id") Integer userId);
 }

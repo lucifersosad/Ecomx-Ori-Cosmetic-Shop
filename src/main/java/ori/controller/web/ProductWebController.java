@@ -59,7 +59,11 @@ public class ProductWebController {
 		for (Product product : listProSeen) {
 			System.out.println(product.getName());
 		}
-
+		
+		String brandName = enityBrand.getName();
+		String cateName = enityCate.getName();
+		model.addAttribute("cateName",cateName);
+		model.addAttribute("brandName", brandName);
 		model.addAttribute("listProSeen", listProSeen);
 		model.addAttribute("listCate", listCate);
 		model.addAttribute("detailPro", proModel);
