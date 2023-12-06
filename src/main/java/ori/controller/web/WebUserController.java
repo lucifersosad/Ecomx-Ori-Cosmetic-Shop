@@ -109,7 +109,7 @@ public class WebUserController {
 	        userService.updateUser(user);
 	        model.addAttribute("message", "Address is updated!!!");
 	        model.addAttribute("user", userModel);
-	        return new ModelAndView("web/users/infor", model);
+	        return new ModelAndView("redirect:/web/users/infor/" + email);
 	    }
 	    return new ModelAndView("forward:/web/users/", model);
 	}
