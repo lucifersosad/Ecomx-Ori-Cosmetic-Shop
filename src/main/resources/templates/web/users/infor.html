@@ -83,17 +83,22 @@
 							<form th:action="@{'/web/users/updateAddress/' + ${user.email}}" method="POST" >
 							    <div class="form-row">
 							        <div class="form-group col-md-6">
-							            <label for="inputCity">Tỉnh/Thành phố</label>
-							            <input type="text" class="form-control" id="inputCity" name="city" placeholder="City" th:value="${city}">
+							            <label for="inputCity">Tỉnh/Thành phố </label>
+							            <input type="text" class="form-control" id="inputCity" name="city" placeholder="" th:value="${city}">
 							        </div>
 							        <div class="form-group col-md-6">
-							            <label for="inputDistrict">Quận/Huyện</label>
-							            <input type="text" class="form-control" id="inputDistrict" name="district" placeholder="District" th:value="${district}">
+							            <label for="inputDistrict">Quận/Huyện </label>
+							            <input type="text" class="form-control" id="inputDistrict" name="district" placeholder="" th:value="${district}">
 							        </div>
+							        <div class="form-group col-md-6">
+							            <label for="inputTown">Xã/Phường </label>
+							        	<input type="text" class="form-control" id="inputTown" name="town" placeholder="" th:value="${town}">
+							        </div>
+							        
 							    </div>
 							    <div class="form-group">
-							        <label for="inputTown">Xã/Phường</label>
-							        <input type="text" class="form-control" id="inputTown" name="town" placeholder="Town" th:value="${town}">
+							        <label for="inputAddr">Địa chỉ</label>
+							        <input type="text" class="form-control" id="inputAddr" name="homeaddress" placeholder="" th:value="${homeaddress}">
 							    </div>
 							    <div class="form-group">
 							        <label for="inputTown">Địa chỉ</label>

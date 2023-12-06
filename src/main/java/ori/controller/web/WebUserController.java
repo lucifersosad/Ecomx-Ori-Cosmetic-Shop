@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import ori.entity.User;
 import ori.model.UserModel;
@@ -71,16 +72,17 @@ public class WebUserController {
         	UserModel userModel = new UserModel();
         	BeanUtils.copyProperties(user, userModel);
 			userModel.setIsEdit(true);
-			String add = user.getAddress();
-			String[] tmp = add.split(",");
-            if(tmp.length == 4) {
-            	 model.addAttribute("subAdd",tmp[0]);
-            	 model.addAttribute("city",tmp[3]);
-                 model.addAttribute("district",tmp[2]);
-                 model.addAttribute("town",tmp[1]);
-            }else {
+			String add = userModel.getAddress();
+			String[] parts = add.split("\\s*,\\s*");
+			if (parts.length >= 3) {
+			    model.addAttribute("city", parts[3].trim()); 
+			    model.addAttribute("district", parts[2].trim()); 
+			    model.addAttribute("town", parts[1].trim()); 
+			    model.addAttribute("homeaddress", parts[0].trim()); 
+			} else {
 
-            }
+			    model.addAttribute("homeaddress", add.trim());
+			}
 			model.addAttribute("user", userModel);
             return new ModelAndView("web/users/infor", model);
 	       
@@ -93,7 +95,8 @@ public class WebUserController {
 	                                   @PathVariable("email") String email,
 	                                   @RequestParam("city") String city,
 	                                   @RequestParam("district") String district,
-	                                   @RequestParam("town") String town) {
+	                                   @RequestParam("town") String town,
+	                                   @RequestParam("homeaddress") String homeadd) {
 	    Optional<User> optUser = userService.findByEmail(email);
 
 	    if (optUser.isPresent()) {
@@ -101,15 +104,32 @@ public class WebUserController {
 	        UserModel userModel = new UserModel();
         	BeanUtils.copyProperties(user, userModel);
         	userModel.setIsEdit(true);
-	        String address = city + ", " + district + ", " + town;
+	        String address = homeadd+ " , " +town + " , " + district + " , " + city;
 	        user.setAddress(address);
 	        userService.updateUser(user);
 	        model.addAttribute("message", "Address is updated!!!");
 	        model.addAttribute("user", userModel);
-	        return new ModelAndView("forward:web/users/infor", model);
+	        return new ModelAndView("web/users/infor", model);
 	    }
 	    return new ModelAndView("forward:/web/users/", model);
 	}
+	@GetMapping("/profile")
+	public ModelAndView info(ModelMap model, HttpSession session) {
+	    String userEmail = session.getAttribute("Email").toString();
+	    if (userEmail != null) {
+	        Optional<User> optUser = userService.findByEmail(userEmail.toString());
 
+	        if (optUser.isPresent()) {
+	            User user = optUser.get();
+	            UserModel userModel = new UserModel();
+	        	BeanUtils.copyProperties(user, userModel);
+	            model.addAttribute("user", userModel);
+	            return new ModelAndView("web/users/infor", model);
+	        }
+	    }
+
+	    model.addAttribute("message", "User is not logged in!");
+	    return new ModelAndView("forward:/admin/users", model);
+	}
 	
 }

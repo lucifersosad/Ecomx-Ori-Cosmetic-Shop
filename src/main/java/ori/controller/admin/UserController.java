@@ -105,23 +105,7 @@ public class UserController {
 	    model.addAttribute("message", "User is not existed!!!!");
 	    return new ModelAndView("forward:/admin/users", model);
 	}
-	@GetMapping("/profile")
-	public ModelAndView info(ModelMap model, HttpSession session) {
-	    Object userEmail = session.getAttribute("userEmail");
 
-	    if (userEmail != null) {
-	        Optional<User> optUser = userService.findByEmail(userEmail.toString());
-
-	        if (optUser.isPresent()) {
-	            User user = optUser.get();
-	            model.addAttribute("user", user);
-	            return new ModelAndView("admin/users/profile", model);
-	        }
-	    }
-
-	    model.addAttribute("message", "User is not logged in!");
-	    return new ModelAndView("forward:/admin/users", model);
-	}
 
 
 }
