@@ -36,7 +36,6 @@ public class AuthController {
     IUserService userService;
     @Autowired
     AppUtil appUtil;
-
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
@@ -48,18 +47,13 @@ public class AuthController {
 //        model.addAttribute("login", login);
         return "web/auth/login";
     }
+    @RequestMapping(path = "/auth/login1", method = RequestMethod.GET)
+    public String user(Model model) {
 
-//    @PostMapping(path = "/auth/login-handler")
-//    public String loginHandle(@ModelAttribute("login") LoginRequest loginRequest) {
-//        User user = userService.findByEmail(loginRequest.getUsername()).orElse(null);
-//        if(user != null) {
-//            boolean isTrue = appUtil.checkPassword(loginRequest.getPassword(), user);
-//            if(isTrue) {
-//                return "redirect:/home";
-//            }
-//        }
-//        return "web/auth/signUp";
-//    }
+        return "web/auth/security";
+    }
+
+
 
     @RequestMapping(path = "/auth/sign-up", method = RequestMethod.GET)
     public String signUpForm(Model model) {
@@ -81,13 +75,7 @@ public class AuthController {
             role.add(roleuser);
         }
 
-//        role.add(Roles.builder()
-//                .role(UserRole.ADMIN)
-//                .build());
 
-//               role.add(Roles.builder()
-//                .role(UserRole.USER)
-//                .build());
 
         user = User.builder()
                 .active(false)
@@ -104,10 +92,6 @@ public class AuthController {
             return "web/auth/signUp";
         }
 
-//        String pwSalt = appUtil.generateSalt();
-//        user.setPasswordSalt(pwSalt);
-//        String pwHash = appUtil.generatePasswordHash(userReq.getPasswordHash(), user);
-//        user.setPasswordSalt(pwSalt);
         user.setPasswordHash(passwordEncoder.encode(userReq.getPasswordHash()));
 
         userService.save(user);

@@ -34,8 +34,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
-//    @Autowired
-//    AuthEntryPointException unauthorizedHandler;
+
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -57,6 +56,7 @@ public class SecurityConfiguration {
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+
     }
 
     @Bean
@@ -74,28 +74,26 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .cors().and()
+
                 .csrf(AbstractHttpConfigurer::disable)
+
                 .authorizeHttpRequests(
                     auth -> auth
                             .requestMatchers(antMatcher("/admin/**")).hasAnyAuthority(UserRole.ADMIN.getRoleName())
-                            .requestMatchers(antMatcher("/home")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())
-//                            .requestMatchers(antMatcher("/"))
-                            .requestMatchers(antMatcher("/api/**"))
-                            .permitAll()
-//                            .requestMatchers(antMatcher("/home")).permitAll()
-//                            config trang ko cần login
+//                            .requestMatchers(antMatcher("/home")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())enable
+                            .requestMatchers(antMatcher("/api/**")).permitAll()
                             .requestMatchers(antMatcher("/auth/sign-up/**")).permitAll()
-                            .requestMatchers(antMatcher("/auth/login-handler")).permitAll()
+                            .requestMatchers(antMatcher("/auth/login1")).permitAll()
                             .requestMatchers(antMatcher("/home")).permitAll()
+
                             .anyRequest().authenticated()
-                ).httpBasic(withDefaults()).formLogin(f -> f.loginPage("/auth/login")
-                        .failureHandler((request, response, exception) -> {
-                            System.out.println("mess > " + exception.getMessage());
-                        })
-                        .defaultSuccessUrl("/home")
+                ).formLogin(login -> login
+                        .loginPage("/auth/login")
+//
+
+                        .defaultSuccessUrl("/")
                         .permitAll())
-                .rememberMe(re -> re.key("uniqueAndSecret")
+                        .rememberMe(re -> re.key("uniqueAndSecret")
                         .rememberMeCookieName("tracker-remember-me")
                         .userDetailsService(userDetailsService())
                                 .tokenValiditySeconds(5000)
