@@ -1,5 +1,6 @@
 package ori.controller.web;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import ori.repository.RoleRepository;
 import ori.service.IUserService;
 import ori.utils.AppUtil;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,11 +43,17 @@ public class AuthController {
     BCryptPasswordEncoder passwordEncoder;
 
 
-    @RequestMapping(path = "/auth/login", method = RequestMethod.GET)
-    public String login(Model model, Principal principal) {
-        if (principal != null) {
+    @RequestMapping(path = "/auth/login",  method = RequestMethod.GET)
+    public String login(Model model, Principal principal, @RequestParam(name = "message", required = false) String message, HttpServletRequest request) {
+    	if (principal != null) {
         	return "redirect:/";
         }
+    	String loginStatus = (String) request.getSession().getAttribute("loginStatus");
+    	
+    	if ("error".equals(message) && "failure".equals(loginStatus)) {
+            model.addAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng");
+        }
+        request.getSession().removeAttribute("loginStatus");
         return "web/auth/login";
     }
     @RequestMapping(path = "/auth/login1", method = RequestMethod.GET)
@@ -57,15 +65,23 @@ public class AuthController {
 
 
     @RequestMapping(path = "/auth/sign-up", method = RequestMethod.GET)
-    public String signUpForm(Model model) {
+    public String signUpForm(Model model, Principal principal, HttpServletRequest request) {
+    	if (principal != null) {
+    		return "redirect:/";
+    	}
         SignUpRequest user = new SignUpRequest();
         System.out.println("[GET] signUpForm");
         model.addAttribute("user", user);
+        String errorMessage = (String) request.getSession().getAttribute("errorMessage");
+        if ("error".equals(errorMessage)) {
+        	model.addAttribute("errorMessage", "Đăng kí thất bại");
+        }
+        request.getSession().removeAttribute("errorMessage");
         return "web/auth/signUp";
     }
 
     @PostMapping(path = "/auth/sign-up/save")
-    public String signUpPostForm(@ModelAttribute("user") SignUpRequest userReq, BindingResult result, Model model) {
+    public String signUpPostForm(@ModelAttribute("user") SignUpRequest userReq, BindingResult result, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         User user = userService.findByEmail(userReq.getEmail()).orElse(null);
         if(user != null) {
             result.rejectValue("email", null, "There is already an account registered with that email");
@@ -88,13 +104,14 @@ public class AuthController {
                 .build();
         if (result.hasErrors()) {
             model.addAttribute("user", user);
-            return "web/auth/signUp";
+            request.getSession().setAttribute("errorMessage", "error");
+            return "redirect:/auth/sign-up";
         }
 
         user.setPasswordHash(passwordEncoder.encode(userReq.getPasswordHash()));
 
         userService.save(user);
-        return "redirect:/auth/sign-up?success";
+        return "redirect:/auth/login";
     }
 
     @GetMapping("/auth/logout")

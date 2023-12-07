@@ -191,6 +191,9 @@
                     <div class="auth-box card">
                         <div class="card-block">
                             <div class="row m-b-20">
+								<div class="col-md-12" th:if="${errorMessage}">
+									<h6 class="text-danger" th:text="'Đăng ký thất bại'"></h6>
+								</div>
                                 <div class="col-md-12">
                                     <h3 class="text-center txt-primary">Sign up Acount</h3>
                                 </div>
@@ -238,7 +241,10 @@
                                                placeholder="Enter password"
 
                                                th:field="*{passwordHash}"
-                                               type="password">
+                                               type="password"
+                                               required
+                                         >
+                                               
                                     </div>
                                 </div>
 
@@ -272,7 +278,7 @@
                                 <div class="col-md-10">
                                     <p class="text-inverse text-left m-b-0">Thank you.</p>
                                     <p class="text-inverse text-left">
-                                        <a href="home"><b>Back to website</b></a>
+                                        <a th:href="@{/home}"><b>Back to website</b></a>
                                     </p>
                                 </div>
                                 <div class="col-md-2">

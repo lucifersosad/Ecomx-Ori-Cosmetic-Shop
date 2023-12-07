@@ -46,7 +46,17 @@ public class HomeController {
 	}
 	
 	@GetMapping("my-account")
-	public String myAccount(ModelMap model) {
-		return "web/profile";
+	public String myAccount(ModelMap model, Principal principal) {
+		Object authen = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (authen instanceof AuthUser) {
+			String email = ((AuthUser)authen).getEmail();
+			Optional<User> optUser = userService.findByEmail(email);
+			if (optUser.isPresent()) {
+				User user = optUser.get();
+				model.addAttribute("user", user);
+				return "web/profile";
+			}	
+		} 
+		return "redirect:/";
 	}
 }

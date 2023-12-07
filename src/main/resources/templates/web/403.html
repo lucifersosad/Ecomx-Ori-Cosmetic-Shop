@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{web/layout-default.html}">
+
 <body>
-    <h1>you don't have permission</h1>
+
+	<!--Thêm dòng này vào-->
+	<div layout:fragment="content">
+		<h1>
+			Mày cook
+		</h1>
+	</div>
 </body>
+
 </html>

@@ -21,13 +21,18 @@ import org.springframework.security.config.annotation.web.configurers.LogoutConf
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import ori.common.enums.UserRole;
+import org.springframework.security.core.AuthenticationException;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import ori.common.enums.UserRole;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -86,8 +91,15 @@ public class SecurityConfiguration {
         ).formLogin(login -> login
                 .loginPage("/auth/login")
                 .defaultSuccessUrl("/")
-                .failureUrl("/auth/login?message=error")
-                .permitAll())
+                .failureHandler(new AuthenticationFailureHandler() {
+					@Override
+					public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+							AuthenticationException exception)
+							throws IOException, ServletException {
+						request.getSession().setAttribute("loginStatus", "failure");
+                        response.sendRedirect("/auth/login?message=error");				
+					}
+                }).permitAll())
         .rememberMe(re -> re.key("uniqueAndSecret")
                 .rememberMeCookieName("tracker-remember-me")
                 .userDetailsService(userDetailsService())
