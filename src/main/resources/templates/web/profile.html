@@ -7,18 +7,7 @@
 	<!--Thêm dòng này vào-->
 	<div layout:fragment="content">
 		<div class="container">
-			<div sec:authorize="isAnonymous()">
-				Trang chủ chưa đăng nhập
-			</div>
-			<div sec:authorize="isAuthenticated()">
-				Trang chủ đã đăng nhập
-			</div>
-			<div sec:authorize="hasAuthority('ADMIN')">
-				Trang chủ của admin
-			</div>
-			<div sec:authorize="isAuthenticated()">
-				Xin chào, [[${user.fullName}]]
-			</div>
+			My profile
 		</div>
 
 		<div class="modal fade" id="loginModal" role="dialog" tabindex="-1">

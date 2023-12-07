@@ -21,6 +21,7 @@ import ori.repository.RoleRepository;
 import ori.service.IUserService;
 import ori.utils.AppUtil;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -41,10 +42,10 @@ public class AuthController {
 
 
     @RequestMapping(path = "/auth/login", method = RequestMethod.GET)
-    public String login(Model model) {
-//        System.out.println("[GET] login");
-//        LoginRequest login = new LoginRequest();
-//        model.addAttribute("login", login);
+    public String login(Model model, Principal principal) {
+        if (principal != null) {
+        	return "redirect:/";
+        }
         return "web/auth/login";
     }
     @RequestMapping(path = "/auth/login1", method = RequestMethod.GET)
@@ -74,8 +75,6 @@ public class AuthController {
         if(roleuser !=null){
             role.add(roleuser);
         }
-
-
 
         user = User.builder()
                 .active(false)

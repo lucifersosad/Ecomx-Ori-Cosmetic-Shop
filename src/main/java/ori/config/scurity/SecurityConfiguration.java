@@ -73,39 +73,40 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+    	httpSecurity
+        .csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(
+                auth -> auth
+                        .requestMatchers(antMatcher("/admin/**")).hasAnyAuthority(UserRole.ADMIN.getRoleName())
+                        .requestMatchers(antMatcher("/api/**")).permitAll()
+                        .requestMatchers(antMatcher("/auth/sign-up/**")).permitAll()
+                        .requestMatchers(antMatcher("/auth/login1")).permitAll()
+                        .requestMatchers(antMatcher("/**")).permitAll()
+                        .anyRequest().authenticated()
+        ).formLogin(login -> login
+                .loginPage("/auth/login")
+                .defaultSuccessUrl("/")
+                .failureUrl("/auth/login?message=error")
+                .permitAll())
+        .rememberMe(re -> re.key("uniqueAndSecret")
+                .rememberMeCookieName("tracker-remember-me")
+                .userDetailsService(userDetailsService())
+                .tokenValiditySeconds(5000)
+        )
+        .logout(l -> l.invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+                .logoutSuccessUrl("/")
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+        )
+        .exceptionHandling(e -> e.accessDeniedPage("/403"))
+        .sessionManagement(session -> session
+        .maximumSessions(1) // Đặt giới hạn session ở đây, ví dụ là 1 session
+        .expiredUrl("/") // Đường dẫn khi session hết hạn
+        .maxSessionsPreventsLogin(true)) ;
 
-                .csrf(AbstractHttpConfigurer::disable)
 
-                .authorizeHttpRequests(
-                    auth -> auth
-                            .requestMatchers(antMatcher("/admin/**")).hasAnyAuthority(UserRole.ADMIN.getRoleName())
-//                            .requestMatchers(antMatcher("/home")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())enable
-                            .requestMatchers(antMatcher("/api/**")).permitAll()
-                            .requestMatchers(antMatcher("/auth/sign-up/**")).permitAll()
-                            .requestMatchers(antMatcher("/auth/login1")).permitAll()
-                            .requestMatchers(antMatcher("/home")).permitAll()
-
-                            .anyRequest().authenticated()
-                ).formLogin(login -> login
-                        .loginPage("/auth/login")
-//
-
-                        .defaultSuccessUrl("/")
-                        .permitAll())
-                        .rememberMe(re -> re.key("uniqueAndSecret")
-                        .rememberMeCookieName("tracker-remember-me")
-                        .userDetailsService(userDetailsService())
-                                .tokenValiditySeconds(5000)
-                        )
-                .logout(l -> l.invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-                        .logoutSuccessUrl("/auth/login-logouted")
-                        .deleteCookies("JSESSIONID")
-                        .permitAll()
-                )
-                .exceptionHandling(e -> e.accessDeniedPage("/403"))
-                .build();
+return httpSecurity.build();
     }
 }
