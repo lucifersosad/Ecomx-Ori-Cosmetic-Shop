@@ -1,25 +1,29 @@
 package ori.controller.api;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import com.paypal.api.payments.Links;
-
 import ori.config.VNPAYConfig;
+import ori.entity.Cart;
 import ori.entity.Order;
+import ori.entity.OrderDetail;
+import ori.entity.OrderDetailKey;
+import ori.entity.Product;
 import ori.entity.User;
+import ori.service.ICartService;
+import ori.service.IOrderDetailService;
 import ori.service.IOrderService;
+import ori.service.IProductService;
 import ori.service.IUserService;
 import ori.service.PaypalService;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -32,6 +36,12 @@ public class PaypalAPIController {
 	IUserService userService;
 	@Autowired
 	IOrderService orderService;
+	@Autowired
+	IOrderDetailService orderDetailService;
+	@Autowired
+	ICartService cartService;
+	@Autowired
+	IProductService productService;
 	public static final String SUCCESS_URL = "pay/success";
 	public static final String CANCEL_URL = "pay/cancel";
 	public static final double unit = (double) 0.000041;
@@ -106,6 +116,30 @@ public class PaypalAPIController {
 				order.setShipping_method(VNPAYConfig.shipping_method);
 				order.setStatus(1);			
 				orderService.save(order);
+				List<Order> orders = orderService.findAll();
+				Order lastOrder = orders.get(orders.size()-1);
+				List<Cart> carts = cartService.findByUserId(1);
+				for (Cart cart : carts) {
+					OrderDetailKey orderDetailKey = new OrderDetailKey();
+					orderDetailKey.setOrderId(lastOrder.getOrderId()); // Set the appropriate orderId
+					orderDetailKey.setProId(cart.getProduct().getProId()); // Set the appropriate proId
+
+					OrderDetail orderDetail = new OrderDetail();
+					orderDetail.setId(orderDetailKey);
+					orderDetail.setOrder(lastOrder);
+					orderDetail.setProduct(cart.getProduct());
+					orderDetail.setQuantity(cart.getQuantity());
+					orderDetailService.save(orderDetail);
+					Optional<Product> optPro = productService.findById(cart.getProduct().getProId());
+					Product pro = new Product();
+					if (optPro.isPresent()) {
+						pro = optPro.get();
+					}
+					pro.setStock(pro.getStock()-cart.getQuantity());
+					productService.save(pro);
+					
+					cartService.delete(cart);
+				}
 				return "web/paypal/success";
 			}
 		} catch (PayPalRESTException e) {
