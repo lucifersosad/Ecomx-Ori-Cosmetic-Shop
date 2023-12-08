@@ -36,4 +36,9 @@ public class HomeController {
 		model.addAttribute("products", products);
 		return "web/index";
 	}
+	
+	@GetMapping("/checkout")
+	public String checkout(ModelMap model) {
+		return "web/checkout";
+	}
 }
