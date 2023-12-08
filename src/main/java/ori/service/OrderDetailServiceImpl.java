@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import ori.entity.OrderDetail;
 import ori.entity.OrderDetailKey;
+import ori.entity.Product;
 import ori.repository.OrderDetailRepository;
 
 @Service
@@ -43,6 +44,11 @@ public class OrderDetailServiceImpl implements IOrderDetailService{
 	@Override
 	public void deleteById(OrderDetailKey id) {
 		orderDetailRepository.deleteById(id);
+	}
+	
+	@Override
+	public List<Product> listProByOderID(Integer userId){
+		return orderDetailRepository.findProductByUserId(userId);
 	}
 	
 }

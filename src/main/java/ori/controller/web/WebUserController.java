@@ -1,5 +1,6 @@
 package ori.controller.web;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -19,8 +20,13 @@ import org.springframework.web.servlet.ModelAndView;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import ori.config.scurity.AuthUser;
+import ori.entity.Order;
+import ori.entity.OrderDetail;
+import ori.entity.Product;
 import ori.entity.User;
 import ori.model.UserModel;
+import ori.service.IOrderDetailService;
+import ori.service.IOrderService;
 import ori.service.IUserService;
 
 @Controller
@@ -28,6 +34,12 @@ import ori.service.IUserService;
 public class WebUserController {
 	@Autowired(required=true)
 	IUserService userService;
+	
+	@Autowired(required=true)
+	IOrderDetailService orderDetailService;
+	
+	@Autowired(required = true)
+	IOrderService orderService;
 	
 	@GetMapping("/my-account")
 	public String myAccount(ModelMap model) {
@@ -115,6 +127,15 @@ public class WebUserController {
 			    model.addAttribute("homeaddress", add.trim());
 			}
 			model.addAttribute("user", userModel);
+			
+			List<Order> listOrder = orderService.findOder(user.getUserId());
+			model.addAttribute("listOrder", listOrder);
+			
+			List<OrderDetail> listOderDetail = orderDetailService.findAll();
+			model.addAttribute("listOderDetail", listOderDetail);
+			
+			List<Product> listPro = orderDetailService.listProByOderID(user.getUserId());
+			model.addAttribute("listPro", listPro);
             return new ModelAndView("web/users/infor", model);
 	       
 	    }

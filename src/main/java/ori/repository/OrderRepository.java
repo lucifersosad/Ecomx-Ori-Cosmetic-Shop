@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import ori.entity.Order;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import ori.model.OrderModel;
 
 @Repository
@@ -26,4 +28,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer>{
 			+ "WHERE quarter(order_date) = quarter(CURRENT_DATE())\r\n"
 			+ "AND order_status=1;", nativeQuery = true)
     int revenueOnCurrentQuarter();
+	@Query("""
+		    SELECT o FROM Order o WHERE o.userId.userId = :userId
+		""")
+		List<Order> findOrderByUserId(@Param("userId") Integer userId);
 }

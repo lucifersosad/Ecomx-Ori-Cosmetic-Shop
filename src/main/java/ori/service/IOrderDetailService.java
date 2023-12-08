@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import ori.entity.OrderDetail;
 import ori.entity.OrderDetailKey;
+import ori.entity.Product;
 
 public interface IOrderDetailService {
 
@@ -17,5 +18,7 @@ public interface IOrderDetailService {
 	List<OrderDetail> findAll();
 
 	<S extends OrderDetail> S save(S entity);
-
+	
+	List<Product> listProByOderID(Integer oderId);
+	
 }

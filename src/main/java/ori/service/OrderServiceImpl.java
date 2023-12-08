@@ -73,4 +73,9 @@ public class OrderServiceImpl implements IOrderService{
 		return orderRepository.revenueOnCurrentQuarter();
 
 	}
+
+	@Override
+	public List<Order> findOder(Integer userId) {
+        return orderRepository.findOrderByUserId(userId);
+    }
 }
