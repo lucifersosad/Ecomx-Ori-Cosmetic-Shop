@@ -1,9 +1,9 @@
 package ori.model;
 
-import org.hibernate.validator.constraints.Length;
+
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.validation.constraints.NotEmpty;
+
 import lombok.*;
 
 @Data
