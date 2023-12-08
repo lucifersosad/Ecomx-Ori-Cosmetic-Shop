@@ -1,10 +1,11 @@
 package ori.controller.admin;
 
-import java.io.UnsupportedEncodingException;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,12 +23,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import ori.config.VNPAYConfig;
+import ori.entity.Cart;
 import ori.entity.Order;
-
+import ori.entity.OrderDetail;
+import ori.entity.OrderDetailKey;
+import ori.entity.Product;
 import ori.entity.User;
-
+import ori.service.ICartService;
+import ori.service.IOrderDetailService;
 import ori.service.IOrderService;
-
+import ori.service.IProductService;
 import ori.service.IUserService;
 
 @Controller
@@ -37,7 +42,14 @@ public class PaymentController {
 	IOrderService orderService;
 	@Autowired
 	IUserService userService;
+	@Autowired
+	IOrderDetailService orderDetailService;
+	@Autowired
+	ICartService cartService;
+	@Autowired
+	IProductService productService;
 	@GetMapping("/index")
+	
 	
 	public String index() {
 		return "web/payment/index";
@@ -105,6 +117,30 @@ public class PaymentController {
 							payStatus = "1";
 							message = queryParams.get("vnp_Amount");
 							orderService.save(order);
+							List<Order> orders = orderService.findAll();
+							Order lastOrder = orders.get(orders.size()-1);
+							List<Cart> carts = cartService.findByUserId(Integer.parseInt(VNPAYConfig.userid));
+							for (Cart cart : carts) {
+								OrderDetailKey orderDetailKey = new OrderDetailKey();
+								orderDetailKey.setOrderId(lastOrder.getOrderId()); // Set the appropriate orderId
+								orderDetailKey.setProId(cart.getProduct().getProId()); // Set the appropriate proId
+
+								OrderDetail orderDetail = new OrderDetail();
+								orderDetail.setId(orderDetailKey);
+								orderDetail.setOrder(lastOrder);
+								orderDetail.setProduct(cart.getProduct());
+								orderDetail.setQuantity(cart.getQuantity());
+								orderDetailService.save(orderDetail);
+								Optional<Product> optPro = productService.findById(cart.getProduct().getProId());
+								Product pro = new Product();
+								if (optPro.isPresent()) {
+									pro = optPro.get();
+								}
+								pro.setStock(pro.getStock()-cart.getQuantity());
+								productService.save(pro);
+								cartService.delete(cart);
+							}
+						
 						} else {
 							payStatus = "0";
 							message = "Thanh toán không thành công";

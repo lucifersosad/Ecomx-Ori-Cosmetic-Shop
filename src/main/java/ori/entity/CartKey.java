@@ -3,32 +3,16 @@ package ori.entity;
 import java.util.Objects;
 
 import jakarta.persistence.Embeddable;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Embeddable
 public class CartKey {
 	private Integer userid;
 	private Integer proid;
-	public CartKey(Integer userid, Integer proid) {
-	
-		this.userid = userid;
-		this.proid = proid;
-	}
-	public CartKey() {
-
-	}
-	public Integer getUserid() {
-		return userid;
-	}
-	public void setUserid(Integer userid) {
-		this.userid = userid;
-	}
-	public Integer getProid() {
-		return proid;
-	}
-	public void setPorid(Integer proid) {
-		this.proid = proid;
-	}
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
