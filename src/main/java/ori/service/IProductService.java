@@ -7,6 +7,8 @@ import ori.entity.Product;
 public interface IProductService {
 
 	void delete(Product entity);
+	
+	void deleteById(Integer id);
 
 	long count();
 
@@ -19,5 +21,11 @@ public interface IProductService {
 	<S extends Product> S save(S entity);
 	
 	List<Product> findTop10();
+	
+	List<Product> findProductsMostSaleByCategory();
+	
+    List<Product> findByBrand(Integer brandId, float proPrice);
+    
+    List<Product> findByCategory(Integer cateId, float proPrice);
 
 }

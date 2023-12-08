@@ -5,9 +5,8 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import ori.entity.Category;
 import ori.entity.Order;
-
 public interface IOrderService {
 
 	void deleteById(Integer id);
@@ -21,5 +20,11 @@ public interface IOrderService {
 	Page<Order> findAll(Pageable pageable);
 
 	<S extends Order> S save(S entity);
-
+	 int reOnCurrentMonth();
+	 
+	 int reOnCurrentYear();
+	 
+	 int reOnCurrentQuarter();
+	 
+	 float rateCom();
 }

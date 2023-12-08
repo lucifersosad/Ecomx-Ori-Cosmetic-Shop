@@ -50,4 +50,23 @@ public class ProductServiceImpl implements IProductService  {
 		Pageable pageable = PageRequest.of(0, 10);
 		return productRepository.findAll(pageable).toList();
 	}
+	public void deleteById(Integer id) {
+		productRepository.deleteById(id);
+		
+	}
+
+	@Override
+	public List<Product> findProductsMostSaleByCategory() {
+		return productRepository.findProductsMostSaleByCategory();
+	}
+
+	@Override
+	public List<Product> findByBrand(Integer brandId, float proPrice) {
+		return productRepository.findByBrand(brandId, proPrice);
+	}
+
+	@Override
+	public List<Product> findByCategory(Integer cateId, float proPrice) {
+		return productRepository.findByCategory(cateId, proPrice);
+	}
 }

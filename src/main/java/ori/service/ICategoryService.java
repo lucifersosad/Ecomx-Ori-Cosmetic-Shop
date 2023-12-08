@@ -19,4 +19,5 @@ public interface ICategoryService {
 
 	<S extends Category> S save(S entity);
 
+	List<Category> findTop10();
 }

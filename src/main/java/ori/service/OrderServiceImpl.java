@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import ori.entity.Order;
+import ori.model.OrderModel;
 import ori.repository.OrderRepository;
 
 @Service
@@ -48,5 +49,28 @@ public class OrderServiceImpl implements IOrderService{
 	@Override
 	public void deleteById(Integer id) {
 		orderRepository.deleteById(id);
+	}
+	public int reOnCurrentMonth() {
+
+		return orderRepository.revenueOnCurrentMonth();
+	}
+
+	@Override
+	public int reOnCurrentYear() {
+		// TODO Auto-generated method stub
+		return orderRepository.revenueOnCurrentYear();
+	}
+
+	@Override
+	public float rateCom() {
+		// TODO Auto-generated method stub
+		return orderRepository.rateCompleted();
+	}
+
+	@Override
+	public int reOnCurrentQuarter() {
+		// TODO Auto-generated method stub
+		return orderRepository.revenueOnCurrentQuarter();
+
 	}
 }

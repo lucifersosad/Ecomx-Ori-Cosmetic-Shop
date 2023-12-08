@@ -27,4 +27,6 @@ public class OrderModel {
 	private String order_currency;
 	
 	private Integer userId;
+	
+	private Boolean isEdit = false;
 }
