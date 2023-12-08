@@ -41,8 +41,5 @@ public class HomeController {
 		return "web/checkout";
 	}
 	
-	@GetMapping(value = "cart")
-	public String cart(ModelMap model) {
-		return "web/cart";
-	}
+	
 }

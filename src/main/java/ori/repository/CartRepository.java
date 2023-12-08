@@ -14,6 +14,8 @@ import ori.entity.CartKey;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, CartKey>{
-	@Query("SELECT c FROM Cart c WHERE c.user.id = :userId")
-	List<Cart> findByUserId(@Param("userId") Integer userId);
+	@Query(value="select * from cart where userid=?",nativeQuery = true)
+	List<Cart> findByUserId(Integer userId);
+	@Query(value="select * from cart where userid=? and proid=?",nativeQuery = true)
+	List<Cart> findByUserIdAndProid(Integer userId,Integer proId);
 }
