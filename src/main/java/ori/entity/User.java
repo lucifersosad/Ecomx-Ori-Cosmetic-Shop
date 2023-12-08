@@ -31,10 +31,13 @@ public class User implements Serializable {/**
 	private String passwordSalt;
 	@Column(name="fullname")
 	private String fullName;
+	
 	@Column(name="email")
 	private String email;
+	
 	@Column(name="phone")
 	private String phone;
+	
 	@Column(name="address")
 	private String address;
 	@Column(name="active")
