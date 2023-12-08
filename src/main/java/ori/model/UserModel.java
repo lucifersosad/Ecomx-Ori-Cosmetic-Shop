@@ -17,10 +17,10 @@ public class UserModel {
 	private String email;
 	private String phone;
 	private String address;
-	private Boolean isAdmin;
 	private Boolean active;
 	private MultipartFile imageFile;
 	private Boolean isEdit=false;
+	private String code;
 	
 	
 }

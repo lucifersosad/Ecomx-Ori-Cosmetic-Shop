@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import ori.config.scurity.AuthUser;
 import ori.entity.User;
 import ori.model.UserModel;
 import ori.service.IUserService;
@@ -26,6 +28,35 @@ import ori.service.IUserService;
 public class WebUserController {
 	@Autowired(required=true)
 	IUserService userService;
+	
+	@GetMapping("/my-account")
+	public String myAccount(ModelMap model) {
+		Object authen = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (authen instanceof AuthUser) {
+			String email = ((AuthUser)authen).getEmail();
+			Optional<User> optUser = userService.findByEmail(email);
+			if (optUser.isPresent()) {
+				User user = optUser.get();
+				UserModel userModel = new UserModel();
+	        	BeanUtils.copyProperties(user, userModel);
+				userModel.setIsEdit(true);
+				String add = userModel.getAddress();
+				String[] parts = add.split("\\s*,\\s*");
+				if (parts.length >= 3) {
+				    model.addAttribute("city", parts[3].trim()); 
+				    model.addAttribute("district", parts[2].trim()); 
+				    model.addAttribute("town", parts[1].trim()); 
+				    model.addAttribute("homeaddress", parts[0].trim()); 
+				} else {
+
+				    model.addAttribute("homeaddress", add.trim());
+				}
+				model.addAttribute("user", userModel);
+				return "web/users/infor";
+			}	
+		} 
+		return "redirect:/";
+	}
 	
 	@GetMapping("edit/{userId}")
 	public ModelAndView edit(ModelMap model, @PathVariable("userId") Integer userId) {

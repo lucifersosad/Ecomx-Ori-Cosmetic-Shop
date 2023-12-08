@@ -79,6 +79,7 @@ public class UserServiceImpl implements IUserService {
 				if (model.getPhone() != null && !model.getPhone().isEmpty()) {
 					user.setPhone(model.getPhone());
 				}
+				model.setPasswordHash(user.getPasswordHash());
 
 				return userRepository.save(user);
 			}
