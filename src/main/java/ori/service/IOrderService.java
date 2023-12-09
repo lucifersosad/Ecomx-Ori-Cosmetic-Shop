@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ori.entity.Category;
 import ori.entity.Order;
+import ori.entity.Product;
 public interface IOrderService {
 
 	void deleteById(Integer id);
@@ -29,5 +30,8 @@ public interface IOrderService {
 	 float rateCom();
 	 
 	 List<Order> findOder(Integer userId);
-
+	 
+	 Page<Order> getAll(Integer pageNo);
+	 
+	 void updateOrderState(Integer orderId, int newState);
 }

@@ -2,7 +2,11 @@ package ori.service;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+
 import ori.entity.Product;
+import ori.entity.User;
 
 public interface IProductService {
 
@@ -27,5 +31,7 @@ public interface IProductService {
     List<Product> findByBrand(Integer brandId, float proPrice);
     
     List<Product> findByCategory(Integer cateId, float proPrice);
+    
+    Page<Product> getAll(Integer pageNo);
 
 }
