@@ -106,7 +106,7 @@ public class CheckOutController {
 		return "CheckOut/note";
 	}
 
-	@PostMapping("Payment")
+	@PostMapping("/Payment")
 	public String processPayment(@RequestParam("paymentMethod") String paymentMethod) {
 		PaymentMethod = paymentMethod;
 		return "redirect:/CheckOut/PaymentMethod";
