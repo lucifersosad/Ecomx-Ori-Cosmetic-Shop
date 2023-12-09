@@ -4,23 +4,35 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import ori.config.scurity.AuthUser;
 import ori.entity.Cart;
 import ori.entity.Product;
+import ori.entity.User;
 import ori.model.CartModel;
 import ori.model.ProductModel;
 import ori.service.ICartService;
 import ori.service.IProductService;
 import ori.service.IUserService;
 
+@RequestMapping("/cart")
 @Controller
-@RequestMapping("cart")
 public class CartController {
 	@Autowired(required=true)
 	IUserService userService;
@@ -28,16 +40,18 @@ public class CartController {
 	ICartService cartService;
 	@Autowired(required=true)
 	IProductService productService;
+	
 	@GetMapping(value = "backToHome")
 	public String backToHome(ModelMap model) 
 	{
 		return "web/index";
 	}
-	@GetMapping("/cart")
+	
+	@GetMapping("")
 	public String viewCart(ModelMap model) 
 	{
-		
-    	List<Cart> list= cartService.findByUserId(2);
+		User userLogged = userService.getUserLogged();
+    	List<Cart> list= cartService.findByUserId(userLogged.getUserId());
 		List<ProductModel> listp = new ArrayList<>();
 		List<CartModel> listc = new ArrayList<>();
 		List<Double> tong=new ArrayList<>();
@@ -47,9 +61,10 @@ public class CartController {
 		    Product pro = cart.getProduct();
 		    ProductModel productModel = new ProductModel();
 		    CartModel cartModel = new CartModel();
+		    productModel.setProId(pro.getProId());
 		    productModel.setImage_link(pro.getImage_link());
 		    productModel.setName(pro.getName());
-		    productModel.setPrice(pro.getPrice());
+		    productModel.setPrice(Math.round(pro.getPrice() * (100 - pro.getSale()) / 100));
 		    cartModel.setQuantity(cart.getQuantity());
 		    double total= cartModel.getQuantity()*productModel.getPrice();
 		    tong.add(total);
@@ -69,15 +84,20 @@ public class CartController {
 		model.addAttribute("total", sum);
 		return "web/cart";
 	}
+
+	 
 	@GetMapping("deleteItem/{proid}")
 	public String deleteItem(ModelMap model, @PathVariable("proid") Integer proid) 
 	{
-		List<Cart> list =cartService.findByUserIdAndProid(2, proid);
+		User userLogged = userService.getUserLogged();
+		List<Cart> list =cartService.findByUserIdAndProid(userLogged.getUserId(), proid);
 		for (Cart cart : list) {
 			cartService.delete(cart);
 		}
-		return "web/cart";
-	}
+		return "redirect:/cart";
+	} 
+	
+	
 	@GetMapping(value = "deleteCart")
 	public String deleteCart(ModelMap model) 
 	{
@@ -87,15 +107,31 @@ public class CartController {
 		}
 		return "web/cart";
 	}
-	@GetMapping(value = "/updateQTT/{proid}")
-	public String updateCart(ModelMap model,@PathVariable("proid")Integer proid, Integer qtt) 
-	{
-		qtt=69;
-		List<Cart> list =cartService.findByUserIdAndProid(2, proid);
-		for (Cart cart : list) {
-			cart.setQuantity(qtt);
-			cartService.save(cart);
-		}
-		return "web/cart";
+	/*
+	@DeleteMapping("/deleteItem/{proid}")
+    @ResponseBody
+    public ResponseEntity<String> deleteItem(@PathVariable("proid") Integer proid) {
+        List<Cart> list = cartService.findByUserIdAndProid(2, proid);
+        for (Cart cart : list) {
+            cartService.delete(cart);
+        }
+        return ResponseEntity.ok("Item deleted successfully");
+    }
+    */
+	
+	@PostMapping(value = "updateQTT")
+	@ResponseBody
+	public String updateCart(@RequestBody Map<String, Integer> requestBody) {
+		User userLogged = userService.getUserLogged();
+		
+	    Integer proid = requestBody.get("proid");
+	    Integer qtt = requestBody.get("quantity");
+
+	    List<Cart> list = cartService.findByUserIdAndProid(userLogged.getUserId(), proid);
+	    for (Cart cart : list) {
+	        cart.setQuantity(qtt);
+	        cartService.save(cart);
+	    }
+	    return proid + " " + qtt;
 	}
 }
