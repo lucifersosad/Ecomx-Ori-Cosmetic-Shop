@@ -36,16 +36,17 @@
 						<tbody>
 							<tr th:each="item : ${user}">
 								<td th:text="${item.userId}"></td>
-								<td th:text="${item.userName}"></td>
+								<td th:text="${item.username}"></td>
 								<td th:text="${item.fullName}"></td>
 								<td th:text="${item.email}"></td>
 								<td th:text="${item.phone}"></td>
 								<td th:text="${item.address}"></td>
 								<td>
 
-									<a th:href="@{'/admin/users/delete/' + ${item.userId}}">Delete</a> ||
-									<a th:href="@{'/admin/users/infor/' + ${item.email}}">Infor</a>||
-									<a th:href="@{'/admin/users/edit/' + ${item.userId}}">Edit</a> 
+									<a th:href="@{'/admin/users/delete/' + ${item.userId}}">Xóa</a> ||
+									<a th:href="@{'/admin/users/infor/' + ${item.email}}">Thông tin</a> ||
+									<a th:href="@{'/admin/users/edit/' + ${item.userId}}">Sửa</a>
+
 
 								</td>
 							</tr>

@@ -66,6 +66,15 @@ public class WebUserController {
 				    model.addAttribute("homeaddress", add.trim());
 				}
 				model.addAttribute("user", userModel);
+				
+				List<Order> listOrder = orderService.findOder(user.getUserId());
+				model.addAttribute("listOrder", listOrder);
+				
+				List<OrderDetail> listOderDetail = orderDetailService.findAll();
+				model.addAttribute("listOderDetail", listOderDetail);
+				
+				List<Product> listPro = orderDetailService.listProByOderID(user.getUserId());
+				model.addAttribute("listPro", listPro);
 				return "web/users/infor";
 			}	
 		} 
