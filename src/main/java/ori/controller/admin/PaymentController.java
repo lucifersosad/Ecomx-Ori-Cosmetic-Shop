@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,11 +37,11 @@ public class PaymentController {
 	@Autowired
 	IUserService userService;
 
-	@GetMapping("/vnpay/option")
-	public String list(ModelMap model) {
-		int amount = 20000;
+	@GetMapping("/option")
+	public String list(ModelMap model, @Validated @RequestParam("amount") double amount) {
+		//int amount = 20000;
 		model.addAttribute("amount", amount);
-		return "web/payment/vnpay_pay";
+		return "web/vnpay/vnpay_pay";
 	}
 	@GetMapping("/paypal/create")
 	public RedirectView createPayPalPayment() {

@@ -27,4 +27,7 @@ public interface IOrderService {
 	 int reOnCurrentQuarter();
 	 
 	 float rateCom();
+	 
+	 List<Order> findOder(Integer userId);
+
 }

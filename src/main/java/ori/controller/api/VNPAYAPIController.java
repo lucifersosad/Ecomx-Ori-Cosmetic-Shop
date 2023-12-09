@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,14 +59,13 @@ public class VNPAYAPIController {
 	IProductService productService;
 	@GetMapping(path = "/create")
 	public ResponseEntity<?> createPayment(			
-			HttpServletRequest req
+			HttpServletRequest req, @Validated @RequestParam("amount") double amount
 			) throws IOException {
-
 		String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
- 
-        long total = 100000*100;  
+        int total = (int) (Math.ceil(amount) * 100);  
+        //long total = 100000*100;  
         String vnp_TxnRef = VNPAYConfig.getRandomNumber(8);
         String vnp_IpAddr = VNPAYConfig.getIpAddress(req);
         String vnp_TmnCode = VNPAYConfig.vnp_TmnCode;
