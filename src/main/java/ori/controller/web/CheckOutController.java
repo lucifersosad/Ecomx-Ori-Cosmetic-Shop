@@ -21,7 +21,7 @@ import ori.service.ICartService;
 import ori.service.IUserService;
 
 @Controller
-@RequestMapping("CheckOut")
+@RequestMapping("checkout")
 public class CheckOutController {
 	String PaymentMethod;
 	String Note;
@@ -33,21 +33,12 @@ public class CheckOutController {
 	@GetMapping("")
 	public String ThongtinKh(ModelMap model) {
 		// khi gộp vào vào thì sẽ dùng đoạn này
+		User user = userService.getUserLogged();
+		String[] addressParts = user.getAddress().split(",");
+		model.addAttribute("addressParts", addressParts);
+		model.addAttribute("user", user);
 
-		User user = new User();
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (principal instanceof AuthUser) {
-			String email = ((AuthUser) principal).getEmail();
-			Optional<User> optUser = userService.findByEmail(email);
-			if (optUser.isPresent()) {
-				user = optUser.get();
-				String[] addressParts = user.getAddress().split(",");
-				model.addAttribute("addressParts", addressParts);
-				model.addAttribute("user", user);
-			}
-		}
-
-        List<Cart> list= cartService.findByUserId(1);
+        List<Cart> list= cartService.findByUserId(user.getUserId());
         List<List<Object>> obs = new ArrayList<>();
         float sum = 0;
     	for (Cart cart : list) 

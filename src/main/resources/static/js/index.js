@@ -82,3 +82,78 @@ document.addEventListener('click', function(event) {
 		}
 	}
 });
+
+function updateAddress() {
+	var email = document.querySelector('#email').value;
+	var city = document.querySelector('#city').value;
+	var district = document.querySelector('#district').value;
+	var town = document.querySelector('#town').value;
+	var homeaddress = document.querySelector('#address').value;
+
+	// Gửi request tới controller để cập nhật địa chỉ
+	fetch('/web/users/updateAddress', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+		},
+		body: 'email=' + email +
+			'&city=' + city +
+			'&district=' + district +
+			'&town=' + town +
+			'&homeaddress=' + homeaddress,
+	})
+		.then(response => response.text())
+		.then(data => {
+			localStorage.setItem('updatedAddress', JSON.stringify({
+            city: city,
+            district: district,
+            town: town,
+            homeaddress: homeaddress,
+            data: data,
+        }));
+			location.reload();
+		})
+		.catch(error => console.error('Error:', error));
+}
+function updateUser() {
+	$(".btn-update").css("display", "block");
+	$("#city").prop("disabled", false);
+	$("#district").prop("disabled", false);
+	$("#town").prop("disabled", false);
+	$("#address").prop("disabled", false);
+}
+
+function loadUpdate() {
+    // Kiểm tra nếu có thông tin đã lưu trong localStorage
+    var updatedAddress = localStorage.getItem('updatedAddress');
+    if (updatedAddress) {
+        // Parse và áp dụng thông tin vào thẻ DOM
+        var addressInfo = JSON.parse(updatedAddress);
+        document.querySelector('#city').value = addressInfo.city;
+        document.querySelector('#district').value = addressInfo.district;
+        document.querySelector('#town').value = addressInfo.town;
+        document.querySelector('#address').value = addressInfo.homeaddress;
+        document.querySelector('#thong-bao').innerHTML = "cc";
+        console.log("OK");
+
+        // Xóa thông tin đã lưu trong localStorage
+        localStorage.removeItem('updatedAddress');
+    }
+}
+
+$(document).ready(function() {
+    // Kiểm tra nếu có thông tin đã lưu trong localStorage
+    var updatedAddress = localStorage.getItem('updatedAddress');
+    if (updatedAddress) {
+        // Parse và áp dụng thông tin vào thẻ DOM
+        var addressInfo = JSON.parse(updatedAddress);
+        $('#city').val(addressInfo.city);
+        $('#district').val(addressInfo.district);
+        $('#town').val(addressInfo.town);
+        $('#address').val(addressInfo.homeaddress);
+        $('#thong-bao').html(addressInfo.data);
+        console.log("OK");
+        // Xóa thông tin đã lưu trong localStorage
+        localStorage.removeItem('updatedAddress');
+    }
+});

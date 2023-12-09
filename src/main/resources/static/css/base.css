@@ -4,3 +4,7 @@
 	--color-green: #7E9C59;
 	--color-secondary-hover: #d26e4b;
 }
+
+.form-control:disabled {
+	background-color: #e9ecef !important;
+}
