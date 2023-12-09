@@ -55,7 +55,7 @@
 			</script>
 			<script type="text/javascript">
 				function createPay() {
-					var postData = '100000';
+					var postData = $("#frmCreateOrder").serialize();
 					var submitUrl = 'http://localhost:8888/api/payment/create';
 					$.ajax({
 						type: "GET",
