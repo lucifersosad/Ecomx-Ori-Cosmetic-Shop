@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{web/layout-default.html}">
+
+<body>
+	
+	<!--Thêm dòng này vào-->
+	<div layout:fragment="content">
+		<section class="container mt-5 checkout__question">
+			<p class="mb-1">
+				<span class="text-black-50">Bạn có mã ưu đãi? </span>
+			  	<a class="checkout__couppon-btn" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+					  Ấn vào đây để nhập mã
+			    </a>
+			</p>
+			<div class="collapse mb-2" id="collapseExample">
+			  <div class="card card-body checkout__couppon-card">
+			     <p class="text-black-50">Nếu bạn có mã giảm giá, vui lòng điền vào phía bên dưới.</p>
+			     <div class="input-group">
+					<input type="text" class="form-control" placeholder="Mã ưu đãi"/>
+					<span class="input-group-text btn-pink">Áp dụng</span>
+				 </div>
+			  </div>  
+			</div>
+			<p>
+				<span class="text-black-50">Sử dụng địa chỉ khác? </span>
+			  	<a class="checkout__couppon-btn" href="/web/users/my-account">
+					 Thay đổi địa chỉ
+			    </a>
+			</p>
+		</section>
+		
+		<section class="container mb-5">
+			<div class="row">
+				<div class="col-md-7">
+					<form method="post" class="colorlib-form" target="pay/cod">
+						<h3><strong>Thông tin thanh toán</strong></h3>
+	              		<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="fullName">Họ và tên</label>
+									<input type="text" id="fullName" class="form-control" placeholder="Họ và tên của bạn" name="fullName">
+								</div>
+							</div>
+	
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="fname">Số điện thoại</label>
+									<input type="text" id="phone" name="phone" class="form-control" placeholder="Số điện thoại của bạn">
+								</div>
+							</div>
+	
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="lname">Địa chỉ email</label>
+									<input type="text" id="email" name="email" class="form-control" placeholder="Email của bạn">
+								</div>
+							</div>
+	
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="city">Tỉnh/Thành phố</label>
+									<div class="form-field">
+										<i class="icon icon-arrow-down3"></i>
+										<select name="city" id="city" class="form-control">
+											<option value="#">Chọn tỉnh/thành phố</option>
+											<option value="#">Alaska</option>
+											<option value="#">China</option>
+											<option value="#">Japan</option>
+											<option value="#">Korea</option>
+											<option value="#">Philippines</option>
+									  </select>
+									</div>
+								</div>
+							</div>
+	
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="district">Quận/Huyện</label>
+									<div class="form-field">
+										<i class="icon icon-arrow-down3"></i>
+										<select name="district" id="district" class="form-control">
+											<option value="#">Chọn quận/huyện</option>
+											<option value="#">Alaska</option>
+											<option value="#">China</option>
+											<option value="#">Japan</option>
+											<option value="#">Korea</option>
+											<option value="#">Philippines</option>
+									  </select>
+									</div>
+								</div>
+							</div>
+	
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="town">Xã/Phường</label>
+									<div class="form-field">
+										<i class="icon icon-arrow-down3"></i>
+										<select name="town" id="town" class="form-control" th:value="HCM">
+											<option value="#">Chọn xã/phường </option>
+											<option value="HCM">Alaska</option>
+											<option value="#">China</option>
+											<option value="#">Japan</option>
+											<option value="#">Korea</option>
+											<option value="#">Philippines</option>
+									  </select>
+									</div>
+								</div>
+							</div>
+	
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="fname">Địa chỉ</label>
+									<input type="text" id="address" name="address" class="form-control" placeholder="Địa chỉ">
+								</div>
+							</div>
+	               </div>
+	            </form>
+				</div>
+				<div class="col-md-5">
+					<div class="row">
+						<div class="col-md-12">
+							<form action="after-checkout" method="post" onsubmit="return checkPaymentOption(this)">
+								<div class="cart-detail">
+									<h3><strong>Đơn hàng của bạn</strong></h3>
+									<ul>
+										<li>										
+											<ul>
+												<li><span>1 x Product Name</span> <span>$99.00</span></li>
+												<li><span>1 x Product Name</span> <span>$78.00</span></li>
+											</ul>
+										</li>
+										<li id="codOption" style="display: none;"><span>Shipping</span> <span id="codValue">30.000 VND</span></li>
+										<li><span>Subtotal</span> <span>180.000 VND</span></li>
+										<li id="total"><span>Order Total</span> <span id="totalValue">180.000 VND</span></li>
+									</ul>
+		
+									<h3><strong>Phương thức thanh toán</strong></h3>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+											   <label><input type="radio" name="optradio" id="cod" class="optradio" value="cod"> Thanh toán khi nhận hàng</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+											   <label><input type="radio" name="optradio" id="paypal" class="optradio" value="paypal"> PAYPAL</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+											   <label><input type="radio" name="optradio" id="vnpay" class="optradio" value="vnpay"> VNPAY</label>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<p><button type="submit" class="btn btn-primary">ĐẶT HÀNG</button></p>
+										</div>
+									</div>
+								</div>
+							</form>
+					   </div> 
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</body>
+
+</html>

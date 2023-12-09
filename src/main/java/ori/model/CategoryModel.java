@@ -16,20 +16,20 @@ import lombok.*;
 
 public class CategoryModel {
 
-private Integer cateId;
+	private Integer cateId;
 
-//validate
+	//validate
 
-@NotEmpty
+	@NotEmpty
 
-@Length(min=5)
+	@Length(min = 5)
 
-private String name;
+	private String name;
 
-private String logo;
+	private String logo;
 
-private MultipartFile imageFile;
+	private MultipartFile imageFile;
 
-private Boolean isEdit=false;
+	private Boolean isEdit = false;
 
 }

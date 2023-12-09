@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 
 import ori.entity.Brand;
 import ori.entity.Category;
@@ -14,6 +16,7 @@ import ori.service.IBrandService;
 import ori.service.ICategoryService;
 import ori.service.IProductService;
 
+@RequestMapping(value = {"", "/", "home"})
 @Controller
 public class HomeController {
 	@Autowired
@@ -23,7 +26,7 @@ public class HomeController {
 	@Autowired
 	IProductService productService;
 
-	@RequestMapping(value = {"/", "home"})
+	@GetMapping()
 	public String trangchu(ModelMap model) {
 		List<Product> products = productService.findProductsMostSaleByCategory(); 
 		List<Brand> brands = brandService.findAll();
@@ -32,5 +35,10 @@ public class HomeController {
 		model.addAttribute("categories", categories);
 		model.addAttribute("products", products);
 		return "web/index";
+	}
+	
+	@GetMapping("/checkout")
+	public String checkout(ModelMap model) {
+		return "web/checkout";
 	}
 }

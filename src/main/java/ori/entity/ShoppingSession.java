@@ -1,34 +1,32 @@
 package ori.entity;
-import java.io.Serializable;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShoppingSession implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "shopsesid")
-	private Integer shopSesId;
+@Entity(name = "shopping_session")
+public class ShoppingSession {
+	@EmbeddedId
+    private ShoppingSessionKey id;
 	
 	@ManyToOne
-	@JoinColumn(name="userid")
-	private User user;
+    @MapsId("proId")
+    @JoinColumn(name = "proid")
+    private Product product;
 	
 	@ManyToOne
-	@JoinColumn(name="proid")
-	private Product product;
+    @MapsId("userId")
+    @JoinColumn(name = "userid")
+    private User user;
+	
+	String date;
+
 }
