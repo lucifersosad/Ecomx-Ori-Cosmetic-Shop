@@ -6,6 +6,7 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,8 +23,8 @@ public class Cart implements Serializable{
 	private CartKey id;
 	@Column(name="quantity")
 	private int quantity;
-	@ManyToOne 
-	@JoinColumn(name = "userid",insertable = false, updatable = false) 
+	@OneToOne 
+	@JoinColumn(name = "userid",referencedColumnName = "userid",insertable=false, updatable=false) 
 	private User user;
 	@ManyToOne
 	@JoinColumn(name = "proid",insertable = false, updatable = false) 

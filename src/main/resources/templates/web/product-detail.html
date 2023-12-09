@@ -5,37 +5,35 @@
 <body>
 
 	<!--Thêm dòng này vào-->
-	<div layout:fragment="content">
+	<div layout:fragment="content" class="product-detail">
 		<!-- SECTION -->
-		<div class="section">
+		<div class="section mt-5">
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
 				<div class="row">
 					<!-- Product main img -->
-					<div class="col-md-5 col-md-push-2">
-						<div id="product-main-img">
-							<div class="product-preview">
-								<img th:src="${detailPro.image_link}" alt="">
-							</div>
-
+					<div class="col-md-6 col-md-push-2 product-preview">
+						<div class="product-main-img">
+							<img th:src="${detailPro.image_link}" alt="">
 						</div>
 					</div>
 					<!-- /Product main img -->
 
-					<!-- Product thumb imgs -->
-					<div class="col-md-2  col-md-pull-5">
-
-					</div>
-					<!-- /Product thumb imgs -->
-
 					<!-- Product details -->
-					<div class="col-md-5">
+					<div class="col-md-6">
 						<div class="product-details">
 							<h2 class="product-name" th:text=${detailPro.name}></h2>
 							<div>
-								<h3 class="product-price" th:text="${#strings.concat(detailPro.price, ' VND')}"></h3>
-								<span class="product-available">In Stock</span>
+								<h3 class="product-price-old">
+									[[${#numbers.formatDecimal(detailPro.oldPrice, 0, 'POINT', 0, 'POINT')}]].000 đ
+								</h3>
+								<h3 class="product-price" th:if="${detailPro.sale > 0}">
+									[[${#numbers.formatDecimal(detailPro.price, 0, 'POINT', 0, 'POINT')}]].000 đ
+								</h3>
+							</div>
+							<div>
+								<span class="product-available">còn [[${detailPro.stock}]] hàng</span>								
 							</div>
 							<!-- Display the initial content with a limited length -->
 							<p id="description"
@@ -44,19 +42,6 @@
 
 							<!-- Show more/hide button with styling -->
 							<button id="showMoreButton" onclick="toggleDescription()">Show more</button>
-
-							<!-- CSS for button styling (you can customize this based on your preferences) -->
-							<style>
-								#showMoreButton {
-									background-color: #D10024e6;
-									color: #fff;
-									padding: 2px 3px;
-									border: none;
-									border-radius: 4px;
-									/* Rounded corners */
-									cursor: pointer;
-								}
-							</style>
 
 							<!-- JavaScript function to toggle between show/hide -->
 							<script th:inline="javascript">
@@ -83,21 +68,19 @@
 								}
 							</script>
 
-
-
-
-							<div class="product-options">
-
-							</div>
-
-							<div class="add-to-cart">
-								<div class="qty-label">
-									Qty
-									<div class="input-number">
-										<input type="number" th:value="1" th:name="qty">
-									</div>
+							<div class="d-flex mb-3 mt-3">
+								<div class="input-group" style="max-width: 120px;">
+			                        <div class="input-group-prepend">
+			                          <button class="btn btn-outline-primary js-btn-minus-cart btn-quantity-cart" style="border-top-right-radius: 0;border-bottom-right-radius: 0;" type="button">&minus;</button>
+			                        </div>
+			                        <input type="texts" class="cart-input form-control text-center" th:value="1" th:attr="data-proid-cart=${detailPro.proId}"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+			                        <div class="input-group-append">
+			                          <button class="btn btn-outline-primary js-btn-plus-cart btn-quantity-cart" style="border-top-left-radius: 0;border-bottom-left-radius: 0;" type="button">&plus;</button>
+			                        </div>
+			                	</div>
+			                	<div class="add-to-cart">
+									<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 								</div>
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 							</div>
 
 

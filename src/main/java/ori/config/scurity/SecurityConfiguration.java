@@ -83,6 +83,7 @@ public class SecurityConfiguration {
         .authorizeHttpRequests(
                 auth -> auth
                         .requestMatchers(antMatcher("/admin/**")).hasAnyAuthority(UserRole.ADMIN.getRoleName())
+                        .requestMatchers(antMatcher("/cart/**")).hasAnyAuthority(UserRole.USER.getRoleName())
                         .requestMatchers(antMatcher("/api/**")).permitAll()
                         .requestMatchers(antMatcher("/auth/sign-up/**")).permitAll()
                         .requestMatchers(antMatcher("/auth/login1")).permitAll()
