@@ -57,7 +57,7 @@ public class PaymentController {
 	}
 
 	@GetMapping("/option")
-	public String list(ModelMap model, @Validated @RequestParam("amount") int amount) {
+	public String list(ModelMap model, @Validated @RequestParam("amount") double amount) {
 		//int amount = 20000;
 		model.addAttribute("amount", amount);
 		return "web/payment/vnpay_pay";

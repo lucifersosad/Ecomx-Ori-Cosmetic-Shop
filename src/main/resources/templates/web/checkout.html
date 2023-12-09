@@ -106,19 +106,41 @@
 									<h3>
 										<strong>Đơn hàng của bạn</strong>
 									</h3>
-									<ul>
-										<li>
-											<ul>
-												<li><span>1 x Product Name</span> <span>$99.00</span></li>
-												<li><span>1 x Product Name</span> <span>$78.00</span></li>
-											</ul>
-										</li>
-										<li id="codOption" style="display: none;"><span>Shipping</span>
-											<span id="codValue">30.000 VND</span></li>
-										<li><span>Subtotal</span> <span>180.000 VND</span></li>
-										<li id="total"><span>Order Total</span> <span
-											id="totalValue">180.000 VND</span></li>
-									</ul>
+									<style>
+										.product-info {
+											display: flex;
+											justify-content: space-between;
+											align-items: center;
+											margin-bottom: 10px; /* Điều chỉnh khoảng cách giữa các dòng */
+										}
+										
+										.product-name {
+											flex-grow: 1;
+										}
+										
+										.total {
+											text-align: right;
+										}
+										
+										.bold-x {
+											font-weight: bold;
+										}
+										</style>
+
+									<div class="product-list">
+										<!-- Sử dụng th:each để lặp qua danh sách sản phẩm -->
+										<div th:each="item : ${list}" class="product-info">
+											<div>
+												<span class="quantity"> <strong>[[${item.quantity.quantity}]]
+												</strong><span class="bold-x">x</span>
+												</span> <span class="product-name">[[${item.product.name}]]</span>
+											</div>
+											<span class="total">[[${#numbers.formatDecimal(item.tong,
+												0, 'POINT', 0, 'POINT')}]]đ</span>
+										</div>
+									</div>
+
+
 
 									<h3>
 										<strong>Phương thức thanh toán</strong>
@@ -151,7 +173,8 @@
 									<div class="row">
 										<div class="col-md-12">
 											<p>
-												<button type="submit" class="btn btn-primary">ĐẶT
+												<button type="submit" class="btn btn-primary"
+													style="background-color: orange; color: white;">ĐẶT
 													HÀNG</button>
 											</p>
 										</div>
