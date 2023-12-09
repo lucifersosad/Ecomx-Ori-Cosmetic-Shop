@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,10 +44,19 @@ import ori.service.IProductService;
 import ori.service.IUserService;
 
 
-
 @RestController
 @RequestMapping("/api/payment/vnpay")
 public class VNPAYAPIController {
+	@Autowired
+	IOrderService orderService;
+	@Autowired
+	IUserService userService;
+	@Autowired
+	IOrderDetailService orderDetailService;
+	@Autowired
+	ICartService cartService;
+	@Autowired
+	IProductService productService;
 	@GetMapping(path = "/create")
 	public ResponseEntity<?> createPayment(			
 			HttpServletRequest req, @Validated @RequestParam("amount") double amount
@@ -68,9 +77,6 @@ public class VNPAYAPIController {
         vnp_Params.put("vnp_CurrCode", "VND");            
         vnp_Params.put("vnp_BankCode", "NCB");        
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-//        if (orderId == null || orderId.isEmpty()) {
-//        	orderId = "001";
-//        }
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + "001xx" + ". So tien:" + total);
         vnp_Params.put("vnp_OrderType", orderType);
         vnp_Params.put("vnp_Locale", "vn");
@@ -115,5 +121,103 @@ public class VNPAYAPIController {
         String paymentUrl = VNPAYConfig.vnp_PayUrl + "?" + queryUrl;                   
         return new ResponseEntity<Response>(new Response(true, "success", paymentUrl), HttpStatus.OK);
     }
-	
+	@GetMapping("/return")
+	public ResponseEntity<?> transactionAndReturn(@RequestParam Map<String, String> queryParams, RedirectAttributes redirectAttributes) {
+		Map<String, String> fields = new HashMap<>();
+
+		for (Map.Entry<String, String> entry : queryParams.entrySet()) {
+			String fieldName = entry.getKey();
+			String fieldValue = entry.getValue();
+
+			try {
+				fieldName = URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString());
+				fieldValue = URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString());
+
+				if (fieldValue != null && !fieldValue.isEmpty()) {
+					fields.put(fieldName, fieldValue);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		String vnp_SecureHash = queryParams.get("vnp_SecureHash");
+		if (fields.containsKey("vnp_SecureHashType")) {
+			fields.remove("vnp_SecureHashType");
+		}
+		if (fields.containsKey("vnp_SecureHash")) {
+			fields.remove("vnp_SecureHash");
+		}
+		String signValue = VNPAYConfig.hashAllFields(fields);
+		String payStatus = "", message = "";
+		if (signValue.equals(vnp_SecureHash)) {
+			boolean checkAmount = true; // Kiểm tra số tiền tài khoản so với tiền đơn hàng
+			boolean checkOrderStatus = true; // Kiểm tra đơn hàng đã thanh toán hay chưa
+			if (checkAmount) {
+				if (checkOrderStatus) {
+					if ("00".equals(queryParams.get("vnp_ResponseCode"))) {
+						Object authen = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+						if (authen instanceof AuthUser) {
+							String email = ((AuthUser) authen).getEmail();
+							Optional<User> optUser = userService.findByEmail(email);
+							if (optUser.isPresent()) {
+								User user = optUser.get();
+								Order order = new Order();
+								order.setUserId(user);
+								order.setDate(queryParams.get("vnp_PayDate"));
+								order.setPayment_method("VNPAY");
+								order.setStatus(1);
+								order.setTotal(Double.parseDouble(queryParams.get("vnp_Amount")));
+								order.setCurrency("VND");
+								payStatus = "1";
+								message = queryParams.get("vnp_Amount");
+								orderService.save(order);
+								List<Order> orders = orderService.findAll();
+								Order lastOrder = orders.get(orders.size() - 1);
+								List<Cart> carts = cartService.findByUserId(user.getUserId());
+								for (Cart cart : carts) {
+									OrderDetailKey orderDetailKey = new OrderDetailKey();
+									orderDetailKey.setOrderId(lastOrder.getOrderId()); // Set the appropriate orderId
+									orderDetailKey.setProId(cart.getProduct().getProId()); // Set the appropriate proId
+									OrderDetail orderDetail = new OrderDetail();
+									orderDetail.setId(orderDetailKey);
+									orderDetail.setOrder(lastOrder);
+									orderDetail.setProduct(cart.getProduct());
+									orderDetail.setQuantity(cart.getQuantity());
+									orderDetail.setDiscount(cart.getProduct().getSale());
+
+									orderDetailService.save(orderDetail);
+									Optional<Product> optPro = productService.findById(cart.getProduct().getProId());
+									Product pro = new Product();
+									if (optPro.isPresent()) {
+										pro = optPro.get();
+									}
+									pro.setStock(pro.getStock() - cart.getQuantity());
+									productService.save(pro);
+									cartService.delete(cart);
+									return new ResponseEntity<Response>(new Response(true, "success", ""), HttpStatus.OK);
+								}
+							}
+						}
+
+					} else {
+
+						message = "Thanh toán không thành công";
+					}
+				} else {
+
+					message = "Đơn hàng đã thanh toán";
+				}
+			} else {
+
+				message = "Số tiền không hợp lệ";
+			}
+
+		} else {
+
+			message = "Checksum không hợp lệ";
+		}
+		return new ResponseEntity<Response>(new Response(false, "fail", message), HttpStatus.OK);
+	}
+
 }
