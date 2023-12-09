@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/layout-admin.html}">
+<body>
+	
+	<!--Thêm dòng này vào-->
+	<section layout:fragment="content">
+		
+		<!--Viết nội dung từ đây-->
+		<div class="row">
+			<div class="col mt-4">
+				<div class="container-fluid">
+					<!-- Page Title -->
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">Product</h1>
+					</div>
+				</div>
+				<div class="container-fluid">
+					<div th:if="${message != null}">
+						<span th:text="${message}"></span>
+					</div>
+					<a href="/admin/products/add">Add Product</a>
+					<table border="1" width="100%">
+						<thead>
+							<tr>
+								<th>Product ID</th>
+								<th>Product Name</th>
+								<th>Description</th>
+								<th>Stock</th>
+								<th>Sale</th>
+								<th>Price</th>
+								<th>Image</th>
+								<th>Category</th>
+								<th>Brand</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="item : ${products}">
+								<td th:text="${item.proId}"></td>
+								<td th:text="${item.name}"></td>
+								<td th:text="${item.description}"></td>
+								<td th:text="${item.stock}"></td>
+								<td th:text="${item.sale}"></td>
+								<td th:text="${item.price}"></td>
+								<td th:text="${item.image_link}"></td>
+								<td th:text="${item.category.name}"></td>
+								<td th:text="${item.brand.name}"></td>
+								<td>
+									<a th:href="@{'/admin/products/edit/' + ${item.proId}}">Edit</a> || <a
+										th:href="@{'/admin/products/delete/' + ${item.proId}}">Delete</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+
+</body>
+
+</html>
