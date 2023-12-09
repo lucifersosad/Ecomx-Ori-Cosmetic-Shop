@@ -7,36 +7,47 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TimeZone;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import ori.config.VNPAYConfig;
-
+import ori.config.scurity.AuthUser;
+import ori.entity.Cart;
+import ori.entity.Order;
+import ori.entity.OrderDetail;
+import ori.entity.OrderDetailKey;
+import ori.entity.Product;
+import ori.entity.User;
 import ori.model.Response;
+import ori.service.ICartService;
+import ori.service.IOrderDetailService;
+import ori.service.IOrderService;
+import ori.service.IProductService;
+import ori.service.IUserService;
 
 
 
 @RestController
-@RequestMapping("/api/payment")
+@RequestMapping("/api/payment/vnpay")
 public class VNPAYAPIController {
-
-
 	@GetMapping(path = "/create")
 	public ResponseEntity<?> createPayment(			
 			HttpServletRequest req
@@ -105,4 +116,5 @@ public class VNPAYAPIController {
         String paymentUrl = VNPAYConfig.vnp_PayUrl + "?" + queryUrl;                   
         return new ResponseEntity<Response>(new Response(true, "success", paymentUrl), HttpStatus.OK);
     }
+	
 }
