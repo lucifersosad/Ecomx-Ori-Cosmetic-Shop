@@ -5,8 +5,8 @@
 <body>
 	
 	<!--Thêm dòng này vào-->
-	<div layout:fragment="content">
-		<div class="site-section mt-5 cart">
+	<div layout:fragment="content" class="cart">
+		<div class="site-section mt-5">
 	      <div class="container" th:if="${list.size() > 0}">
 	        <div class="row mb-5">
 	          <form class="col-md-12" method="post">

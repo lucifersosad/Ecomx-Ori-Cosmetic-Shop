@@ -60,11 +60,11 @@ document.addEventListener('click', function(event) {
 	var target = event.target;
 	if (target.classList.contains('btn-quantity')) {
 		var row = target.closest('tr');
-		
-        var input = row.querySelector('.form-control');
-        var inputValue = parseInt(input.value, 10);
-        
-        var proid = input.getAttribute('data-proid');
+
+		var input = row.querySelector('.form-control');
+		var inputValue = parseInt(input.value, 10);
+
+		var proid = input.getAttribute('data-proid');
 
 		var currentQuantity = parseInt(row.querySelector('.form-control').value, 10);
 		console.log(currentQuantity);
