@@ -48,6 +48,10 @@ ul {
 	color: #FBA1B7 !important;
 }
 
+.home .card {
+	border: none;
+}
+
 .cart-detail {
 	border: 2px solid #FBA1B7;
 	padding: 30px;
@@ -349,3 +353,17 @@ ul {
 
 .site-block-order-table td, .site-block-order-table th {
   color: #000; }
+  
+.user .avatar {
+	 display: flex;
+	 align-items: center;
+	 padding: 0 30px;
+	 margin-bottom: 20px;
+}
+
+.user .avatar i {
+	font-size: 50px;
+	margin-right: 10px;
+	margin-left: 20px;
+} 
+ 

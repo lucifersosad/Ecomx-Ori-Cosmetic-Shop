@@ -17,10 +17,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 			"ORDER BY sale DESC\r\n" +
 			"LIMIT 8", nativeQuery = true)
     List<Product> findProductsMostSaleByCategory();
-	@Query(value = "SELECT * FROM product where brandId = :id", nativeQuery = true)
+	@Query(value = "SELECT * FROM product where brandId = :id ORDER BY ABS(price - :proPrice) LIMIT 4 ", nativeQuery = true)
+	List<Product> findByBrand(@Param("id") Integer branId, @Param("proPrice") float proPrice);
 	
-	List<Product> findByBrand(@Param("id") Integer branId);
-	
-	@Query(value = "SELECT * FROM product where cateId = :id", nativeQuery = true)
-	List<Product> findByCategory(@Param("id") Integer cateId);
+	@Query(value = "SELECT * FROM product where cateId = :id ORDER BY ABS(price - :proPrice) LIMIT 4 ", nativeQuery = true)
+	List<Product> findByCategory(@Param("id") Integer cateId, @Param("proPrice") float proPrice);
 }

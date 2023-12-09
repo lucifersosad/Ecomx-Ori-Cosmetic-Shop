@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
 import ori.entity.Brand;
 import ori.entity.Category;
 import ori.entity.Product;
@@ -15,7 +16,7 @@ import ori.service.IBrandService;
 import ori.service.ICategoryService;
 import ori.service.IProductService;
 
-@RequestMapping(value = {"/", "home"})
+@RequestMapping(value = {"", "/", "home"})
 @Controller
 public class HomeController {
 	@Autowired
@@ -36,10 +37,13 @@ public class HomeController {
 		return "web/index";
 	}
 	
-	@GetMapping(value = "checkout")
+	@GetMapping("/checkout")
 	public String checkout(ModelMap model) {
 		return "web/checkout";
 	}
+<<<<<<< HEAD
 	
 	
+=======
+>>>>>>> dev
 }

@@ -1,9 +1,11 @@
 package ori.controller.web;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -12,11 +14,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import ori.config.scurity.AuthUser;
+import ori.entity.Order;
+import ori.entity.OrderDetail;
+import ori.entity.Product;
 import ori.entity.User;
 import ori.model.UserModel;
+import ori.service.IOrderDetailService;
+import ori.service.IOrderService;
 import ori.service.IUserService;
 
 @Controller
@@ -24,6 +34,41 @@ import ori.service.IUserService;
 public class WebUserController {
 	@Autowired(required=true)
 	IUserService userService;
+	
+	@Autowired(required=true)
+	IOrderDetailService orderDetailService;
+	
+	@Autowired(required = true)
+	IOrderService orderService;
+	
+	@GetMapping("/my-account")
+	public String myAccount(ModelMap model) {
+		Object authen = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (authen instanceof AuthUser) {
+			String email = ((AuthUser)authen).getEmail();
+			Optional<User> optUser = userService.findByEmail(email);
+			if (optUser.isPresent()) {
+				User user = optUser.get();
+				UserModel userModel = new UserModel();
+	        	BeanUtils.copyProperties(user, userModel);
+				userModel.setIsEdit(true);
+				String add = userModel.getAddress();
+				String[] parts = add.split("\\s*,\\s*");
+				if (parts.length >= 3) {
+				    model.addAttribute("city", parts[3].trim()); 
+				    model.addAttribute("district", parts[2].trim()); 
+				    model.addAttribute("town", parts[1].trim()); 
+				    model.addAttribute("homeaddress", parts[0].trim()); 
+				} else {
+
+				    model.addAttribute("homeaddress", add.trim());
+				}
+				model.addAttribute("user", userModel);
+				return "web/users/infor";
+			}	
+		} 
+		return "redirect:/";
+	}
 	
 	@GetMapping("edit/{userId}")
 	public ModelAndView edit(ModelMap model, @PathVariable("userId") Integer userId) {
@@ -58,35 +103,85 @@ public class WebUserController {
 		}
 		model.addAttribute("message", message);
 //redirect về URL controller
-		return new ModelAndView("forward:/web/users/", model);
+		return new ModelAndView("/web/users/infor", model);
 
 	}
-	@GetMapping("/infor/{email}/{password}")
-	public ModelAndView infor(ModelMap model, @PathVariable("email") String email, @PathVariable("password") String password) {
+	@GetMapping("/infor/{email}")
+	public ModelAndView infor(ModelMap model, @PathVariable("email") String email) {
 	    Optional<User> optUser = userService.findByEmail(email);
 
 	    if (optUser.isPresent()) {
 	        User user = optUser.get();
-	        if (user.getPassword().equals(password)) {
-	            model.addAttribute("user", user);
-	            return new ModelAndView("web/users/infor", model);
-	        }
-	    }
-	    model.addAttribute("message", "User is not existed!!!!");
-	    return new ModelAndView("forward:/web/users", model);
-	}
-	@GetMapping("/updateAddress/{email}")
-	public ModelAndView updateAddress(ModelMap model, @PathVariable("email") String email) {
-		Optional<User> optUser = userService.findByEmail(email);
+        	UserModel userModel = new UserModel();
+        	BeanUtils.copyProperties(user, userModel);
+			userModel.setIsEdit(true);
+			String add = userModel.getAddress();
+			String[] parts = add.split("\\s*,\\s*");
+			if (parts.length >= 3) {
+			    model.addAttribute("city", parts[3].trim()); 
+			    model.addAttribute("district", parts[2].trim()); 
+			    model.addAttribute("town", parts[1].trim()); 
+			    model.addAttribute("homeaddress", parts[0].trim()); 
+			} else {
 
-	    if (optUser.isPresent()) {
-	        User user = optUser.get();
-	            model.addAttribute("user", user);
-	            return new ModelAndView("web/users/updateAddress", model);
-	        
+			    model.addAttribute("homeaddress", add.trim());
+			}
+			model.addAttribute("user", userModel);
+			
+			List<Order> listOrder = orderService.findOder(user.getUserId());
+			model.addAttribute("listOrder", listOrder);
+			
+			List<OrderDetail> listOderDetail = orderDetailService.findAll();
+			model.addAttribute("listOderDetail", listOderDetail);
+			
+			List<Product> listPro = orderDetailService.listProByOderID(user.getUserId());
+			model.addAttribute("listPro", listPro);
+            return new ModelAndView("web/users/infor", model);
+	       
 	    }
 	    model.addAttribute("message", "User is not existed!!!!");
 	    return new ModelAndView("forward:/web/users/", model);
+	}
+	@PostMapping("/updateAddress/{email}")
+	public ModelAndView updateAddress(ModelMap model,
+	                                   @PathVariable("email") String email,
+	                                   @RequestParam("city") String city,
+	                                   @RequestParam("district") String district,
+	                                   @RequestParam("town") String town,
+	                                   @RequestParam("homeaddress") String homeadd) {
+	    Optional<User> optUser = userService.findByEmail(email);
+
+	    if (optUser.isPresent()) {
+	        User user = optUser.get();
+	        UserModel userModel = new UserModel();
+        	BeanUtils.copyProperties(user, userModel);
+        	userModel.setIsEdit(true);
+	        String address = homeadd+ " , " +town + " , " + district + " , " + city;
+	        user.setAddress(address);
+	        userService.updateUser(user);
+	        model.addAttribute("message", "Address is updated!!!");
+	        model.addAttribute("user", userModel);
+	        return new ModelAndView("redirect:/web/users/infor/" + email);
+	    }
+	    return new ModelAndView("forward:/web/users/", model);
+	}
+	@GetMapping("/profile")
+	public ModelAndView info(ModelMap model, HttpSession session) {
+	    String userEmail = session.getAttribute("Email").toString();
+	    if (userEmail != null) {
+	        Optional<User> optUser = userService.findByEmail(userEmail.toString());
+
+	        if (optUser.isPresent()) {
+	            User user = optUser.get();
+	            UserModel userModel = new UserModel();
+	        	BeanUtils.copyProperties(user, userModel);
+	            model.addAttribute("user", userModel);
+	            return new ModelAndView("web/users/infor", model);
+	        }
+	    }
+
+	    model.addAttribute("message", "User is not logged in!");
+	    return new ModelAndView("forward:/admin/users", model);
 	}
 	
 }

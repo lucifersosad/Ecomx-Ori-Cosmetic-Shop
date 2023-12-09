@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 
 import ori.entity.User;
 import ori.repository.UserRepository;
+
 @Service
-public class UserServiceImpl implements IUserService{
+public class UserServiceImpl implements IUserService {
 	@Autowired
 	UserRepository userRepository;
 
@@ -57,24 +58,59 @@ public class UserServiceImpl implements IUserService{
 
 	@Override
 	public User updateUser(User model) {
-		Integer userid = model.getUserId();
-		User user = userRepository.findById(userid).get();
-		model.setPassword(user.getPassword());
-		model.setIsAdmin(user.getIsAdmin());
-		return userRepository.save(model);
+		Integer userId = model.getUserId();
+		if (userId != null) {
+			Optional<User> userOptional = userRepository.findById(userId);
+			if (userOptional.isPresent()) {
+				User user = userOptional.get();
+
+				if (model.getFullName() != null && !model.getFullName().isEmpty()) {
+					user.setFullName(model.getFullName());
+				}
+				if (model.getUsername() != null && !model.getUsername().isEmpty()) {
+					user.setUsername(model.getUsername());
+				}
+				if (model.getEmail() != null && !model.getEmail().isEmpty()) {
+					user.setEmail(model.getEmail());
+				}
+				if (model.getAddress() != null && !model.getAddress().isEmpty()) {
+					user.setAddress(model.getAddress());
+				}
+				if (model.getPhone() != null && !model.getPhone().isEmpty()) {
+					user.setPhone(model.getPhone());
+				}
+				model.setPasswordHash(user.getPasswordHash());
+
+				return userRepository.save(user);
+			}
+		}
+		return null;
 	}
+
 	@Override
-	public User updateAddress(String email,String newAddress) {
-		
+	public User updateAddress(String email, String newAddress) {
+
 		User user = userRepository.findByEmail(email).get();
 		user.setAddress(newAddress);
 		return userRepository.save(user);
 	}
+
 	@Override
-	public Page<User> getAll(Integer pageNo){
-		Pageable pageable = PageRequest.of(pageNo-1, 100);
+	public Page<User> getAll(Integer pageNo) {
+		Pageable pageable = PageRequest.of(pageNo - 1, 100);
 		return userRepository.findAll(pageable);
 	}
-	
-	
+
+	public User login(String email, String passwd) {
+		User user = userRepository.findByEmail(email).get();
+		if (user != null && passwd.equals(user.getPasswordHash())) {
+			return user;
+		}
+		return null;
+	}
+
+	@Override
+	public Optional<User> getByUserNameOrEmail(String username) {
+		return userRepository.findByUsernameOrEmail(username);
+	}
 }

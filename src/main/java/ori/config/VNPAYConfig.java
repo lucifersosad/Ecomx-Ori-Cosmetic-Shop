@@ -15,13 +15,16 @@ import javax.crypto.spec.SecretKeySpec;
 import jakarta.servlet.http.HttpServletRequest;
 
 
-public class Config {
+public class VNPAYConfig {
 	public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_ReturnUrl = "http://localhost:8888/payment/ipn";
     public static String vnp_TmnCode = "M8IEGRE2";
     public static String secretKey = "XGQTYPCIATVOJJNAVFGGGSBTKMKWTSZU";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
-
+    public static String userid = "";
+    public static String shipping_method = "";
+    
+    
     public static String md5(String message) {
         String digest = null;
         try {

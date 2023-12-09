@@ -5,68 +5,107 @@
 <body>
 
 	<!--Thêm dòng này vào-->
-	<section layout:fragment="content">
+	<div layout:fragment="content">
+		<section style="background-color: #eee;">
+			<form action="/admin/users/saveOrUpdate" method="POST">
+				
+						<div class="container py-5">
+				
 
-		<!--Viết nội dung từ đây-->
-		<div class="row">
-			<div class="col mt-4">
-				<div class="container-fluid">
-					<!-- Page Title -->
-					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">User</h1>
-					</div>
-				</div>
-				<div class="container-fluid">
-					<div th:if="${message != null}">
-						<span th:text="${message}"></span>
-					</div>
-
-					<div style="display: flex; justify-content: space-between; padding: 20px;">
-						<!-- Bên trái -->
-						<div style="width: 30%;">
-							<!-- Phần đầu -->
-							<div>
-								<h2>Avartar</h2>
-								<!-- Thêm mã HTML để hiển thị ảnh đại diện -->
-								<img src="path/to/avatar.jpg" alt="Avatar">
-							</div>
-							<!-- Phần dưới -->
-							<div>
-								
-								<ul>
-									<li><a href="#/info">Thông tin</a></li>
-									<li><a href="#/orders">Đơn hàng</a></li>
-								</ul>
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="card mb-4">
+							<div class="card-body text-center">
+								<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+									alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+								<h5 class="my-3" th:text="${user.fullName}"></h5>
+								<p class="text-muted mb-1">Custommer</p>
+								<p class="text-muted mb-4" th:text="${user.address}"></p>
+								<div class="d-flex justify-content-center mb-2">
+									
+								</div>
 							</div>
 						</div>
-
-						<!-- Bên phải -->
-						<div style="width: 60%;">
-							<form action="/admin/users/saveOrUpdate" method="POST"> 
-								<div th:each="item : ${user}">
+						<div class="card mb-4 mb-lg-0">
+							<div class="card-body p-0">
 								
-								<div>
-									<strong>Full Name:</strong> <span th:text="${item.fullName}"></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-8">
+						<div class="card mb-4">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Full Name</p>
+									</div>
+									<div class="col-sm-9">
+										<p class="text-muted mb-0" th:text="${user.fullName}"></p>
+									</div>
 								</div>
-								<div>
-									<strong>Email:</strong> <span th:text="${item.email}"></span>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Email</p>
+									</div>
+									<div class="col-sm-9">
+										<p class="text-muted mb-0" th:text="${user.email}"></p>
+									</div>
 								</div>
-								<div>
-									<strong>Phone:</strong> <span th:text="${item.phone}"></span>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Phone</p>
+									</div>
+									<div class="col-sm-9">
+										<p class="text-muted mb-0" th:text="${user.phone}"></p>
+									</div>
 								</div>
-								<div>
-									<strong>Address:</strong> <span th:text="${item.address}"></span>
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Mobile</p>
+									</div>
+									<div class="col-sm-9">
+										<p class="text-muted mb-0">(098) 765-4321</p>
+									</div>
 								</div>
-							
-							
-							
-
+								<hr>
+								<div class="row">
+									<div class="col-sm-3">
+										<p class="mb-0">Address</p>
+									</div>
+									<div class="col-sm-9">
+										<p class="text-muted mb-0" th:text="${user.address}"></p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="card mb-4 mb-md-0">
+									<div class="card-body">
+										
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="card mb-4 mb-md-0">
+									<div class="card-body">
+										
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</section>
+			</form>
+
+		</section>
+
+	</div>
 
 </body>
 

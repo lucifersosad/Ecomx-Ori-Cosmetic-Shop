@@ -13,8 +13,8 @@
 				</div>
 				<h3>Tạo mới đơn hàng</h3>
 				<div class="table-responsive">
-					<form action="/api/payment/create" id="frmCreateOrder" method="post">  
-						<div class="form-group">	
+					<form id="frmCreateOrder" method="post">
+						<div class="form-group">
 							<label for="amount">Số tiền</label>
 							<input class="form-control" data-val="true"
 								data-val-number="The field Amount must be a number."
@@ -41,7 +41,7 @@
 							<label for="language">Tiếng anh</label><br>
 
 						</div>
-						<button type="submit" class="btn btn-default" href>Thanh toán</button>
+						<a onclick="createPay()" class="btn btn-default">Thanh toán</a>
 					</form>
 				</div>
 				<p>
@@ -50,33 +50,35 @@
 			</section>
 			<link href="https://pay.vnpay.vn/lib/vnpay/vnpay.css" rel="stylesheet" />
 			<script src="https://pay.vnpay.vn/lib/vnpay/vnpay.min.js"></script>
+			<script th:inline="javascript">
+				var contextPath = /*[[@{/}]]*/ '';
+			</script>
 			<script type="text/javascript">
-				$("#frmCreateOrder").submit(function (e) {
-					var postData =  new FormData(this);
-					var submitUrl = $("#frmCreateOrder").attr("action");
+				function createPay() {
+					var postData = '100000';
+					var submitUrl = 'http://localhost:8888/api/payment/create';
 					$.ajax({
-						type: "POST",
+						type: "GET",
 						url: submitUrl,
 						data: postData,
 						dataType: 'JSON',
-						success: function (data) {
-							if (data.status) {
+						success: function (x) {
+							if (x.status === true) {
 								if (window.vnpay) {
-									vnpay.open({width: 768, height: 600, url: data.body});
+									vnpay.open({width: 768, height: 600, url: x.body});
 								} else {
-									location.href = data.body;
+									location.href = x.body;
 								}
 								return false;
 							} else {
-								alert(x.Message);
+								alert(x.message);
 							}
 						}
 					});
 					return false;
-				});
+				}
 			</script>
 		</div>
-
 	</div>
 </body>
 
