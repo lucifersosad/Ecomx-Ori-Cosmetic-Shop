@@ -20,7 +20,7 @@
                                 </tr>
                             </thead>
                            	<tbody>
-							    <tr th:each="item : ${list}">
+						<tr th:each="item : ${list}">
 							        <td class="product-thumbnail">
 							            <img th:src="@{${item.product.image_link}}" alt="Image" class="img-fluid">
 							        </td>
@@ -30,18 +30,25 @@
 							        <td class="product-price">
 							            <p class="text-black" th:text="${item.product.price}"></p>
 							        </td>
-							        <td class="product-quantity">
-							            <p class="text-black" th:text="${item.quantity.quantity}"></p>
-							        </td>
+									<td class="product-quantity">
+									    <div class="input-group" style="width: 120px; margin: 0 auto;">
+									        <div class="input-group-prepend">
+									            <a th:href="@{'/cart/updateQTT/' + ${item.product.proId} + '/giam'}" class="btn btn-primary btn-auto btn-sm">-</a>
+									        </div>
+									        <input type="text" class="form-control text-center" th:value="${item.quantity.quantity}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" style="width: 60px;">
+									        <div class="input-group-append">
+									            <a th:href="@{'/cart/updateQTT/' + ${item.product.proId} + '/tang'}" class="btn btn-primary btn-auto btn-sm">+</a>
+									        </div>
+									    </div>
+									</td>
 							        <td class="product-total">
 							            <p class="text-black" th:text="${item.tong}"></p>
 							        </td>
 							        <td>
-							            <a href="#" class="btn btn-primary btn-auto btn-sm">X</a>
+							   			<a th:href="@{'/cart/deleteItem/' + ${item.product.proId}}" class="btn btn-primary btn-auto btn-sm">X</a>
+
 							        </td>
 							    </tr>
-							</tbody>
-
                         </table>
                     </div>
                 </form>
@@ -101,3 +108,5 @@
     </div>
 </body>
 </html>
+
+

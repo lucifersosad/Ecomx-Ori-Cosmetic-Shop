@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-<<<<<<< HEAD
-import org.springframework.web.bind.annotation.PathVariable;
-=======
-import org.springframework.web.bind.annotation.RequestMapping;
 
->>>>>>> dev
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
 import ori.entity.Cart;
 import ori.entity.Product;
 import ori.model.CartModel;
@@ -23,52 +23,16 @@ import ori.service.IProductService;
 import ori.service.IUserService;
 
 @Controller
-<<<<<<< HEAD
-
+@RequestMapping("/cart")
 public class CartController
 {
-=======
-@RequestMapping("cart")
-public class CartController {
->>>>>>> dev
 	@Autowired(required=true)
 	IUserService userService;
 	@Autowired(required=true)
 	ICartService cartService;
 	@Autowired(required=true)
 	IProductService productService;
-<<<<<<< HEAD
-=======
-	
-    @GetMapping("")
-	public String viewCart(Model model) {
-        //UserModel user = (UserModel) session.getAttribute("account");
-        List<Cart> list= cartService.findByUserId(1);
-        List<List<Object>> obs = new ArrayList<>();
-        float sum = 0;
-    	for (Cart cart : list) 
-    	{
-    		 List<Object> o = new ArrayList<>();
-             o.add(cart.getProduct().getImage_link());
-             o.add(cart.getProduct().getName());
-             o.add(cart.getProduct().getPrice());
-             o.add(cart.getQuantity());
-             o.add((cart.getQuantity())*(cart.getProduct().getPrice()));
-             float total = (cart.getQuantity()*(cart.getProduct().getPrice()));
-             sum = sum + total;
-             obs.add(o);
-		}
-    	model.addAttribute("total", sum);
-        model.addAttribute("listp", obs);
-        return "web/cart"; 
-    }
->>>>>>> dev
-	@GetMapping(value = "backToHome")
-	public String backToHome(ModelMap model) 
-	{
-		return "web/index";
-	}
-	@GetMapping("/cart")
+	@GetMapping("")
 	public String viewCart(ModelMap model) 
 	{
 		
@@ -85,6 +49,7 @@ public class CartController {
 		    productModel.setImage_link(pro.getImage_link());
 		    productModel.setName(pro.getName());
 		    productModel.setPrice(pro.getPrice());
+		    productModel.setProId(pro.getProId());
 		    cartModel.setQuantity(cart.getQuantity());
 		    double total= cartModel.getQuantity()*productModel.getPrice();
 		    tong.add(total);
@@ -104,14 +69,14 @@ public class CartController {
 		model.addAttribute("total", sum);
 		return "web/cart";
 	}
-	@GetMapping("deleteItem/{proid}")
+	@GetMapping("/deleteItem/{proid}")
 	public String deleteItem(ModelMap model, @PathVariable("proid") Integer proid) 
 	{
 		List<Cart> list =cartService.findByUserIdAndProid(2, proid);
 		for (Cart cart : list) {
 			cartService.delete(cart);
 		}
-		return "web/cart";
+		return viewCart(model);
 	}
 	@GetMapping(value = "deleteCart")
 	public String deleteCart(ModelMap model) 
@@ -120,17 +85,38 @@ public class CartController {
 		for (Cart cart : list) {
 			cartService.delete(cart);
 		}
-		return "web/cart";
+	
+		return "web/index";
 	}
-	@GetMapping(value = "/updateQTT/{proid}")
-	public String updateCart(ModelMap model,@PathVariable("proid")Integer proid, Integer qtt) 
+	@GetMapping("/updateQTT/{proid}/tang")
+	public String updateCartTang(ModelMap model,@PathVariable("proid")Integer proid) 
 	{
-		qtt=69;
+
 		List<Cart> list =cartService.findByUserIdAndProid(2, proid);
 		for (Cart cart : list) {
-			cart.setQuantity(qtt);
+			cart.setQuantity((cart.getQuantity()) + 1);
 			cartService.save(cart);
 		}
-		return "web/cart";
+		return viewCart(model);
+
+	}
+	@GetMapping("/updateQTT/{proid}/giam")
+	public String updateCartGiam(ModelMap model,@PathVariable("proid")Integer proid) 
+	{
+
+		List<Cart> list =cartService.findByUserIdAndProid(2, proid);
+		String message="Loi";
+		for (Cart cart : list) {
+			int old = cart.getQuantity();
+			if(cart.getQuantity()>1) 
+			{
+				cart.setQuantity(old - 1);
+				cartService.save(cart);
+			}
+			else {
+				model.addAttribute("message",message);
+			}
+		}
+		return viewCart(model);
 	}
 }
