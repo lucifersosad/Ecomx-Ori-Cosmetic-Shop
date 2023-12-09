@@ -52,9 +52,9 @@ public class PaymentController {
 	@Autowired
 	IProductService productService;
 
-	@GetMapping("/vnpay/option")
-	public String list(ModelMap model) {
-		int amount = 20000;
+	@GetMapping("/option")
+	public String list(ModelMap model, @Validated @RequestParam("amount") double amount) {
+		//int amount = 20000;
 		model.addAttribute("amount", amount);
 		return "web/payment/vnpay_pay";
 	}

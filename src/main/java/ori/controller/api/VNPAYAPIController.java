@@ -50,12 +50,12 @@ import ori.service.IUserService;
 public class VNPAYAPIController {
 	@GetMapping(path = "/create")
 	public ResponseEntity<?> createPayment(			
-			HttpServletRequest req, @Validated @RequestParam("amount") int amount
+			HttpServletRequest req, @Validated @RequestParam("amount") double amount
 			) throws IOException {
 		String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        long total = Integer.parseInt(req.getParameter("amount"))*100;  
+        int total = (int) (Math.ceil(amount) * 100);  
         //long total = 100000*100;  
         String vnp_TxnRef = VNPAYConfig.getRandomNumber(8);
         String vnp_IpAddr = VNPAYConfig.getIpAddress(req);
