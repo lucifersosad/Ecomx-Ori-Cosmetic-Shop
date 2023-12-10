@@ -35,6 +35,7 @@ public class CheckOutController {
 
 	@GetMapping("")
 	public String ThongtinKh(ModelMap model) {
+		double sum = 0;
 		User user = userService.getUserLogged();
 		String[] addressParts = user.getAddress().split(",");
 		model.addAttribute("addressParts", addressParts);
@@ -44,9 +45,7 @@ public class CheckOutController {
 		List<ProductModel> listp = new ArrayList<>();
 		List<CartModel> listc = new ArrayList<>();
 		List<Double> tong = new ArrayList<>();
-
-		double sum = 0;
-
+	
 		for (Cart cart : list) {
 			Product pro = cart.getProduct();
 			ProductModel productModel = new ProductModel();
@@ -58,6 +57,7 @@ public class CheckOutController {
 			cartModel.setQuantity(cart.getQuantity());
 			double total = cartModel.getQuantity() * productModel.getPrice();
 			tong.add(total);
+			
 			sum = sum + total;
 			listp.add(productModel);
 			listc.add(cartModel);

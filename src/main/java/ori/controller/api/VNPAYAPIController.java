@@ -1,6 +1,8 @@
 package ori.controller.api;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,7 +65,7 @@ public class VNPAYAPIController {
 		String vnp_Version = "2.1.0";
 		String vnp_Command = "pay";
 		String orderType = "other";
-		int total = (int) (Math.ceil(amount) * 100);
+		int total = (int) amount * 100;
 		String vnp_TxnRef = VNPAYConfig.getRandomNumber(8);
 		String vnp_IpAddr = VNPAYConfig.getIpAddress(req);
 		String vnp_TmnCode = VNPAYConfig.vnp_TmnCode;
@@ -168,10 +170,14 @@ public class VNPAYAPIController {
 							User user = optUser.get();
 							Order order = new Order();
 							order.setUserId(user);
-							order.setDate(queryParams.get("vnp_PayDate"));
+							DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+					        LocalDateTime dateTime = LocalDateTime.parse(queryParams.get("vnp_PayDate"), inputFormatter);
+					        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+					        String outputDateString = dateTime.format(outputFormatter);
+							order.setDate(outputDateString);
 							order.setPayment_method("VNPAY");
-							order.setStatus(1);
-							order.setTotal(Double.parseDouble(queryParams.get("vnp_Amount")));
+							order.setStatus(0);
+							order.setTotal(Double.parseDouble(queryParams.get("vnp_Amount"))/100);
 							order.setCurrency("VND");
 							orderService.save(order);
 							List<Order> orders = orderService.findAll();
