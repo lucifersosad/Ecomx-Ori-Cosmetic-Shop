@@ -97,4 +97,16 @@ public class OrderServiceImpl implements IOrderService{
 	        } else {
 	}
 }
+
+	@Override
+	public List<Integer> getMonthlyTotal() {
+		// TODO Auto-generated method stub
+		return orderRepository.getMonthlyTotal();
+	}
+
+	@Override
+	public List<Integer> getQuarterTotal() {
+		// TODO Auto-generated method stub
+		return orderRepository.getQuarterTotal();
+	}
 }

@@ -121,19 +121,13 @@
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Statictis</div>
-
-                                            <a class="dropdown-item" href="#">Quarter</a>
-                                            <!-- <div class="dropdown-divider"></div>-->
-                                            <a class="dropdown-item" href="#">Year</a>
-                                        </div>
+                                    
                                     </div>
                                 </div>
                                 <!-- Card Body -->
                                <div class="card-body">
                                     <div class="chart-area"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                                        <canvas id="myAreaChartt" width="752" height="400" style="display: block; height: 320px; width: 602px;" class="chartjs-render-monitor"></canvas>
+                                        <canvas id="myAreaChart" width="752" height="400" style=" display: block; height: 320px; width: 602px;" class="chartjs-render-monitor"></canvas>
                                         
                                     </div>
                                 </div>
@@ -141,7 +135,27 @@
                         </div>
 
 
-                        
+                      <div class="col-xl-4 col-lg-5">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Revenue by Quarter</h6>
+                                    <div class="dropdown no-arrow">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                        </a>
+                                        
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                                        <canvas id="myPieChart" width="752" height="306" style="display: block; height: 245px; width: 602px;" class="chartjs-render-monitor"></canvas>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>  
                     </div>
 
 			</div>
@@ -151,37 +165,7 @@
 
 
 <!-- Plugin datalabels -->
-    <script>
-      // Example data
-      var chartData = {
-        labels: ["January", "February", "March", "April", "May"],
-        datasets: [
-          {
-            label: "Example Data",
-            backgroundColor: "rgba(75, 192, 192, 0.2)",
-            borderColor: "rgba(75, 192, 192, 1)",
-            borderWidth: 1,
-            data: [65, 59, 80, 81, 56],
-          },
-        ],
-      };
-
-      // Get the canvas element
-      var ctx = document.getElementById("myAreaChart").getContext("2d");
-
-      // Create the area chart
-      var myAreaChart = new Chart(ctx, {
-        type: "line", // You can use 'line' for a line chart or 'bar' for a bar chart
-        data: chartData,
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
-      });
-    </script>
+   
 </body>
 
 </html>

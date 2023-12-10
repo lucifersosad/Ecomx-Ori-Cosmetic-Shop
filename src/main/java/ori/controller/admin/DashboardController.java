@@ -20,6 +20,10 @@ public class DashboardController {
 		model.addAttribute("reYear",orderService.reOnCurrentYear());
 		model.addAttribute("reQuarter",orderService.reOnCurrentQuarter());
 		model.addAttribute("rateCom",orderService.rateCom());
+		
+		model.addAttribute("totalMontly", orderService.getMonthlyTotal());
+
+		model.addAttribute("totalQuarter", orderService.getQuarterTotal());
 
 		return "admin/dashboard";
 	}	

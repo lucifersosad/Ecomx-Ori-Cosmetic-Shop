@@ -34,4 +34,6 @@ public interface IOrderService {
 	 Page<Order> getAll(Integer pageNo);
 	 
 	 void updateOrderState(Integer orderId, int newState);
+	 List<Integer> getMonthlyTotal();
+	 List<Integer> getQuarterTotal();
 }

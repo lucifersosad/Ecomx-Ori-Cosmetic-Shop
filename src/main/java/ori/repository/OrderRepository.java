@@ -34,4 +34,34 @@ public interface OrderRepository extends JpaRepository<Order, Integer>{
 		    SELECT o FROM Order o WHERE o.userId.userId = :userId
 		""")
 		List<Order> findOrderByUserId(@Param("userId") Integer userId);
+	
+	@Query(nativeQuery = true, value =
+	        "WITH AllMonths AS (\r\n"
+	        + "  SELECT 1 AS month_number UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 \r\n"
+	        + "  UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 \r\n"
+	        + "  UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12\r\n"
+	        + ")\r\n"
+	        + "SELECT  IFNULL(SUM(CASE WHEN o.currency = \"VND\" THEN o.total\r\n"
+	        + "                                        WHEN o.currency = \"USD\" THEN o.total * 23000\r\n"
+	        + "                                   END), 0) AS total_sum, m.month_number\r\n"
+	        + "FROM AllMonths m\r\n"
+	        + "LEFT JOIN wck.orders o ON MONTH(STR_TO_DATE(o.date, '%d/%m/%Y %H:%i:%s')) = m.month_number\r\n"
+	        + "                      AND o.status = 1\r\n"
+	        + "GROUP BY m.month_number;"
+	    )
+	    List<Integer> getMonthlyTotal();
+	
+	@Query(nativeQuery = true, value =
+	        "WITH AllQuarters AS (\r\n"
+	        + "  SELECT 1 AS quarter_number UNION SELECT 2 UNION SELECT 3 UNION SELECT 4\r\n"
+	        + ")\r\n"
+	        + "SELECT  IFNULL(SUM(CASE WHEN o.currency = \"VND\" THEN o.total\r\n"
+	        + "                                      WHEN o.currency = \"USD\" THEN o.total * 23000\r\n"
+	        + "                                 END), 0) AS total_sum\r\n"
+	        + "FROM AllQuarters q\r\n"
+	        + "LEFT JOIN wck.orders o ON QUARTER(STR_TO_DATE(o.date, '%d/%m/%Y %H:%i:%s')) = q.quarter_number\r\n"
+	        + "                    AND o.status = 1\r\n"
+	        + "GROUP BY q.quarter_number;"
+	    )
+	    List<Integer> getQuarterTotal();
 }
