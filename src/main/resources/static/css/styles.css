@@ -21,11 +21,6 @@ a {
 	-o-transition: .3s all ease;
 	transition: .3s all ease;
 	color: #2f2f2f;
-	text-decoration: underline;
-}
-
-a {
-	text-decoration: none !important;
 }
 
 a:hover {
@@ -199,8 +194,32 @@ ul {
 	margin-left: 20px;
 } 
 
-/* product-details */
+.bg-cart {
+	left: 80%;
+	top: 13%;
+	font-size: 11px;
+	display: flex;
+}
 
-/*product-details */
+.bg-cart span{
+	padding-top: 1px;
+}
+
+/* CSS cho hiệu ứng */
+@keyframes bounceIn {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-30px);
+    }
+    60% {
+        transform: translateY(-15px);
+    }
+}
+
+#cartQty {
+    animation: bounceIn 2s;
+}
 
  

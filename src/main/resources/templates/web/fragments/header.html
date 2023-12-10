@@ -31,7 +31,7 @@
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5 d-flex justify-content-between">
 						<li class="nav-item dropdown" sec:authorize="isAnonymous()" style="margin-right: 20px;">
 							<a sec:authorize="isAnonymous()" th:href="@{/auth/login}" class="nav-link">
-								<i class="fa-solid fa-user"></i>
+								<i class="fa-solid fa-user"></i>	
 							</a>
 						</li>
 						<li class="nav-item dropdown-center" sec:authorize="isAuthenticated()" style="margin-right: 20px; ">
@@ -46,7 +46,14 @@
 								<li><a sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{/auth/logout}">Logout</a></li>
 							</ul>
 						</li>
-						<li><a class="nav-link" th:href="@{/cart}"><i class="fa-solid fa-cart-shopping"></i></a></li>
+						<li>
+							<a class="nav-link position-relative" th:href="@{/cart}">
+								<span sec:authorize="isAuthenticated()" class="position-absolute translate-middle badge rounded-pill bg-danger bg-cart border-light border border-2">
+							    	<span id="cartQty" class="animated bounceIn">0</span>
+							  	</span>
+								<i class="fa-solid fa-cart-shopping"></i>
+							</a>
+						</li>
 					</ul>
 				</div>
 			</div>
