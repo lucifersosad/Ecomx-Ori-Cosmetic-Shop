@@ -155,7 +155,7 @@ public class PaymentController {
 		order.setTotal(amount);
 		order.setDate(LocalDateTime.now().toString());
 		order.setPayment_method("COD");
-		order.setStatus(1);
+		order.setStatus(0);
 		orderService.save(order);
 		List<Order> orders = orderService.findAll();
 		Order lastOrder = orders.get(orders.size() - 1);
