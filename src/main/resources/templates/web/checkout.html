@@ -26,10 +26,11 @@
 			</div>
 			<p>
 				<span class="text-black-50">Sử dụng địa chỉ khác? </span> <a
-					class="checkout__couppon-btn" onclick="updateUser()">
-					Thay đổi địa chỉ </a>
+					class="checkout__couppon-btn" onclick="updateUser()"> Thay đổi
+					địa chỉ </a>
 			</p>
-			<button class="btn btn-primary btn-update" style="display: none;" onclick="updateAddress()">Thay đổi thông tin</button>
+			<button class="btn btn-primary btn-update" style="display: none;"
+				onclick="updateAddress()">Thay đổi thông tin</button>
 			<p id="thong-bao" class="text-danger"></p>
 		</section>
 
@@ -66,35 +67,29 @@
 										th:value="${user.email}" placeholder="Email của bạn" disabled>
 								</div>
 							</div>
-							<div class="col-md-6">
-								<div class="form-group">
+							<div class="form-row">
+								<div class="form-group col-md-12">
 									<label for="city">Tỉnh/Thành phố</label> <input type="text"
-										id="city" name="city" class="form-control"
-										th:value="${addressParts[3].trim()}" disabled>
+										id="city" name="city" class="form-control" th:value="${city}"
+										disabled>
 								</div>
-							</div>
 
-							<div class="col-md-6">
-								<div class="form-group">
+								<div class="form-group col-md-12">
 									<label for="district">Quận/Huyện</label> <input type="text"
 										id="district" name="district" class="form-control"
-										th:value="${addressParts[2].trim()}" disabled>
+										th:value="${district}" disabled>
 								</div>
-							</div>
 
-							<div class="col-md-6">
-								<div class="form-group">
+								<div class="form-group col-md-12">
 									<label for="town">Xã/Phường</label> <input type="text"
-										id="town" name="town" class="form-control"
-										th:value="${addressParts[1].trim()}" disabled>
+										id="town" name="town" class="form-control" th:value="${town}"
+										disabled>
 								</div>
-							</div>
 
-							<div class="col-md-6">
-								<div class="form-group">
+								<div class="form-group col-md-12">
 									<label for="fname">Địa chỉ</label> <input type="text"
 										id="address" name="address" class="form-control"
-										th:value="${addressParts[0].trim()}" disabled>
+										th:value="${homeaddress}" disabled>
 								</div>
 							</div>
 						</div>
@@ -107,21 +102,22 @@
 								<div class="cart-detail">
 									<h3>
 										<strong>Đơn hàng của bạn</strong>
-									</h3>								
+									</h3>
 
 									<div class="product-list">
 										<!-- Sử dụng th:each để lặp qua danh sách sản phẩm -->
 										<div th:each="item : ${list}" class="product-info">
 											<div class="row align-items-center">
 												<div class="col-md-9">
-													 <div class="product-name">
-														<span class="quantity"> 
-															<strong>[[${item.quantity.quantity}]]</strong><span class="bold-x"> x</span>
+													<div class="product-name">
+														<span class="quantity"> <strong>[[${item.quantity.quantity}]]</strong><span
+															class="bold-x"> x</span>
 														</span> [[${item.product.name}]]
 													</div>
 												</div>
 												<div class="col-md-3">
-													<div class="total">[[${#numbers.formatDecimal(item.tong, 0, 'POINT', 0, 'POINT')}]].000 đ</div>
+													<div class="total">[[${#numbers.formatDecimal(item.tong,
+														0, 'POINT', 0, 'POINT')}]].000 đ</div>
 												</div>
 											</div>
 										</div>
@@ -131,11 +127,12 @@
 													<div class="quantity product-name">Subtotal</div>
 												</div>
 												<div class="col-md-3">
-													<div class="total" id="subTotalValue">[[${#numbers.formatDecimal(total, 0, 'POINT', 0, 'POINT')}]].000 đ</div>
+													<div class="total" id="subTotalValue">[[${#numbers.formatDecimal(total,
+														0, 'POINT', 0, 'POINT')}]].000 đ</div>
 												</div>
 											</div>
 										</div>
-										<div class="product-info"  id="codOption" style="display:none">
+										<div class="product-info" id="codOption" style="display: none">
 											<div class="row align-items-center">
 												<div class="col-md-9">
 													<div class="quantity product-name">Shipping cost</div>
@@ -151,7 +148,8 @@
 													<div class="quantity product-name">Order Total</div>
 												</div>
 												<div class="col-md-3">
-													<div class="total" id="totalValue">[[${#numbers.formatDecimal(total, 0, 'POINT', 0, 'POINT')}]].000 đ</div>
+													<div class="total" id="totalValue">[[${#numbers.formatDecimal(total,
+														0, 'POINT', 0, 'POINT')}]].000 đ</div>
 												</div>
 											</div>
 										</div>
@@ -162,9 +160,9 @@
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
-												<label for="cod"><input type="radio" name="paymentMethod"
-													id="cod" class="optradio" value="COD"> Thanh toán
-													khi nhận hàng</label>
+												<label for="cod"><input type="radio"
+													name="paymentMethod" id="cod" class="optradio" value="COD">
+													Thanh toán khi nhận hàng</label>
 											</div>
 										</div>
 									</div>
