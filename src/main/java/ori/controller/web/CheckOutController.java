@@ -27,8 +27,7 @@ import ori.service.IUserService;
 @RequestMapping("CheckOut")
 public class CheckOutController {
 	String PaymentMethod;
-	String Note;
-	double sum = 0;
+	String Note;	
 	@Autowired(required = true)
 	IUserService userService;
 	@Autowired(required = true)
@@ -36,6 +35,7 @@ public class CheckOutController {
 
 	@GetMapping("")
 	public String ThongtinKh(ModelMap model) {
+		double sum = 0;
 		User user = userService.getUserLogged();
 		String[] addressParts = user.getAddress().split(",");
 		model.addAttribute("addressParts", addressParts);
@@ -45,8 +45,7 @@ public class CheckOutController {
 		List<ProductModel> listp = new ArrayList<>();
 		List<CartModel> listc = new ArrayList<>();
 		List<Double> tong = new ArrayList<>();
-		
-
+	
 		for (Cart cart : list) {
 			Product pro = cart.getProduct();
 			ProductModel productModel = new ProductModel();
@@ -54,10 +53,11 @@ public class CheckOutController {
 			productModel.setProId(pro.getProId());
 			productModel.setImage_link(pro.getImage_link());
 			productModel.setName(pro.getName());
-			productModel.setPrice(Math.round(pro.getPrice() * 1000 * (100 - pro.getSale()) / 100));
+			productModel.setPrice(Math.round(pro.getPrice() * (100 - pro.getSale()) / 100) * 1000);
 			cartModel.setQuantity(cart.getQuantity());
 			double total = cartModel.getQuantity() * productModel.getPrice();
 			tong.add(total);
+			
 			sum = sum + total;
 			listp.add(productModel);
 			listc.add(cartModel);
@@ -82,7 +82,7 @@ public class CheckOutController {
 		int total = 0;
 		for (Cart cart : carts) {		
 			int sale = cart.getProduct().getSale();
-			int price = (int) Math.ceil(cart.getProduct().getPrice() * 1000 * (100 - sale) / 100);
+			int price = (int) Math.round(cart.getProduct().getPrice() * (100 - sale) / 100) * 1000;
 		    int quantity = cart.getQuantity();
 		    total += quantity * price;
 		}

@@ -3,6 +3,7 @@ package ori.controller.admin;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -125,6 +126,7 @@ public class PaymentController {
 			queryString.append(entry.getKey()).append("=").append(entry.getValue());
 		}
 		String apiUrl = "http://localhost:8888/api/payment/vnpay/return?userId=" + user.getUserId();
+		System.out.println("==============" + apiUrl + "==============");
 		if (queryString.length() > 0) {
 			apiUrl += "&" + queryString.toString();
 		}
@@ -153,9 +155,9 @@ public class PaymentController {
 		order.setUserId(user);
 		order.setCurrency("VND");
 		order.setTotal(amount);
-		order.setDate(LocalDateTime.now().toString());
+		order.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
 		order.setPayment_method("COD");
-		order.setStatus(1);
+		order.setStatus(0);
 		orderService.save(order);
 		List<Order> orders = orderService.findAll();
 		Order lastOrder = orders.get(orders.size() - 1);
