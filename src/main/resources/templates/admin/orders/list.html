@@ -47,7 +47,7 @@
 								<td th:text="${item.total}"></td>
 								<td th:text="${item.currency}"></td>
 								<td>
-								    <a th:href="@{'/admin/orders/detail/' + ${item.orderId}}" style="display: inline-block; margin-right: 10px;">Detail</a> 
+								    
 								    <a th:href="@{'/admin/orders/delete/' + ${item.orderId}}" style="display: inline-block; margin-right: 10px;">Delete</a> 
 								    <form th:if="${item.status == 0}" th:action="@{'/admin/orders/updateState/' + ${item.orderId} + '/1'}" method="get" style="display: inline-block; margin-right: 10px;">
 								        <button type="submit" style="background-color: green; color: white;">Activate</button>
