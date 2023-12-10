@@ -12,21 +12,21 @@ import ori.model.OrderModel;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer>{
-	@Query(value = "SELECT IFNULL(sum(order_total), 0) as total_month\r\n"
-			+ "FROM `order` \r\n"
-			+ "WHERE MONTH(order_date) = MONTH(CURRENT_DATE()) AND order_status=1;", nativeQuery = true)
+	@Query(value = "SELECT IFNULL(sum(total), 0) as total_month\r\n"
+			+ "FROM `orders` \r\n"
+			+ "WHERE MONTH(date) = MONTH(CURRENT_DATE()) AND status=1;", nativeQuery = true)
     int revenueOnCurrentMonth();
-	@Query(value = "SELECT IFNULL(sum(order_total), 0) as total_month\r\n"
-			+ "FROM `order` \r\n"
-			+ "WHERE YEAR(order_date) = YEAR(CURRENT_DATE()) AND order_status=1;", nativeQuery = true)
+	@Query(value = "SELECT IFNULL(sum(total), 0) as total_month\r\n"
+			+ "FROM `orders` \r\n"
+			+ "WHERE YEAR(date) = YEAR(CURRENT_DATE()) AND status=1;", nativeQuery = true)
     int revenueOnCurrentYear();
-	@Query(value = "SELECT IFNULL(sum(order_status)/count(*),0)*100 as completed_rate\r\n"
-			+ "FROM `order` \r\n", nativeQuery = true)
+	@Query(value = "SELECT IFNULL(sum(status)/count(*),0)*100 as completed_rate\r\n"
+			+ "FROM `orders` \r\n", nativeQuery = true)
     int rateCompleted();
-	@Query(value = "SELECT IFNULL(sum(order_total), 0) as total_quarter\r\n"
-			+ "FROM `order` \r\n"
-			+ "WHERE quarter(order_date) = quarter(CURRENT_DATE())\r\n"
-			+ "AND order_status=1;", nativeQuery = true)
+	@Query(value = "SELECT IFNULL(sum(total), 0) as total_quarter\r\n"
+			+ "FROM `orders` \r\n"
+			+ "WHERE quarter(date) = quarter(CURRENT_DATE())\r\n"
+			+ "AND status=1;", nativeQuery = true)
     int revenueOnCurrentQuarter();
 	@Query("""
 		    SELECT o FROM Order o WHERE o.userId.userId = :userId
