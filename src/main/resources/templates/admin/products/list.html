@@ -4,7 +4,7 @@
 <body>
 	
 	<!--Thêm dòng này vào-->
-	<section layout:fragment="content">
+	<section layout:fragment="content" class="product-admin">
 		
 		<!--Viết nội dung từ đây-->
 		<div class="row">
@@ -15,21 +15,19 @@
 						<h1 class="h3 mb-0 text-gray-800">Product</h1>
 					</div>
 				</div>
-				<div class="container-fluid">
+				<div class="container-fluid site-blocks-table">
 					<div th:if="${message != null}">
 						<span th:text="${message}"></span>
 					</div>
 					<a href="/admin/products/add">Add Product</a>
-					<table border="1" width="100%" class="table table-striped table-bordered table-hover" id="sample_1">
+					<table border="1" width="100vw" class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
 								<th>Product ID</th>
 								<th>Product Name</th>
-								<th>Description</th>
 								<th>Stock</th>
 								<th>Sale</th>
 								<th>Price</th>
-								<th>Image</th>
 								<th>Category</th>
 								<th>Brand</th>
 								<th>Action</th>
@@ -39,11 +37,9 @@
 							<tr th:each="item : ${products}">
 								<td th:text="${item.proId}"></td>
 								<td th:text="${item.name}"></td>
-								<td th:text="${item.description}"></td>
 								<td th:text="${item.stock}"></td>
 								<td th:text="${item.sale}"></td>
 								<td th:text="${item.price}"></td>
-								<td th:text="${item.image_link}"></td>
 								<td th:text="${item.category.name}"></td>
 								<td th:text="${item.brand.name}"></td>
 								<td>
