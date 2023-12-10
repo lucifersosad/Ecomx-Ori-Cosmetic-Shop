@@ -174,6 +174,6 @@ function updateCartQuantity() {
 		});
 }
 
-/*$(document).ready(function() {
+$(document).ready(function() {
 	updateCartQuantity();
-});*/
+});
