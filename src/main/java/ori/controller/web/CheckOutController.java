@@ -54,7 +54,7 @@ public class CheckOutController {
 			productModel.setProId(pro.getProId());
 			productModel.setImage_link(pro.getImage_link());
 			productModel.setName(pro.getName());
-			productModel.setPrice(Math.round(pro.getPrice() * (100 - pro.getSale()) / 100));
+			productModel.setPrice(Math.round(pro.getPrice() * 1000 * (100 - pro.getSale()) / 100));
 			cartModel.setQuantity(cart.getQuantity());
 			double total = cartModel.getQuantity() * productModel.getPrice();
 			tong.add(total);
@@ -82,17 +82,15 @@ public class CheckOutController {
 		int total = 0;
 		for (Cart cart : carts) {		
 			int sale = cart.getProduct().getSale();
-			int price = (int) Math.ceil(cart.getProduct().getPrice() * (100 - sale) / 100);
+			int price = (int) Math.ceil(cart.getProduct().getPrice() * 1000 * (100 - sale) / 100);
 		    int quantity = cart.getQuantity();
 		    total += quantity * price;
 		}
 		if ("PayPal".equals(PaymentMethod)) {
-
-			return "redirect:/pay";
+			return "redirect:/payment/paypal/create";
 		} else if ("VNPAY".equals(PaymentMethod)) {
-			
 			redirectAttributes.addAttribute("amount", String.valueOf(total));
-			return "redirect:/payment/option";
+			return "redirect:/payment/vnpay/option";
 
 		} else {
 			redirectAttributes.addAttribute("amount", String.valueOf(total));
