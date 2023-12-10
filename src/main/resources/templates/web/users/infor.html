@@ -144,14 +144,19 @@
 								            </div>
 										 <div>
 											  <p class="title" th:text="${product.name}"></p>
-								                <p class="title" th:text="${product.price +'VND'+ ' SL: ' + orderDetail.quantity} " style="color: rgb(238, 77, 45);"></p>
+								                <p class="title" style="color: rgb(238, 77, 45);">[[${#numbers.formatDecimal(product.price, 0, 0)}]].000 đ</p>
 										 </div>
 								               
 								       
 								        </div>
 									</div>
 								</div>
-								<h6 th:text="'Tổng tiền: ' + ${order.total} +'VND'"></h5>
+								<h5 th:utext="'Tổng tiền: ' + 
+								               ${order.currency eq 'VND' ? 
+								                 #numbers.formatDecimal(order.total, 0, 'POINT', 0, 'POINT') + ' đ' : 
+								                 order.total + ' USD'}">
+								</h5>
+
 							</li>  
 						      <hr>
 						</ul>

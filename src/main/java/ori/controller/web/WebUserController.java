@@ -1,5 +1,6 @@
 package ori.controller.web;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -68,12 +69,17 @@ public class WebUserController {
 				model.addAttribute("user", userModel);
 				
 				List<Order> listOrder = orderService.findOder(user.getUserId());
+				
 				model.addAttribute("listOrder", listOrder);
 				
 				List<OrderDetail> listOderDetail = orderDetailService.findAll();
 				model.addAttribute("listOderDetail", listOderDetail);
 				
 				List<Product> listPro = orderDetailService.listProByOderID(user.getUserId());
+				for (Product product : listPro) {
+					float oldprice = product.getPrice();
+					product.setPrice(Math.round(oldprice * (100 - product.getSale()) / 100));
+				}
 				model.addAttribute("listPro", listPro);
 				return "web/users/infor";
 			}	
