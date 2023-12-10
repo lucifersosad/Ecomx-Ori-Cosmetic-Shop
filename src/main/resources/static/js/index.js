@@ -84,6 +84,8 @@ document.addEventListener('click', function(event) {
 
 function updateAddress() {
 	var email = document.querySelector('#email').value;
+	var fullName = document.querySelector('#fullName').value;
+	var phone = document.querySelector('#phone').value;
 	var city = document.querySelector('#city').value;
 	var district = document.querySelector('#district').value;
 	var town = document.querySelector('#town').value;
@@ -96,6 +98,8 @@ function updateAddress() {
 			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 		body: 'email=' + email +
+			'&fullName=' + fullName +
+			'&phone=' + phone +
 			'&city=' + city +
 			'&district=' + district +
 			'&town=' + town +
@@ -104,6 +108,9 @@ function updateAddress() {
 		.then(response => response.text())
 		.then(data => {
 			localStorage.setItem('updatedAddress', JSON.stringify({
+			email: email,
+			fullName: fullName,
+			phone: phone,
             city: city,
             district: district,
             town: town,
@@ -116,10 +123,13 @@ function updateAddress() {
 }
 function updateUser() {
 	$(".btn-update").css("display", "block");
+	$("#fullName").prop("disabled", false);
+	$("#phone").prop("disabled", false);
 	$("#city").prop("disabled", false);
 	$("#district").prop("disabled", false);
 	$("#town").prop("disabled", false);
 	$("#address").prop("disabled", false);
+	$("#fullName").focus();
 }
 
 function loadUpdate() {
@@ -128,6 +138,9 @@ function loadUpdate() {
     if (updatedAddress) {
         // Parse và áp dụng thông tin vào thẻ DOM
         var addressInfo = JSON.parse(updatedAddress);
+        document.querySelector('#email').value = addressInfo.email;
+        document.querySelector('#fullName').value = addressInfo.fullName;
+        document.querySelector('#phone').value = addressInfo.phone;
         document.querySelector('#city').value = addressInfo.city;
         document.querySelector('#district').value = addressInfo.district;
         document.querySelector('#town').value = addressInfo.town;
@@ -146,6 +159,9 @@ $(document).ready(function() {
     if (updatedAddress) {
         // Parse và áp dụng thông tin vào thẻ DOM
         var addressInfo = JSON.parse(updatedAddress);
+        $('#email').val(addressInfo.email);
+        $('#fullName').val(addressInfo.fullName);
+        $('#phone').val(addressInfo.phone);
         $('#city').val(addressInfo.city);
         $('#district').val(addressInfo.district);
         $('#town').val(addressInfo.town);

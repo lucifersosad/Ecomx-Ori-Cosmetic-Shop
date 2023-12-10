@@ -179,6 +179,8 @@ public class WebUserController {
 	
 	@PostMapping("/updateAddress")
     public ResponseEntity<String> updateAddress(@RequestParam("email") String email,
+    										   @RequestParam("fullName") String fullName,
+    										   @RequestParam("phone") String phone,
                                                @RequestParam("city") String city,
                                                @RequestParam("district") String district,
                                                @RequestParam("town") String town,
@@ -190,10 +192,12 @@ public class WebUserController {
             User user = optUser.get();
             String address = homeadd + " , " + town + " , " + district + " , " + city;
             user.setAddress(address);
+            user.setFullName(fullName);
+            user.setPhone(phone);
             userService.updateUser(user);
-            return new ResponseEntity<>("Address updated successfully!", HttpStatus.OK);
+            return new ResponseEntity<>("Cập nhật thông tin thành công", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Cập nhật thông tin không thành công", HttpStatus.NOT_FOUND);
         }
     }
 	
