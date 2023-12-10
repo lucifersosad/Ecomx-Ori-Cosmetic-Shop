@@ -41,7 +41,7 @@ public class PaymentController {
 	public String list(ModelMap model, @Validated @RequestParam("amount") double amount) {
 		//int amount = 20000;
 		model.addAttribute("amount", amount);
-		return "web/payment/vnpay_pay";
+		return "web/vnpay/vnpay_pay";
 	}
 	@GetMapping("/paypal/create")
 	public RedirectView createPayPalPayment() {
