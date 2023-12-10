@@ -24,5 +24,9 @@ public class ShoppingSessionServiceImpl implements IShoppingSessionService{
 	public List<ShoppingSession> findAll() {
 		return shoppingSessionRepository.findAll();
 	}
+	@Override
+	public <S extends ShoppingSession> S save(S entity) {
+		return shoppingSessionRepository.save(entity);
+	}
 
 }

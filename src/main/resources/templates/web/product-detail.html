@@ -41,9 +41,9 @@
 							</p>
 
 							<!-- Show more/hide button with styling -->
-							<button id="showMoreButton" onclick="toggleDescription()">Show more</button>
-
-							<!-- JavaScript function to toggle between show/hide -->
+							<th:block th:if="${#strings.length(detailPro.description) > 200}">
+							    <button id="showMoreButton" onclick="toggleDescription()">Show more</button>
+									<!-- JavaScript function to toggle between show/hide -->
 							<script th:inline="javascript">
 								var fullDescription = "[(${detailPro.description})]";
 								var hideDicription = "[(${#strings.substring(detailPro.description, 0, 200) + '...'})]";
@@ -67,20 +67,40 @@
 									isExpanded = !isExpanded;
 								}
 							</script>
-
+							</th:block>
+							
 							<div class="d-flex mb-3 mt-3">
 								<div class="input-group" style="max-width: 120px;">
 			                        <div class="input-group-prepend">
 			                          <button class="btn btn-outline-primary js-btn-minus-cart btn-quantity-cart" style="border-top-right-radius: 0;border-bottom-right-radius: 0;" type="button">&minus;</button>
 			                        </div>
-			                        <input type="texts" class="cart-input form-control text-center" th:value="1" th:attr="data-proid-cart=${detailPro.proId}"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+			                        <input type="texts" class="cart-input form-control text-center" th:value="1" th:attr="data-proid-cart=${detailPro.proId}"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" name="qty">
 			                        <div class="input-group-append">
 			                          <button class="btn btn-outline-primary js-btn-plus-cart btn-quantity-cart" style="border-top-left-radius: 0;border-bottom-left-radius: 0;" type="button">&plus;</button>
 			                        </div>
 			                	</div>
-			                	<div class="add-to-cart">
-									<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-								</div>
+			                <div class="add-to-cart">
+							    <button class="add-to-cart-btn" onclick="addToCart()">
+							        <i class="fa fa-shopping-cart"></i> Add to cart
+							    </button>
+							</div>
+							
+							<script>
+							    function addToCart() {
+							        // Lấy ID sản phẩm từ Thymeleaf expression
+							        var productId = "[(${detailPro.proId})]";
+							        
+							        var qty = document.getElementsByName("qty")[0].value;
+        
+							        // Xây dựng đường dẫn chuyển hướng với tham số qty
+							        var redirectUrl = '/web/product/add-to-cart/' + productId + '&&' + qty;
+
+							  
+							        // Chuyển hướng trình duyệt
+							        window.location.href = redirectUrl;
+							    }
+							</script>
+
 							</div>
 
 
@@ -98,7 +118,7 @@
 					</div>
 					<!-- /Product details -->
 
-
+					<th:block th:if="${isHasUser != -1}">
 					<!-- Section -->
 					<div class="section">
 						<!-- container -->
@@ -108,7 +128,7 @@
 
 								<div class="col-md-12">
 									<div class="section-title text-center">
-										<h3 class="title">Products Viewed</h3>
+										<h3 class="title"}>Products Viewed</h3>
 									</div>
 								</div>
 								<ul>
@@ -131,7 +151,10 @@
 									</li>
 								</ul>
 							</div>
+							</div>
+							</div>
 							<!-- /product -->
+							</th:block>
 
 
 

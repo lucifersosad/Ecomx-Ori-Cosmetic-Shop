@@ -32,5 +32,10 @@ public class CartServiceImpl implements ICartService{
 	public <S extends Cart> S save(S entity) {
 		return cartRepository.save(entity);
 	}
+	@Override
+	public void addtocart(Integer proId, Integer userId, Integer quantity) {
+		cartRepository.addtocart(proId, userId, quantity);
+		
+	}
 
 }
