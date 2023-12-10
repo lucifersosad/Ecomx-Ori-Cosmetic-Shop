@@ -16,6 +16,7 @@ public class ProductModel {
 	private int stock;
 	private int sale;
 	private float price;
+	private float oldPrice;
 	private String image_link;
 	private Integer cateId;
 	private Integer brandId;

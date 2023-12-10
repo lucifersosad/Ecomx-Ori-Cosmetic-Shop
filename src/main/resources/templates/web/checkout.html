@@ -6,7 +6,7 @@
 <body>
 
 	<!--Thêm dòng này vào-->
-	<div layout:fragment="content">
+	<div layout:fragment="content" class="checkout">
 		<section class="container mt-5 checkout__question">
 			<p class="mb-1">
 				<span class="text-black-50">Bạn có mã ưu đãi? </span> <a
@@ -26,9 +26,11 @@
 			</div>
 			<p>
 				<span class="text-black-50">Sử dụng địa chỉ khác? </span> <a
-					class="checkout__couppon-btn" href="/web/users/my-account">
+					class="checkout__couppon-btn" onclick="updateUser()">
 					Thay đổi địa chỉ </a>
 			</p>
+			<button class="btn btn-primary btn-update" style="display: none;" onclick="updateAddress()">Thay đổi thông tin</button>
+			<p id="thong-bao" class="text-danger"></p>
 		</section>
 
 		<section class="container mb-5">
@@ -61,7 +63,7 @@
 								<div class="form-group">
 									<label for="lname">Địa chỉ email</label> <input type="text"
 										id="email" th:name="email" class="form-control"
-										th:value="${user.email}" placeholder="Email của bạn">
+										th:value="${user.email}" placeholder="Email của bạn" disabled>
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -105,50 +107,62 @@
 								<div class="cart-detail">
 									<h3>
 										<strong>Đơn hàng của bạn</strong>
-									</h3>
-									<style>
-										.product-info {
-											display: flex;
-											justify-content: space-between;
-											align-items: center;
-											margin-bottom: 10px; /* Điều chỉnh khoảng cách giữa các dòng */
-										}
-										
-										.product-name {
-											flex-grow: 1;
-										}
-										
-										.total {
-											text-align: right;
-										}
-										
-										.bold-x {
-											font-weight: bold;
-										}
-										</style>
+									</h3>								
 
 									<div class="product-list">
 										<!-- Sử dụng th:each để lặp qua danh sách sản phẩm -->
 										<div th:each="item : ${list}" class="product-info">
-											<div>
-												<span class="quantity"> <strong>[[${item.quantity.quantity}]]
-												</strong><span class="bold-x">x</span>
-												</span> <span class="product-name">[[${item.product.name}]]</span>
+											<div class="row align-items-center">
+												<div class="col-md-9">
+													 <div class="product-name">
+														<span class="quantity"> 
+															<strong>[[${item.quantity.quantity}]]</strong><span class="bold-x"> x</span>
+														</span> [[${item.product.name}]]
+													</div>
+												</div>
+												<div class="col-md-3">
+													<div class="total">[[${#numbers.formatDecimal(item.tong, 0, 'POINT', 0, 'POINT')}]].000 đ</div>
+												</div>
 											</div>
-											<span class="total">[[${#numbers.formatDecimal(item.tong,
-												0, 'POINT', 0, 'POINT')}]]đ</span>
+										</div>
+										<div class="product-info">
+											<div class="row align-items-center">
+												<div class="col-md-9">
+													<div class="quantity product-name">Subtotal</div>
+												</div>
+												<div class="col-md-3">
+													<div class="total" id="subTotalValue">[[${#numbers.formatDecimal(total, 0, 'POINT', 0, 'POINT')}]].000 đ</div>
+												</div>
+											</div>
+										</div>
+										<div class="product-info"  id="codOption" style="display:none">
+											<div class="row align-items-center">
+												<div class="col-md-9">
+													<div class="quantity product-name">Shipping cost</div>
+												</div>
+												<div class="col-md-3">
+													<div class="total" id="codValue">30.000 đ</div>
+												</div>
+											</div>
+										</div>
+										<div class="product-info">
+											<div class="row align-items-center">
+												<div class="col-md-9">
+													<div class="quantity product-name">Order Total</div>
+												</div>
+												<div class="col-md-3">
+													<div class="total" id="totalValue">[[${#numbers.formatDecimal(total, 0, 'POINT', 0, 'POINT')}]].000 đ</div>
+												</div>
+											</div>
 										</div>
 									</div>
-
-
-
 									<h3>
 										<strong>Phương thức thanh toán</strong>
 									</h3>
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
-												<label><input type="radio" name="paymentMethod"
+												<label for="cod"><input type="radio" name="paymentMethod"
 													id="cod" class="optradio" value="COD"> Thanh toán
 													khi nhận hàng</label>
 											</div>

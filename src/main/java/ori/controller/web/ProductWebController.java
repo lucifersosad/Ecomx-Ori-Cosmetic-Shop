@@ -60,6 +60,8 @@ public class ProductWebController {
 			System.out.println(product.getName());
 		}
 		
+		proModel.setOldPrice(proModel.getPrice());
+		proModel.setPrice(Math.round(proModel.getPrice() * (100 - proModel.getSale()) / 100));
 		String brandName = enityBrand.getName();
 		String cateName = enityCate.getName();
 		model.addAttribute("cateName",cateName);

@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -64,6 +66,15 @@ public class WebUserController {
 				    model.addAttribute("homeaddress", add.trim());
 				}
 				model.addAttribute("user", userModel);
+				
+				List<Order> listOrder = orderService.findOder(user.getUserId());
+				model.addAttribute("listOrder", listOrder);
+				
+				List<OrderDetail> listOderDetail = orderDetailService.findAll();
+				model.addAttribute("listOderDetail", listOderDetail);
+				
+				List<Product> listPro = orderDetailService.listProByOderID(user.getUserId());
+				model.addAttribute("listPro", listPro);
 				return "web/users/infor";
 			}	
 		} 
@@ -165,6 +176,27 @@ public class WebUserController {
 	    }
 	    return new ModelAndView("forward:/web/users/", model);
 	}
+	
+	@PostMapping("/updateAddress")
+    public ResponseEntity<String> updateAddress(@RequestParam("email") String email,
+                                               @RequestParam("city") String city,
+                                               @RequestParam("district") String district,
+                                               @RequestParam("town") String town,
+                                               @RequestParam("homeaddress") String homeadd) {
+
+        Optional<User> optUser = userService.findByEmail(email);
+
+        if (optUser.isPresent()) {
+            User user = optUser.get();
+            String address = homeadd + " , " + town + " , " + district + " , " + city;
+            user.setAddress(address);
+            userService.updateUser(user);
+            return new ResponseEntity<>("Address updated successfully!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND);
+        }
+    }
+	
 	@GetMapping("/profile")
 	public ModelAndView info(ModelMap model, HttpSession session) {
 	    String userEmail = session.getAttribute("Email").toString();

@@ -99,7 +99,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public Page<User> getAll(Integer pageNo) {
-		Pageable pageable = PageRequest.of(pageNo - 1, 100);
+		Pageable pageable = PageRequest.of(pageNo - 1, 10);
 		return userRepository.findAll(pageable);
 	}
 
@@ -115,6 +115,7 @@ public class UserServiceImpl implements IUserService {
 	public Optional<User> getByUserNameOrEmail(String username) {
 		return userRepository.findByUsernameOrEmail(username);
 	}
+
 	@Override
 	public User getUserLogged() {
 		Object authen = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

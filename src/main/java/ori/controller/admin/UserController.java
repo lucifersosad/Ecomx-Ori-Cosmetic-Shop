@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import ori.entity.Product;
 import ori.entity.User;
 import ori.model.UserModel;
 import ori.service.IUserService;
