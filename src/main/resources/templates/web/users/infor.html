@@ -134,7 +134,7 @@
 							    <div>
 							        <h6 th:text="'Mã đơn hàng: ' + ${order.orderId}"></h6>
 							        <h6 th:text="'Ngày đặt hàng: ' + ${order.date}"></h6>
-							        <h6 th:text="'Phương thức thanh toán: ' + ${order.shipping_method}"></h5>
+							        <h6 th:text="'Phương thức thanh toán: ' + ${order.payment_method}"></h5>
 							    </div>
 							    <div th:each="orderDetail : ${listOderDetail}" th:if="${orderDetail.order.orderId == order.orderId}" > 
 							    	<div th:each="product : ${listPro}" th:if="${orderDetail.product.proId == product.proId}">

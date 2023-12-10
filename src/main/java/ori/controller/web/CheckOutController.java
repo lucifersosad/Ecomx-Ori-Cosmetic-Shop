@@ -28,7 +28,6 @@ import ori.service.IUserService;
 public class CheckOutController {
 	String PaymentMethod;
 	String Note;
-	double sum = 0;
 	@Autowired(required = true)
 	IUserService userService;
 	@Autowired(required = true)
@@ -45,7 +44,8 @@ public class CheckOutController {
 		List<ProductModel> listp = new ArrayList<>();
 		List<CartModel> listc = new ArrayList<>();
 		List<Double> tong = new ArrayList<>();
-		
+
+		double sum = 0;
 
 		for (Cart cart : list) {
 			Product pro = cart.getProduct();
@@ -93,6 +93,7 @@ public class CheckOutController {
 			return "redirect:/payment/vnpay/option";
 
 		} else {
+			total += 30000;
 			redirectAttributes.addAttribute("amount", String.valueOf(total));
 			return "redirect:/payment/cod";
 		}

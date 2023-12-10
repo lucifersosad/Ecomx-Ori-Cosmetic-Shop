@@ -1,7 +1,7 @@
 $(document).ready(function() {
-	var originalTotalValue = $("#totalValue").html();
+	var originalTotalValue = $("#subTotalValue").html();
 
-	$("#cod").on("click", function(e) {
+	$("#cod").on("change", function(e) {
 		$("#codOption").css("display", "block");
 		var codHtml = $("#codValue").html();
 		var codValue = parseFloat(codHtml.replace(/[^\d.]/g, ''));
@@ -9,19 +9,18 @@ $(document).ready(function() {
 		var totalHtml = $("#totalValue").html();
 		var totalValue = parseFloat(totalHtml.replace(/[^\d.]/g, ''));
 
-		$("#totalValue").html((codValue + totalValue) + ".000 VND");
+		$("#totalValue").html((codValue + totalValue) + ".000 đ");
 		$("#codOption").css("font-weight", "bold");
 		$("#total").css("font-weight", "bold");
 	});
-
-	$(document).on("mouseup", function(e) {
-		var container = $("#cod");
-
-		if (!container.is(e.target) && container.has(e.target).length === 0) {
-			$("#totalValue").html(originalTotalValue);
-			$("#codOption").css("display", "none");
-			$("#total").css("font-weight", "normal");
-		}
+	
+	$(document).on("click", function(e) {
+	    var clickedElement = $(e.target);
+	    if (clickedElement.is("#vnpay") || clickedElement.is("#paypal")) {
+	        $("#totalValue").html(originalTotalValue);
+	        $("#codOption").css("display", "none");
+	        $("#total").css("font-weight", "normal");
+	    } 
 	});
 });
 

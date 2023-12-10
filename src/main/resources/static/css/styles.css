@@ -1,8 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('product-detail.css');
+@import url('checkout.css');
 @import url('home.css');
 @import url('base.css');
+
 body {
 	overflow-x: hidden;
 	position: relative;
@@ -52,63 +54,6 @@ ul {
 
 .home .card {
 	border: none;
-}
-
-.cart-detail {
-	border: 2px solid #FBA1B7;
-	padding: 30px;
-	float: left;
-	width: 100%;
-	margin-bottom: 20px;
-}
-
-.cart-detail .btn{
-	border: 0;
-	background-color: #ffdbaa!important;
-}
-
-@media (max-width: 767.98px) {
-	.cart-detail {
-		padding: 1em;
-	}
-}
-
-.cart-detail ul {
-	width: 100%;
-	padding: 0;
-	float: left;
-	margin: 0;
-}
-
-.cart-detail h3 {
-	font-size: 1.1em;
-    font-weight: bolder;
-    overflow: hidden;
-    padding-top: 10px;
-    text-transform: uppercase;
-}
-
-.cart-detail ul li {
-	font-weight: 400;
-	width: 100%;
-	display: block;
-	float: left;
-}
-
-.cart-detail ul li span {
-	margin-bottom: 15px;
-	display: block;
-	float: left;
-	border-bottom: 1px solid #e6e6e6;
-	width: 100px;
-}
-
-.cart-detail ul li span:first-child {
-	width: calc(100% - 100px);
-}
-
-.cart-detail ul li span:last-child {
-	width: 100px;
 }
 
 .colorlib-form {
