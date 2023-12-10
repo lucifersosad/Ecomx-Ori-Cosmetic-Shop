@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	var originalTotalValue = $("#subTotalValue").html();
 
-	$("#cod").on("change", function(e) {
+	$("#cod").on("click", function(e) {
 		$("#codOption").css("display", "block");
 		var codHtml = $("#codValue").html();
 		var codValue = parseFloat(codHtml.replace(/[^\d.]/g, ''));
@@ -132,27 +132,6 @@ function updateUser() {
 	$("#fullName").focus();
 }
 
-function loadUpdate() {
-    // Kiểm tra nếu có thông tin đã lưu trong localStorage
-    var updatedAddress = localStorage.getItem('updatedAddress');
-    if (updatedAddress) {
-        // Parse và áp dụng thông tin vào thẻ DOM
-        var addressInfo = JSON.parse(updatedAddress);
-        document.querySelector('#email').value = addressInfo.email;
-        document.querySelector('#fullName').value = addressInfo.fullName;
-        document.querySelector('#phone').value = addressInfo.phone;
-        document.querySelector('#city').value = addressInfo.city;
-        document.querySelector('#district').value = addressInfo.district;
-        document.querySelector('#town').value = addressInfo.town;
-        document.querySelector('#address').value = addressInfo.homeaddress;
-        document.querySelector('#thong-bao').innerHTML = "cc";
-        console.log("OK");
-
-        // Xóa thông tin đã lưu trong localStorage
-        localStorage.removeItem('updatedAddress');
-    }
-}
-
 $(document).ready(function() {
     // Kiểm tra nếu có thông tin đã lưu trong localStorage
     var updatedAddress = localStorage.getItem('updatedAddress');
@@ -172,3 +151,11 @@ $(document).ready(function() {
         localStorage.removeItem('updatedAddress');
     }
 });
+
+$(document).ready(function() {
+    // Lấy đối tượng input#cod và thực hiện click
+    var codInput = $('#cod');
+    if (codInput.length) {
+      codInput.click();
+    }
+  });
