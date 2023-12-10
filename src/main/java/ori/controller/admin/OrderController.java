@@ -47,8 +47,12 @@ public class OrderController {
 
 	@GetMapping("delete/{orderId}")
 	public ModelAndView delet(ModelMap model, @PathVariable("orderId") Integer orderId) {
-		orderSer.deleteById(orderId);
-		model.addAttribute("message", "Order is deleted!!!!");
+		try {
+			orderSer.deleteById(orderId);
+			model.addAttribute("message", "Order is deleted!!!!");
+		} catch (Exception e) {
+			model.addAttribute("message", "Cannot delete!!!!");
+		}
 		return new ModelAndView("redirect:/admin/orders", model);
 	}
 	
