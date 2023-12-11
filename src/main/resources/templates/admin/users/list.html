@@ -25,7 +25,6 @@
 						<thead>
 							<tr>
 								<th>User ID</th>
-								<th>User Name</th>
 								<th>Full Name</th>
 								<th>Email</th>
 								<th>Phone</th>
@@ -36,7 +35,6 @@
 						<tbody>
 							<tr th:each="item : ${user}">
 								<td th:text="${item.userId}"></td>
-								<td th:text="${item.username}"></td>
 								<td th:text="${item.fullName}"></td>
 								<td th:text="${item.email}"></td>
 								<td th:text="${item.phone}"></td>
