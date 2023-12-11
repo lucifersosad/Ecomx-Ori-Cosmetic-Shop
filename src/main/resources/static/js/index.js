@@ -9,7 +9,7 @@ $(document).ready(function() {
 		var totalHtml = $("#totalValue").html();
 		var totalValue = parseFloat(totalHtml.replace(/[^\d.]/g, ''));
 
-		$("#totalValue").html((codValue + totalValue) + ".000 đ");
+		$("#totalValue").html(((codValue + totalValue) * 1000).toLocaleString('vi-VN') + ' đ');
 		$("#codOption").css("font-weight", "bold");
 		$("#total").css("font-weight", "bold");
 	});
@@ -20,9 +20,68 @@ $(document).ready(function() {
 			$("#totalValue").html(originalTotalValue);
 			$("#codOption").css("display", "none");
 			$("#total").css("font-weight", "normal");
+			$('#applydiscount').trigger('click');
 		}
 	});
+	//----------------------- xử lí hiển thị liên quan giảm giá checkout
+	$('#applydiscount').on('click', function() {
+		var totalValue = $("#subTotalValue").html();
+		var cleanPrice = totalValue.replace(/[^\d.-]/g, '');
+		var subtotal = parseFloat(cleanPrice);
+
+		var totalHtml = $("#totalValue").html();
+		var totalValues = parseFloat(totalHtml.replace(/[^\d.]/g, ''));
+		var totalValueFloat = parseFloat(totalValues);
+
+		var promoCode = $('#promoInput').val();
+
+		$.ajax({
+			url: '/CheckOut/DiscountPost',
+			method: 'POST',
+			dataType: 'json',
+			data: { promo: promoCode },
+			success: function(data) {
+				var receivedInteger = parseFloat(data);
+				var afterDiscount = receivedInteger * subtotal * 1000;
+				var total = afterDiscount.toLocaleString('vi-VN');
+				var totalafter = ((totalValueFloat * 1000) - afterDiscount).toLocaleString('vi-VN');
+
+				$('#discountvalue').text('-' + total + ' đ');
+
+				$("#totalValue").html(totalafter + ' đ');
+
+				$('#collapseExample').collapse('hide');
+
+				$('#mess').text('Áp dụng mã thành công');
+				setTimeout(hideMessages,1000);
+			},
+			error: function(error) {
+				console.error('Lỗi khi gửi yêu cầu:', error);
+				$('#collapseExample').collapse('hide');
+				$('#error').text('Áp dụng mã không thành công');
+				setTimeout(hideMessages,3000);
+			}
+		});
+	});
+
+	/*$('#anvaoday').click(function() {
+		var messes = $('#mess').html().trim();
+		var errorr = $('#error').html().trim();
+
+		if (messes !== '') {
+			$('#mess').hide();
+		}
+		if (errorr !== '') {
+			$('#error').hide();
+		}
+	});*/
+	function hideMessages() {
+		$("#mess").hide();
+		$("#error").hide();
+	}
+	//----------------------------------
 });
+
 
 function updateQuantity(proid, qtt) {
 	fetch('cart/updateQTT', {
@@ -245,10 +304,10 @@ $(document).ready(function() {
 		hide_from_to: true,
 		onChange: updateInputs,
 	});
-	
+
 	function updateInputs(data) {
 		var $inputFrom = $("#range-price-min");
-	    var $inputTo = $("#range-price-max");
+		var $inputTo = $("#range-price-max");
 		from = data.from;
 		to = data.to;
 		$inputFrom.prop("value", from);

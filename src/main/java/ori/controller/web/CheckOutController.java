@@ -7,21 +7,29 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import jakarta.persistence.metamodel.SetAttribute;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpSession;
 import ori.entity.Cart;
 import ori.entity.Product;
+import ori.entity.Promotion;
 import ori.entity.User;
 import ori.model.CartModel;
 import ori.model.ProductModel;
 import ori.model.UserModel;
 import ori.service.ICartService;
+import ori.service.IPromotionServive;
 import ori.service.IUserService;
 
 @Controller
@@ -33,6 +41,8 @@ public class CheckOutController {
 	IUserService userService;
 	@Autowired(required = true)
 	ICartService cartService;
+	@Autowired
+	IPromotionServive promoService;
 
 	@GetMapping("")
 	public String ThongtinKh(ModelMap model) {
@@ -40,13 +50,12 @@ public class CheckOutController {
 		User user = userService.getUserLogged();
 		String add = user.getAddress();
 		String[] parts = add.split("\\s*,\\s*");
-		if(parts.length >= 3) {
+		if (parts.length >= 3) {
 			model.addAttribute("city", parts[3].trim());
 			model.addAttribute("district", parts[2].trim());
 			model.addAttribute("town", parts[1].trim());
 			model.addAttribute("homeaddress", parts[0].trim());
-		}
-		else {
+		} else {
 			model.addAttribute("homeaddress", add.trim());
 		}
 		model.addAttribute("user", user);
@@ -55,7 +64,7 @@ public class CheckOutController {
 		List<ProductModel> listp = new ArrayList<>();
 		List<CartModel> listc = new ArrayList<>();
 		List<Double> tong = new ArrayList<>();
-	
+
 		for (Cart cart : list) {
 			Product pro = cart.getProduct();
 			ProductModel productModel = new ProductModel();
@@ -67,7 +76,7 @@ public class CheckOutController {
 			cartModel.setQuantity(cart.getQuantity());
 			double total = cartModel.getQuantity() * productModel.getPrice();
 			tong.add(total);
-			
+
 			sum = sum + total;
 			listp.add(productModel);
 			listc.add(cartModel);
@@ -86,16 +95,29 @@ public class CheckOutController {
 	}
 
 	@GetMapping("PaymentMethod")
-	public String PaymentMethod(RedirectAttributes redirectAttributes) {
+	public String PaymentMethod(RedirectAttributes redirectAttributes, HttpSession session) {
 		User user = userService.getUserLogged();
 		List<Cart> carts = cartService.findByUserId(user.getUserId());
-		int total = 0;
-		for (Cart cart : carts) {		
-			int sale = cart.getProduct().getSale();
-			int price = (int) Math.round(cart.getProduct().getPrice() * (100 - sale) / 100 ) * 1000;
-		    int quantity = cart.getQuantity();
-		    total += quantity * price;
+		//của giảm giá
+		Promotion promotion = (Promotion) session.getAttribute("promoCode");
+		double discountRate;
+		
+		if(promotion != null) {
+			discountRate = (double) promotion.getDiscount_rate()/100;
 		}
+		else {
+			discountRate = 0;
+		}
+		session.removeAttribute("promoCode");
+		//
+		int total = 0;
+		for (Cart cart : carts) {
+			int sale = cart.getProduct().getSale();
+			int price = (int) Math.round(cart.getProduct().getPrice() * (100 - sale) / 100) * 1000;
+			int quantity = cart.getQuantity();
+			total += quantity * price;
+		}
+		total =  total - (int)(total * discountRate);
 		if ("PayPal".equals(PaymentMethod)) {
 			return "redirect:/payment/paypal/create";
 		} else if ("VNPAY".equals(PaymentMethod)) {
@@ -119,5 +141,16 @@ public class CheckOutController {
 	public String processPayment(@RequestParam("paymentMethod") String paymentMethod) {
 		PaymentMethod = paymentMethod;
 		return "redirect:/CheckOut/PaymentMethod";
+	}
+
+	@PostMapping("/DiscountPost")
+	public ResponseEntity<Double> DiscountPost(@RequestParam("promo") String promoCode, HttpSession session) {
+		Promotion promotion = promoService.findpromotionByname(promoCode);
+		double discountRate =0;
+		if(promotion.getIs_active() == 0) {
+			discountRate = (double) promotion.getDiscount_rate()/100;
+			session.setAttribute("promoCode", promotion);
+		}
+		return ResponseEntity.ok(discountRate );
 	}
 }
