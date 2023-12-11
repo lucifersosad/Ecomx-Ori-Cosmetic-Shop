@@ -5,14 +5,13 @@
 	<div layout:fragment="content" class="product">
 		<div class="site-section mt-5">
 			<div class="container">
-				<input type="hidden" id="currentPage" th:value="${currentPage}" />
 				<div class="row">
 					<!-- sidebar -->
 					<div class="col-lg-3">
 						<select onchange="location = this.value;">
-							<option value="/web/product">Select Category</option>
+							<option value="/web/product/0/page/1">Select Category</option>
 							<th:block th:each="t : ${listAllCategory}">
-								<option th:value="@{/web/product/(cateID=${t.cateId})}"
+								<option th:value="@{'/web/product/' + ${t.cateId} + '/page/' + '1'}"
 									th:class="${t.cateId == targetactive ? 'selected' : '' }">[[${t.name}]]</option>
 							</th:block>
 						</select>
@@ -114,54 +113,27 @@
 						<!-- Pagination -->
 						<nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
 							<ul class="pagination">
-								<li class="page-item disabled">
-									<a class="page-link" href="#" aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
-									</a>
-								</li>
-								<li class="page-item active"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item"><a class="page-link" href="#">4</a></li>
-								<li class="page-item"><a class="page-link" href="#">5</a></li>
 								<li class="page-item">
-									<a class="page-link" href="#" aria-label="Next">
-										<span aria-hidden="true">&raquo;</span>
-									</a>
+									<a class="page-link" th:href="@{'/web/product/' + ${cateID} + '/page/1'}">Trang đầu</a>
+								</li>
+								<th:block th:each="i : ${#numbers.sequence(startPage, endPage)}">
+									<li th:class="${i == currentPage ? 'page-item active' : 'page-item'}">
+										<a class="page-link" th:href="@{'/web/product/' + ${cateID} + '/page/' + ${i}}" th:text="${i}"></a>
+									</li>
+								</th:block>
+								<li class="page-item">
+									<a class="page-link" th:href="@{'/web/product/' + ${cateID} + '/page/' + totalPages}">Trang cuối</a>
 								</li>
 							</ul>
 						</nav>
 						<!-- Pagination -->
+
 					</div>
 				</div>
 			</div>
 			
 		</div>
-		<a onclick="loadMore()" class="btn btn-default">Load More</a>
 	</div>
-	<script>
-		function loadMore(){
-			loadAjax();
-		}
-		function loadAjax() {
-			var amount = document.getElementsByClassName("product").length;
-			var curPage = amount / 9; // Tính trang tiếp theo dựa trên số sản phẩm đã có
-
-			$.ajax({
-				url: "/web/product/loadAjax",
-				type: "get",
-				data: {
-					exist: amount,
-					page: curPage
-				},
-				success: function (data) {
-					$("#content").append(data); // Thêm sản phẩm mới vào #content
-				},
-				error: function (xhr) {
-					console.log("Error:", xhr);
-				}
-			});
-		}
-	</script>
+	
 </body>
 </html>

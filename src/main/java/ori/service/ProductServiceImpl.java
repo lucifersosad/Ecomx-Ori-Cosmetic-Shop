@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import ori.entity.Category;
 import ori.entity.Product;
 import ori.entity.User;
 import ori.repository.ProductRepository;
@@ -80,6 +82,10 @@ public class ProductServiceImpl implements IProductService  {
 	@Override
 	public Page<Product> findAll(Pageable pageable) {
 		return productRepository.findAll(pageable);
+	}
+	@Override
+	public Page<Product> findByCategory(Category category, Pageable pageable) {
+		return productRepository.findByCategory(category, pageable);
 	}
 	
 	
