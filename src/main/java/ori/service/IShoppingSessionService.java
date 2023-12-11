@@ -8,4 +8,6 @@ public interface IShoppingSessionService {
 	
 	List<ShoppingSession> findByUser(Integer userId);
 	List<ShoppingSession> findAll();
+	
+	<S extends ShoppingSession> S save(S entity);
 }

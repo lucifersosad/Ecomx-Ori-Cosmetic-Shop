@@ -25,23 +25,35 @@
 				</div>
 			</div>
 			<p>
-				<span class="text-black-50">Sử dụng địa chỉ khác? </span> <a
-					class="checkout__couppon-btn" onclick="updateUser()"> Thay đổi
-					địa chỉ </a>
+				<span class="text-black-50">Bạn muốn thay đổi thông tin thanh toán? </span> <a
+					class="checkout__couppon-btn" onclick="updateUser()" style="cursor: pointer;">
+					Thay đổi thông tin </a>
 			</p>
-			<button class="btn btn-primary btn-update" style="display: none;"
-				onclick="updateAddress()">Thay đổi thông tin</button>
+			
 			<p id="thong-bao" class="text-danger"></p>
 		</section>
 
 		<section class="container mb-5">
 			<div class="row">
 				<div class="col-md-7">
-					<form method="post" class="colorlib-form" target="pay/cod">
-						<h3>
-							<strong>Thông tin thanh toán</strong>
-						</h3>
+					<form class="colorlib-form">
+						<div class="d-flex justify-content-between align-items-center">
+							<h3>
+								<strong>Thông tin thanh toán</strong>
+							</h3>
+							<button class="btn btn-primary btn-update" style="display: none;" onclick="updateAddress()">Thay đổi</button>
+						</div>
 						<div class="row">
+							
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="email">Email</label> <input type="text"
+										id="email" th:name="email" class="form-control"
+										th:value="${user.email}" placeholder="Email của bạn"
+										disabled>
+								</div>
+							</div>
+							
 							<div class="col-md-12">
 								<div class="form-group">
 									<label for="fullName">Họ và tên</label> <input type="text"
@@ -51,46 +63,39 @@
 								</div>
 							</div>
 
-							<div class="col-md-6">
+							<div class="col-md-12">
 								<div class="form-group">
-									<label for="fname">Số điện thoại</label> <input type="text"
+									<label for="phone">Số điện thoại</label> <input type="text"
 										id="phone" th:name="phone" class="form-control"
 										th:value="${user.phone}" placeholder="Số điện thoại của bạn"
 										disabled>
 								</div>
-							</div>
-
-							<div class="col-md-6">
+							</div>						
+							
+							<div class="col-md-12">
 								<div class="form-group">
-									<label for="lname">Địa chỉ email</label> <input type="text"
-										id="email" th:name="email" class="form-control"
-										th:value="${user.email}" placeholder="Email của bạn" disabled>
-								</div>
-							</div>
-							<div class="form-row">
-								<div class="form-group col-md-12">
 									<label for="city">Tỉnh/Thành phố</label> <input type="text"
 										id="city" name="city" class="form-control" th:value="${city}"
 										disabled>
 								</div>
+							</div>
+							
+							<div class="form-group col-md-12">
+								<label for="district">Quận/Huyện</label> <input type="text"
+									id="district" name="district" class="form-control"
+									th:value="${district}" disabled>
+							</div>
 
-								<div class="form-group col-md-12">
-									<label for="district">Quận/Huyện</label> <input type="text"
-										id="district" name="district" class="form-control"
-										th:value="${district}" disabled>
-								</div>
+							<div class="form-group col-md-12">
+								<label for="town">Xã/Phường</label> <input type="text"
+									id="town" name="town" class="form-control" th:value="${town}"
+									disabled>
+							</div>
 
-								<div class="form-group col-md-12">
-									<label for="town">Xã/Phường</label> <input type="text"
-										id="town" name="town" class="form-control" th:value="${town}"
-										disabled>
-								</div>
-
-								<div class="form-group col-md-12">
-									<label for="fname">Địa chỉ</label> <input type="text"
-										id="address" name="address" class="form-control"
-										th:value="${homeaddress}" disabled>
-								</div>
+							<div class="form-group col-md-12">
+								<label for="fname">Địa chỉ</label> <input type="text"
+									id="address" name="address" class="form-control"
+									th:value="${homeaddress}" disabled>
 							</div>
 						</div>
 					</form>
@@ -160,9 +165,9 @@
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
-												<label for="cod"><input type="radio"
-													name="paymentMethod" id="cod" class="optradio" value="COD">
-													Thanh toán khi nhận hàng</label>
+												<label><input type="radio" Checked="True" name="paymentMethod"
+													id="cod" class="optradio" value="COD"> Thanh toán
+													khi nhận hàng</label>
 											</div>
 										</div>
 									</div>

@@ -36,17 +36,18 @@
 								<span class="product-available">còn [[${detailPro.stock}]] hàng</span>								
 							</div>
 							<!-- Display the initial content with a limited length -->
+							<span >Thành phần sản phẩm: </span>
+	
 							<p id="description"
-								th:text="${#strings.length(detailPro.description) > 200 ? #strings.substring(detailPro.description, 0, 200) + '...' : detailPro.description}">
+								th:text="${#strings.length(description) > 200 ? #strings.substring(description, 0, 200) + '...' : description}">
 							</p>
-
 							<!-- Show more/hide button with styling -->
-							<button id="showMoreButton" onclick="toggleDescription()">Show more</button>
-
-							<!-- JavaScript function to toggle between show/hide -->
+							<th:block th:if="${#strings.length(description) > 200}">
+							    <button id="showMoreButton" onclick="toggleDescription()">Show more</button>
+									<!-- JavaScript function to toggle between show/hide -->
 							<script th:inline="javascript">
-								var fullDescription = "[(${detailPro.description})]";
-								var hideDicription = "[(${#strings.substring(detailPro.description, 0, 200) + '...'})]";
+								var fullDescription = "[(${description})]";
+								var hideDicription = "[(${#strings.substring(description, 0, 200) + '...'})]";
 								var isExpanded = false;
 
 								function toggleDescription() {
@@ -67,20 +68,81 @@
 									isExpanded = !isExpanded;
 								}
 							</script>
-
+							</th:block>
+							
 							<div class="d-flex mb-3 mt-3">
 								<div class="input-group" style="max-width: 120px;">
 			                        <div class="input-group-prepend">
 			                          <button class="btn btn-outline-primary js-btn-minus-cart btn-quantity-cart" style="border-top-right-radius: 0;border-bottom-right-radius: 0;" type="button">&minus;</button>
 			                        </div>
-			                        <input type="texts" class="cart-input form-control text-center" th:value="1" th:attr="data-proid-cart=${detailPro.proId}"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+			                        <input type="text" class="cart-input form-control text-center" th:value="1" th:attr="data-proid-cart=${detailPro.proId}"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" name="qty">
 			                        <div class="input-group-append">
 			                          <button class="btn btn-outline-primary js-btn-plus-cart btn-quantity-cart" style="border-top-left-radius: 0;border-bottom-left-radius: 0;" type="button">&plus;</button>
 			                        </div>
 			                	</div>
-			                	<div class="add-to-cart">
-									<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-								</div>
+			                <div class="add-to-cart">
+							    <button class="add-to-cart-btn" onclick="addToCart()" th:if="${detailPro.stock > 0 ? '' : 'disabled'}">
+							        <i class="fa fa-shopping-cart"></i> Add to cart
+							    </button>
+							</div>
+							
+							<script>
+							    function addToCart() {
+							        // Lấy ID sản phẩm từ Thymeleaf expression
+							        var productId = "[(${detailPro.proId})]";
+							        var stock = "[(${detailPro.stock})]";
+							        var quantityInCart = "[(${quantityCart})]";
+							        var qty = parseInt(document.getElementsByName("qty")[0].value);
+							       
+							        if (isNaN(qty)){
+										showError("Chỉ được nhập số");
+										return;
+									}
+							        if (qty < 1){
+										showError("Không nhập số lượng nhỏ hơn 1");
+										return;
+									}
+							        if (qty > stock){
+										showError("Không đủ số lượng sản phẩm");
+										return;
+									}
+									if (qty > stock - quantityInCart){
+										showError("Không đủ số lượng sản phẩm");
+										return;
+									}
+        
+							        // Xây dựng đường dẫn chuyển hướng với tham số qty
+							        var redirectUrl = '/web/product/add-to-cart/' + productId + '&&' + qty;
+
+							  
+							        // Chuyển hướng trình duyệt
+							        window.location.href = redirectUrl;
+							    }
+							    
+							    document.addEventListener("click", function(event) {
+								    var target = event.target;
+								    
+								
+								    if (target.classList.contains('btn-quantity-cart')) {
+										var qtyInput = document.getElementsByName("qty")[0];
+								    	var oldQty = parseInt(qtyInput.value, 10);
+								        if (target.classList.contains('js-btn-minus-cart')) {
+								            if (oldQty > 1) {
+								                qtyInput.value = oldQty - 1;
+								            } else {
+								                showError("Số lượng không nhỏ hơn 1");
+								            }
+								        } else if (target.classList.contains('js-btn-plus-cart')) {
+											if (oldQty > 0) {
+								                qtyInput.value = oldQty + 1;
+								            } else {
+								                showError("Số lượng không nhỏ hơn 1");
+								            }					            
+								        }
+								    }
+								});
+							</script>
+
 							</div>
 
 
@@ -98,7 +160,8 @@
 					</div>
 					<!-- /Product details -->
 
-
+					<th:block th:if="${isHasUser != -1}">
+					<th:block th:if="${listProSeen.size() > 0}">
 					<!-- Section -->
 					<div class="section">
 						<!-- container -->
@@ -108,7 +171,7 @@
 
 								<div class="col-md-12">
 									<div class="section-title text-center">
-										<h3 class="title">Products Viewed</h3>
+										<h3 class="title"}>Products Viewed</h3>
 									</div>
 								</div>
 								<ul>
@@ -131,7 +194,11 @@
 									</li>
 								</ul>
 							</div>
+							</div>
+							</div>
 							<!-- /product -->
+							</th:block>
+							</th:block>
 
 
 

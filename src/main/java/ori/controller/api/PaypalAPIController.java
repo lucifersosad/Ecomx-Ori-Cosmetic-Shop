@@ -1,5 +1,9 @@
 package ori.controller.api;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -120,9 +124,21 @@ public class PaypalAPIController {
 				if (optUser.isPresent()) {
 					User user = optUser.get();
 					order.setUserId(user);
-					order.setDate(payment.getCreateTime());
+					String inputDateTimeString = payment.getCreateTime();
+
+					// Chuyển đổi chuỗi sang đối tượng LocalDateTime (thời gian theo UTC)
+					ZonedDateTime utcDateTime = ZonedDateTime.parse(inputDateTimeString);
+
+			        // Chuyển múi giờ từ UTC sang Etc/GMT+7
+			        ZoneId vietnamTimeZone = ZoneId.of("Asia/Ho_Chi_Minh");
+			        ZonedDateTime vietnamDateTime  = utcDateTime.withZoneSameInstant(vietnamTimeZone);
+
+			        // Định dạng lại theo định dạng dd/MM/yyyy HH:mm:ss
+			        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+			        String formattedDateTime = vietnamDateTime.format(formatter);
+					order.setDate(formattedDateTime);
 					order.setPayment_method("Paypal");
-					order.setStatus(1);
+					order.setStatus(0);
 					orderService.save(order);
 					List<Order> orders = orderService.findAll();
 					Order lastOrder = orders.get(orders.size() - 1);

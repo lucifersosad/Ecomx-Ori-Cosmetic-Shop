@@ -98,14 +98,17 @@
 				<div class="row">
 					<div class="col-lg-3 col-md-6 col-sm-6" th:each="product : ${products}">
 						<div class="card my-2 shadow-0">
-							<a th:href="@{/web/product/detail/{proId}(proId=${product.proId})}" class="">
+							<a th:href="@{/web/product/detail/{proId}(proId=${product.proId})}" class="image">
 								<div class="mask" style="height: 50px;">
 									<div class="d-flex justify-content-start align-items-start h-100 m-2">
 										<h6><span class="badge bg-danger pt-1" th:text="${'Sale: ' + product.sale + '%'}"></span></h6>
 									</div>
 								</div>
-								<img th:src="${product.image_link}"
-									class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
+								<img th:src="${product.image_link}" class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
+								<div class="overlay">
+									<span th:attr="data-proid=${product.proId}" class="buyNow">Mua ngay</span>
+									<span th:attr="data-proid=${product.proId}" class="addToCart">Thêm vào giỏ hàng</span>
+								</div>
 							</a>
 							<div class="card-body p-0 pt-3">
 								<a th:href="@{/web/product/detail/{proId}(proId=${product.proId})}">
@@ -115,8 +118,8 @@
 								<p class="card-text mb-0"><strong>Danh mục: </strong>[(${product.category.name})]</p>
 								<p class="card-text mb-0">
 									<strong>Giá:</strong>
-									<span class="text-decoration-line-through" th:text="${#numbers.formatDecimal(product.price, 0, 0)} + '.000 VND'"></span>
-									<span class="text-danger" th:text="${#numbers.formatDecimal(product.price * (100 - product.sale) / 100, 0, 0) } + '.000 VND'"></span>
+									<span class="text-decoration-line-through" th:text="${#numbers.formatDecimal(product.price, 0, 0)} + '.000 đ'"></span>
+									<span class="text-danger" th:text="${#numbers.formatDecimal(product.price * (100 - product.sale) / 100, 0, 0) } + '.000 đ'"></span>
 								</p>							
 								<p class="text-muted">[(${product.brand.name})]</p>
 							</div>

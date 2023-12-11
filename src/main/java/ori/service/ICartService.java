@@ -20,8 +20,7 @@ public interface ICartService {
 
 	<S extends Cart> S save(S entity);
 
-
-	
+	void addtocart(Integer proId, Integer userId, Integer quantity);
 
 
 

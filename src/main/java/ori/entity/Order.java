@@ -30,6 +30,8 @@ public class Order implements Serializable{/**
 	private String date;
 	@Column(name = "payment_method")
 	private String payment_method;
+	@Column(name = "shipping_method")
+	private String shipping_method;
 	@Column(name = "status")
 	private int status;
 	@Column(name = "total")
