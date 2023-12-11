@@ -1,5 +1,6 @@
 package ori.config.scurity;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +27,9 @@ public class AuthUser implements UserDetails {
     private String email;
     private String phone;
 
+    private String code;
+    private boolean isEnabled;
+
     private Set<Roles> userRoles;
 
     public AuthUser(User user) {
@@ -33,6 +37,8 @@ public class AuthUser implements UserDetails {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.phone = user.getPhone();
+        this.code = user.getCode();
+        this.isEnabled= user.getIsEnabled();
         userRoles = user.getRoles();
         this.password = user.getPasswordHash();
         System.out.println("pw" + user.getPasswordHash());
@@ -43,6 +49,8 @@ public class AuthUser implements UserDetails {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.phone = user.getPhone();
+        this.code = user.getCode();
+        this.isEnabled= user.getIsEnabled();
         userRoles = user.getRoles();
         this.password = password;
     }
@@ -87,4 +95,7 @@ public class AuthUser implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
 }

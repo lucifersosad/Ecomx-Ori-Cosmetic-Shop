@@ -37,10 +37,13 @@ public class User implements Serializable {/**
 	private String phone;
 	@Column(name="address")
 	private String address;
-	@Column(name="active")
-	private Boolean active;
+	@Column(name="isEnabled")
+	private Boolean isEnabled;
 	@Column(name="username")
 	private String username;
+	@Column(name="code")
+	private String code;
+
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(
@@ -50,6 +53,6 @@ public class User implements Serializable {/**
 	)
 	private Set<Roles> roles = new HashSet<>();
 
-	
+
 
 }
