@@ -64,13 +64,5 @@ public class HomeController {
 	    }
 	    return 0;
 	}
-	
-	@GetMapping("pro")
-	public String trangSanPham(ModelMap model) {
-		List<Product> listAllProduct = productService.findTop10();
-		List<Category> listAllCategory = categoryService.findAll();
-		model.addAttribute("listAllProduct", listAllProduct);
-		model.addAttribute("listAllCategory", listAllCategory);
-		return "web/product";
-	}
+
 }

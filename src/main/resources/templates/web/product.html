@@ -5,6 +5,7 @@
 	<div layout:fragment="content" class="product">
 		<div class="site-section mt-5">
 			<div class="container">
+				<input type="hidden" id="currentPage" th:value="${currentPage}" />
 				<div class="row">
 					<!-- sidebar -->
 					<div class="col-lg-3">
@@ -92,7 +93,7 @@
 						<div class="row">
 							
 							<th:block th:each="p : ${listAllProduct}">
-								<div class="col-lg-4 col-md-6 col-sm-6 d-flex">
+								<div class="product col-lg-4 col-md-6 col-sm-6 d-flex">
 									<div class="card w-100 my-2 shadow-2-strong">
 										<img th:src="${p.image_link}" class="card-img-top"
 											style="aspect-ratio: 1 / 1" />
@@ -107,6 +108,7 @@
 								</div>
 							</th:block>
 						</div>
+						
 						<hr />
 
 						<!-- Pagination -->
@@ -134,9 +136,32 @@
 				</div>
 			</div>
 			
-
 		</div>
+		<a onclick="loadMore()" class="btn btn-default">Load More</a>
 	</div>
-</body>
+	<script>
+		function loadMore(){
+			loadAjax();
+		}
+		function loadAjax() {
+			var amount = document.getElementsByClassName("product").length;
+			var curPage = amount / 9; // Tính trang tiếp theo dựa trên số sản phẩm đã có
 
+			$.ajax({
+				url: "/web/product/loadAjax",
+				type: "get",
+				data: {
+					exist: amount,
+					page: curPage
+				},
+				success: function (data) {
+					$("#content").append(data); // Thêm sản phẩm mới vào #content
+				},
+				error: function (xhr) {
+					console.log("Error:", xhr);
+				}
+			});
+		}
+	</script>
+</body>
 </html>

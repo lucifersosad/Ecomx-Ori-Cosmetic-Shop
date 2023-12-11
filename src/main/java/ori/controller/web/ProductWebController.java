@@ -1,5 +1,8 @@
 package ori.controller.web;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,6 +12,8 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +24,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.servlet.http.HttpServletResponse;
 import ori.config.scurity.AuthUser;
 import ori.entity.Brand;
 import ori.entity.Cart;
@@ -54,20 +61,21 @@ public class ProductWebController {
 	ICategoryService categoryService;
 	
 	@GetMapping(value = {"/", ""})
-	public String viewProduct(ModelMap model, @RequestParam(name="pageNo", defaultValue = "1") Integer pageNo) {		
+	public String viewProduct(ModelMap model) {		
 		List<Category> listCate = categoryService.findAll();
-		model.addAttribute("listAllCategory", listCate);
-		Page<Product> listPro = proService.getAll(pageNo);
+		model.addAttribute("listAllCategory", listCate);		
+		Pageable pageable = PageRequest.of(0, 27);
+		Page<Product> listCurPro = proService.findAll(pageable);
+		Page<Product> listPro = proService.findAll(pageable) ;
 		model.addAttribute("countPro", listPro.getSize());
 		model.addAttribute("listAllProduct", listPro);
-		model.addAttribute("totalPage",listPro.getTotalPages());
-		model.addAttribute("currentPage",pageNo);
+		model.addAttribute("currentPage",0);
 		
-		double minPrice = listPro.stream()
+		double minPrice = proService.findAll().stream()
                 .mapToDouble(Product::getPrice)
                 .min()
                 .orElse(0);
-		double maxPrice = listPro.stream()
+		double maxPrice = proService.findAll().stream()
                 .mapToDouble(Product::getPrice)
                 .max()
                 .orElse(0);
@@ -75,7 +83,6 @@ public class ProductWebController {
 		model.addAttribute("max_price",maxPrice);
 		return "web/product";
 	}
-	
 	
 	
 	@GetMapping("detail/{proId}")

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import ori.entity.Product;
 import ori.entity.User;
@@ -33,5 +34,7 @@ public interface IProductService {
     List<Product> findByCategory(Integer cateId, float proPrice);
     
     Page<Product> getAll(Integer pageNo);
+
+	Page<Product> findAll(Pageable pageable);
 
 }
