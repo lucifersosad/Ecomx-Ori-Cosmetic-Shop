@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -167,4 +169,49 @@ public class ProductWebController {
 		cartService.addtocart(entityCart.getProduct().getProId(), entityCart.getUser().getUserId(), entityCart.getQuantity());
 		return "redirect:/cart";
 	}
+	
+	@GetMapping(value = "addToCart/{proId}&&{qty}")
+    public ResponseEntity<String> addToCart(@PathVariable("proId") Integer proId, @PathVariable("qty") Integer qty) {
+        try {
+        	String successMessage = "Product added to cart successfully.";
+        	
+        	Optional<Product> optProduct = proService.findById(proId);
+    		
+    		ProductModel proModel = new ProductModel();
+    	
+    		Product entity = optProduct.get();
+
+    		BeanUtils.copyProperties(entity, proModel);
+
+    		proModel.setIsEdit(true);
+    		User userLogged = userService.getUserLogged();
+    		
+    		CartKey cartkey = new CartKey();
+    		Cart entityCart = new Cart();
+
+    		List<Cart> list = cartService.findByUserId(userLogged.getUserId());
+    		int quatity = qty;
+    		for (Cart cart : list) {
+    			System.out.println(cart.getProduct().getProId());
+    			if(cart.getProduct().getProId() - proId == 0) {
+    				quatity = cart.getQuantity()+qty;
+    				cart.setQuantity(quatity);
+    				cartService.save(cart);
+    				return new ResponseEntity<>(successMessage, HttpStatus.OK);
+    			}
+    		}
+    		entityCart.setProduct(entity);
+    		entityCart.setUser(userLogged);
+    		entityCart.setId(cartkey);
+    		entityCart.setQuantity(qty);
+    		
+    		cartService.addtocart(entityCart.getProduct().getProId(), entityCart.getUser().getUserId(), entityCart.getQuantity());
+            
+            return new ResponseEntity<>(successMessage, HttpStatus.OK);
+            
+        } catch (Exception e) {
+            String errorMessage = "Error adding product to cart: " + e.getMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

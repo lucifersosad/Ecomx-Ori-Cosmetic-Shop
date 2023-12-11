@@ -106,7 +106,8 @@
 								</div>
 								<img th:src="${product.image_link}" class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
 								<div class="overlay">
-									<span>Thêm vào giỏ hàng</span>
+									<span th:attr="data-proid=${product.proId}" class="buyNow">Mua ngay</span>
+									<span th:attr="data-proid=${product.proId}" class="addToCart">Thêm vào giỏ hàng</span>
 								</div>
 							</a>
 							<div class="card-body p-0 pt-3">

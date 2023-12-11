@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	var originalTotalValue = $("#subTotalValue").html();
 
-	$("#cod").on("click", function(e) {
+	$("#cod").on("click", function() {
 		$("#codOption").css("display", "block");
 		var codHtml = $("#codValue").html();
 		var codValue = parseFloat(codHtml.replace(/[^\d.]/g, ''));
@@ -23,16 +23,6 @@ $(document).ready(function() {
 		}
 	});
 });
-
-function checkPaymentOption(form) {
-	var paymentOption = $("input[name='optradio']:checked").val();
-	console.log(paymentOption);
-	if (paymentOption == "paypal") {
-		var url = "/pay";
-		window.location.href = url;
-	}
-	return false;
-}
 
 function updateQuantity(proid, qtt) {
 	fetch('cart/updateQTT', {
@@ -162,12 +152,12 @@ function updateCartQuantity() {
 	fetch('/cartQty')
 		.then(response => response.json())
 		.then(data => {
-			if (data < 10) {
+			if (data < 100) {
 				$('#cartQty').html(data);
 			} else {
-				$('#cartQty').html("9+")
+				$('#cartQty').html("99+")
 			}
-			
+
 		})
 		.catch(error => {
 			console.error('Error fetching cart quantity:', error);
@@ -176,4 +166,56 @@ function updateCartQuantity() {
 
 $(document).ready(function() {
 	updateCartQuantity();
+});
+
+$(document).ready(function() {
+	$('.buyNow').click(function(event) {
+		event.preventDefault();
+		var clickedElement = $(event.target);
+		var proId = clickedElement.data('proid');
+		var redirectUrl = '/web/product/add-to-cart/' + proId + '&&' + 1;
+		window.location.href = redirectUrl;
+	});
+});
+
+$(document).ready(function() {
+	$('.addToCart').click(function(event) {
+		event.preventDefault();
+		var clickedElement = $(event.target);
+		var proId = clickedElement.data('proid');
+		var qty = 1;
+		fetch('/web/product/addToCart/' + proId + '&&' + qty, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		})
+			.then(response => response.text())
+			.then(data => {
+				console.log(data);
+				updateCartQuantity();
+				showSucess();
+			})
+			.catch(error => {
+				console.error('Thêm vào giỏ hàng không thành công. Lỗi: ', error);
+			});
+	});
+});
+
+function showSucess(title) {
+	Swal.fire({
+		position: "top-end",
+		icon: 'success',
+		title: 'Thêm vào giỏ hàng thành công' || title,
+		timer: 1500,
+		showConfirmButton: false,
+		toast: true,
+		timerProgressBar: true,
+	})
+};
+
+$(document).ready(function() {
+	$(".btn-back").on("click", function() {
+		window.history.back();
+	});
 });

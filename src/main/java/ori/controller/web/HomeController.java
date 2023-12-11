@@ -55,6 +55,21 @@ public class HomeController {
 	public int getCartQuantity() {
 	    User userLogged = userService.getUserLogged();
 	    if (userLogged != null) {
+	    	int total = 0;
+	        List<Cart> list = cartService.findByUserId(userLogged.getUserId());
+	        for (Cart cart : list) {
+	        	total += cart.getQuantity();
+	        }
+	        return total;
+	    }
+	    return 0;
+	}
+	
+	@GetMapping("/cartDetail")
+	@ResponseBody
+	public int getCartDetail() {
+	    User userLogged = userService.getUserLogged();
+	    if (userLogged != null) {
 	        List<Cart> list = cartService.findByUserId(userLogged.getUserId());
 	        return list.size();
 	    }

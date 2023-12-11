@@ -189,20 +189,21 @@
 	position: relative;
 }
 
-.home .card .image:hover .overlay span {
+.home .card .image:hover .overlay {
+	background-color: #FFF;
+	animation: fadeIn;
+	animation-duration: 0.8s;
 	opacity: 1;
-	animation: fadeInUp;
-	animation-duration: 0.5s;
-	
 }
 
 .home .overlay {
     position: absolute;
-    bottom: 0;
+    bottom: 0%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 100%;   
+    opacity: 0;
 }
 
 .home .overlay span {
@@ -212,7 +213,10 @@
 	text-align: center;
 	color: #fff;
 	text-transform: uppercase;
-	opacity: 0;
+}
+
+.home .overlay span:first-child {
+	margin-bottom: 10px;
 }
 
 .home .overlay a {
