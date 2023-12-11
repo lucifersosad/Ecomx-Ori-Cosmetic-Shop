@@ -181,32 +181,32 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    $('.addToCart').click(async function(event) {
-        event.preventDefault();
-        var clickedElement = $(event.target);
-        var proId = clickedElement.data('proid');
-        var qty = 1;
+	$('.addToCart').click(async function(event) {
+		event.preventDefault();
+		var clickedElement = $(event.target);
+		var proId = clickedElement.data('proid');
+		var qty = 1;
 
-        try {
-            const response = await fetch(`/web/product/addToCart/${proId}&&${qty}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
+		try {
+			const response = await fetch(`/web/product/addToCart/${proId}&&${qty}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+			});
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
 
-            const data = await response.text();
-            console.log(data);
-            updateCartQuantity();
-            showSuccess();
-        } catch (error) {
-            showError("Đăng nhập để tiếp tục");
-        }
-    });
+			const data = await response.text();
+			console.log(data);
+			updateCartQuantity();
+			showSuccess();
+		} catch (error) {
+			showError("Đăng nhập để tiếp tục");
+		}
+	});
 });
 
 
@@ -214,7 +214,7 @@ function showSuccess(title) {
 	Swal.fire({
 		position: "top-end",
 		icon: 'success',
-		title:  title || 'Thêm vào giỏ hàng thành công',
+		title: title || 'Thêm vào giỏ hàng thành công',
 		timer: 1500,
 		showConfirmButton: false,
 		toast: true,
@@ -224,12 +224,12 @@ function showSuccess(title) {
 
 function showError(text) {
 	Swal.fire({
-	  icon: "error",
-	  title: "Lỗi",
-	  text: text || "Lỗi",
-	  showConfirmButton: false,
-	  showCancelButton: true,
-	  timer: 1500,
+		icon: "error",
+		title: "Lỗi",
+		text: text || "Lỗi",
+		showConfirmButton: false,
+		showCancelButton: true,
+		timer: 1500,
 	});
 }
 
@@ -238,3 +238,23 @@ $(document).ready(function() {
 		window.history.back();
 	});
 });
+
+$(document).ready(function() {
+	$(".js-range-slider").ionRangeSlider({
+		hide_min_max: true,
+		hide_from_to: true,
+		onChange: updateInputs,
+	});
+	
+	function updateInputs(data) {
+		var $inputFrom = $("#range-price-min");
+	    var $inputTo = $("#range-price-max");
+		from = data.from;
+		to = data.to;
+		$inputFrom.prop("value", from);
+		$inputTo.prop("value", to);
+		$("#ui-price-min").html(from + ".000đ")
+		$("#ui-price-max").html(to + ".000đ")
+	}
+});
+
