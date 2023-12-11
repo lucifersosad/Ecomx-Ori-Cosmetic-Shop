@@ -36,17 +36,18 @@
 								<span class="product-available">còn [[${detailPro.stock}]] hàng</span>								
 							</div>
 							<!-- Display the initial content with a limited length -->
+							<span >Thành phần sản phẩm: </span>
+	
 							<p id="description"
-								th:text="${#strings.length(detailPro.description) > 200 ? #strings.substring(detailPro.description, 0, 200) + '...' : detailPro.description}">
+								th:text="${#strings.length(description) > 200 ? #strings.substring(description, 0, 200) + '...' : description}">
 							</p>
-
 							<!-- Show more/hide button with styling -->
-							<th:block th:if="${#strings.length(detailPro.description) > 200}">
+							<th:block th:if="${#strings.length(description) > 200}">
 							    <button id="showMoreButton" onclick="toggleDescription()">Show more</button>
 									<!-- JavaScript function to toggle between show/hide -->
 							<script th:inline="javascript">
-								var fullDescription = "[(${detailPro.description})]";
-								var hideDicription = "[(${#strings.substring(detailPro.description, 0, 200) + '...'})]";
+								var fullDescription = "[(${description})]";
+								var hideDicription = "[(${#strings.substring(description, 0, 200) + '...'})]";
 								var isExpanded = false;
 
 								function toggleDescription() {
@@ -90,7 +91,9 @@
 							        // Lấy ID sản phẩm từ Thymeleaf expression
 							        var productId = "[(${detailPro.proId})]";
 							        var stock = "[(${detailPro.stock})]";
-							        var qty = document.getElementsByName("qty")[0].value;
+							        var quantityInCart = "[(${quantityCart})]";
+							        var qty = parseInt(document.getElementsByName("qty")[0].value);
+							       
 							        if (isNaN(qty)){
 										showError("Chỉ được nhập số");
 										return;
@@ -100,6 +103,10 @@
 										return;
 									}
 							        if (qty > stock){
+										showError("Không đủ số lượng sản phẩm");
+										return;
+									}
+									if (qty > stock - quantityInCart){
 										showError("Không đủ số lượng sản phẩm");
 										return;
 									}
@@ -154,6 +161,7 @@
 					<!-- /Product details -->
 
 					<th:block th:if="${isHasUser != -1}">
+					<th:block th:if="${listProSeen.size() > 0}">
 					<!-- Section -->
 					<div class="section">
 						<!-- container -->
@@ -189,6 +197,7 @@
 							</div>
 							</div>
 							<!-- /product -->
+							</th:block>
 							</th:block>
 
 
