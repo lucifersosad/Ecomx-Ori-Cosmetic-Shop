@@ -25,6 +25,9 @@
 							<tr>
 								<th>OrderId</th>
 								<th>UserId</th>
+								<th>Name</th>
+								<th>Phone</th>
+								<th>Address</th>
 								<th>Order date</th>
 								<th>Payment method</th>
 								<th>Shipping method</th>
@@ -38,6 +41,9 @@
 							<tr th:each="item : ${orders}">
 								<td th:text="${item.orderId}"></td>
 								<td th:text="${item.userId.userId}"></td>
+								<td th:text="${item.userId.fullName}"></td>
+								<td th:text="${item.userId.phone}"></td>
+								<td th:text="${item.userId.address}"></td>
 								<td th:text="${item.date}"></td>
 								<td th:text="${item.payment_method}"></td>
 								<td th:text="${item.shipping_method}"></td>
@@ -50,10 +56,10 @@
 								    
 								    <a th:href="@{'/admin/orders/delete/' + ${item.orderId}}" style="display: inline-block; margin-right: 10px;">Delete</a> 
 								    <form th:if="${item.status == 0}" th:action="@{'/admin/orders/updateState/' + ${item.orderId} + '/1'}" method="get" style="display: inline-block; margin-right: 10px;">
-								        <button type="submit" style="background-color: green; color: white;">Activate</button>
+								        <button type="submit" style="background-color: green; color: white;">Accept</button>
 								    </form>
 								    <form th:if="${item.status == 1}" th:action="@{'/admin/orders/updateState/' + ${item.orderId} + '/0'}" method="get" style="display: inline-block;">
-								        <button type="submit" style="background-color: red; color: white;">Deactivate</button>
+								        <button type="submit" style="background-color: red; color: rgb(255, 255, 0);">Cancel</button>
 								    </form>
 								</td>
 							</tr>

@@ -83,7 +83,7 @@ public class OrderServiceImpl implements IOrderService{
 	@Override
 	public Page<Order> getAll(Integer pageNo) {
 		Pageable pageable = PageRequest.of(pageNo - 1, 10);
-		return orderRepository.findAll(pageable);
+		return orderRepository.findAllCustom(pageable);
 	}
 
 	@Override
