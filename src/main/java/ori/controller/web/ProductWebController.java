@@ -60,31 +60,67 @@ public class ProductWebController {
 	@Autowired(required = true)
 	ICategoryService categoryService;
 	
-	@GetMapping(value = {"/", ""})
-	public String viewProduct(ModelMap model) {		
+	@GetMapping("/{cateID}/page/{pageNo}")
+	public String viewProduct(
+			ModelMap model,
+			@PathVariable("cateID") Integer cateID,
+            @PathVariable("pageNo") Integer pageNo) {		
 		List<Category> listCate = categoryService.findAll();
-		model.addAttribute("listAllCategory", listCate);		
-		Pageable pageable = PageRequest.of(0, 27);
-		Page<Product> listCurPro = proService.findAll(pageable);
-		Page<Product> listPro = proService.findAll(pageable) ;
-		model.addAttribute("countPro", listPro.getSize());
-		model.addAttribute("listAllProduct", listPro);
-		model.addAttribute("currentPage",0);
-		
-		double minPrice = proService.findAll().stream()
-                .mapToDouble(Product::getPrice)
-                .min()
-                .orElse(0);
-		double maxPrice = proService.findAll().stream()
-                .mapToDouble(Product::getPrice)
-                .max()
-                .orElse(0);
-		model.addAttribute("min_price",minPrice);
-		model.addAttribute("max_price",maxPrice);
+		model.addAttribute("listAllCategory", listCate);	
+		int pageSize = 27;
+		int totalProducts = proService.findAll().size(); // Số lượng sản phẩm tổng cộng trong cơ sở dữ liệu
+		int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+		int startPage, endPage;
+	    if (totalPages <= 5) {
+	        startPage = 1;
+	        endPage = totalPages;
+	    } else {
+	        if (pageNo <= 3) {
+	            startPage = 1;
+	            endPage = 5;
+	        } else if (pageNo + 1 >= totalPages) {
+	            startPage = totalPages - 4;
+	            endPage = totalPages;
+	        } else {
+	            startPage = pageNo - 2;
+	            endPage = pageNo + 2;
+	        }
+	    }
+	    model.addAttribute("startPage", startPage);
+	    model.addAttribute("endPage", endPage);
+		if (pageNo > totalPages) {
+		    pageNo = totalPages; // Đặt pageNo bằng totalPages nếu vượt quá số trang thực tế
+		}
+		if (cateID == 0) {
+			Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+			Page<Product> listPro = proService.findAll(pageable);
+			model.addAttribute("cateID", cateID);
+			model.addAttribute("countPro", listPro.getSize());
+			model.addAttribute("listAllProduct", listPro);
+			model.addAttribute("currentPage", pageNo);
+
+			double minPrice = listPro.stream().mapToDouble(Product::getPrice).min().orElse(0);
+			double maxPrice = listPro.stream().mapToDouble(Product::getPrice).max().orElse(0);
+			model.addAttribute("min_price", minPrice);
+			model.addAttribute("max_price", maxPrice);
+		}
+		else {
+			Optional<Category> optCate = categoryService.findById(cateID);
+			if (optCate.isPresent()) {
+				Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+				Page<Product> listPro = proService.findByCategory(optCate.get(),pageable);
+				model.addAttribute("cateID", cateID);
+				model.addAttribute("countPro", listPro.getSize());
+				model.addAttribute("listAllProduct", listPro);
+				model.addAttribute("currentPage", pageNo);
+				double minPrice = listPro.stream().mapToDouble(Product::getPrice).min().orElse(0);
+				double maxPrice = listPro.stream().mapToDouble(Product::getPrice).max().orElse(0);
+				model.addAttribute("min_price", minPrice);
+				model.addAttribute("max_price", maxPrice);
+			}	
+		}
 		return "web/product";
 	}
-	
-	
 	@GetMapping("detail/{proId}")
 	public ModelAndView detailProduct(ModelMap model, @PathVariable("proId") Integer proId) {
 	
