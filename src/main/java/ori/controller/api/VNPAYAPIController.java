@@ -219,5 +219,4 @@ public class VNPAYAPIController {
 		}
 		return new ResponseEntity<Response>(new Response(false, "fail", message), HttpStatus.OK);
 	}
-
 }

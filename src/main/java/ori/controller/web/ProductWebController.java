@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +33,7 @@ import ori.entity.User;
 import ori.model.ProductModel;
 import ori.model.UserModel;
 import ori.service.ICartService;
+import ori.service.ICategoryService;
 import ori.service.IProductService;
 import ori.service.IShoppingSessionService;
 import ori.service.IUserService;
@@ -48,6 +50,33 @@ public class ProductWebController {
 	IUserService userService;
 	@Autowired(required=true)
 	ICartService cartService;
+	@Autowired(required = true)
+	ICategoryService categoryService;
+	
+	@GetMapping(value = {"/", ""})
+	public String viewProduct(ModelMap model, @RequestParam(name="pageNo", defaultValue = "1") Integer pageNo) {		
+		List<Category> listCate = categoryService.findAll();
+		model.addAttribute("listAllCategory", listCate);
+		Page<Product> listPro = proService.getAll(pageNo);
+		model.addAttribute("countPro", listPro.getSize());
+		model.addAttribute("listAllProduct", listPro);
+		model.addAttribute("totalPage",listPro.getTotalPages());
+		model.addAttribute("currentPage",pageNo);
+		
+		double minPrice = listPro.stream()
+                .mapToDouble(Product::getPrice)
+                .min()
+                .orElse(0);
+		double maxPrice = listPro.stream()
+                .mapToDouble(Product::getPrice)
+                .max()
+                .orElse(0);
+		model.addAttribute("min_price",minPrice);
+		model.addAttribute("max_price",maxPrice);
+		return "web/product";
+	}
+	
+	
 	
 	@GetMapping("detail/{proId}")
 	public ModelAndView detailProduct(ModelMap model, @PathVariable("proId") Integer proId) {
