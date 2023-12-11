@@ -44,7 +44,7 @@
 	
 	                    </td>
 	                    <td>[[${#numbers.formatDecimal(item.tong, 0, 'POINT', 0, 'POINT')}]].000 đ</td>
-	                    <td><a th:href="@{'cart/deleteItem/' + ${item.product.proId}}" class="btn btn-primary btn-auto btn-sm">X</a></td>
+	                    <td><a th:href="@{'cart/deleteItem/' + ${item.product.proId}}" class="btn btn-primary btn-auto btn-sm btn-remove"><strong>X</strong></a></td>
 	                  </tr>
 	                </tbody>
 	              </table>

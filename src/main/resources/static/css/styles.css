@@ -1,7 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('product-detail.css');
 @import url('checkout.css');
+@import url('cart.css');
+@import url('product-detail.css');
 @import url('home.css');
 @import url('base.css');
 
@@ -95,64 +96,6 @@ ul {
 .checkout__couppon-card {
 	border: 2px dashed #FBA1B7;
 	padding: 15px 30px 30px 30px ;	
-}
-
-.site-section .product-name {
-	max-width: 300px;
-}
-
-.site-section .product-name p {
-	text-align: start;
-	margin-bottom: 0;
-}
-.site-section .btn {
-	height: 43px;
-	font-size: 16px;
-	font-weight: 600;
-	text-transform: uppercase;
-}
-
-.site-section .btn-block{
-	width: 100%;
-}
-
-.site-section .btn-auto{
-	height: auto !important;
-}
-
-.site-section .btn-primary{
-    color: #fff;
-    background-color: #FBA1B7;
-    border-color: #FBA1B7;
-}
-
-.site-section .btn-outline-primary{
-	color: #FBA1B7;
-    background-color: transparent;
-    background-image: none;
-    border-color: #FBA1B7;
-}
-
-.site-section .btn-grey{
-	color: #ccc;
-    background-color: transparent;
-    background-image: none;
-    border-color: #ccc;
-}
-
-.site-section .btn-yellow{
-	color: #fff;
-    background-color: #ffdbaa;
-    border-color: #ffdbaa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-.site-section .form-control {
-	height: 43px;
-	border: 1px solid #ddd !important;
 }
 
 .site-blocks-table {
