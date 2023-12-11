@@ -69,7 +69,14 @@ public class ProductWebController {
 		List<Product> listBrand = proService.findByBrand(enityBrand.getBrandId(), proModel.getPrice());
 		List<Product> listCate = proService.findByCategory(enityCate.getCateId(), proModel.getPrice());
 		
-		
+		String input = proModel.getDescription();
+		String description = input;
+		int index = input.indexOf("Thành phần sản phẩm");
+
+	    if (index != -1) {
+	        String thanhPhanSanPham = input.substring(index + "Thành phần sản phẩm".length()).trim();
+	        description = thanhPhanSanPham;
+	    }
 		LocalDate localDate = LocalDate.now();
 
         String formattedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -124,6 +131,8 @@ public class ProductWebController {
 		String brandName = enityBrand.getName();
 		String cateName = enityCate.getName();
 		
+		
+		model.addAttribute("description", description);
 		model.addAttribute("isHasUser", userId);
 		model.addAttribute("cateName",cateName);
 		model.addAttribute("brandName", brandName);
