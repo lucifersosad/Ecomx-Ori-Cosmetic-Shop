@@ -3,115 +3,7 @@
 	layout:decorate="~{web/layout-default.html}">
 
 <body>
-<<<<<<< HEAD
-    <div layout:fragment="content" class="site-section mt-5">
-        <div class="container">
-            <div class="row mb-5">
-                <form class="col-md-12" method="post">
-                    <div class="site-blocks-table">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th class="product-thumbnail">Ảnh sản phẩm</th>
-                                    <th class="product-name">Sản phẩm</th>
-                                    <th class="product-price">Giá</th>
-                                    <th class="product-quantity">Số lượng</th>
-                                    <th class="product-total">Tổng</th>
-                                    <th class="product-remove">Hủy sản phẩm</th>
-                                </tr>
-                            </thead>
-                           	<tbody>
-						<tr th:each="item : ${list}">
-							        <td class="product-thumbnail">
-							            <img th:src="@{${item.product.image_link}}" alt="Image" class="img-fluid">
-							        </td>
-							        <td class="product-name">
-							            <p class="text-black" th:text="${item.product.name}"></p>
-							        </td>
-							        <td class="product-price">
-							            <p class="text-black" th:text="${item.product.price}"></p>
-							        </td>
-									<td class="product-quantity">
-									    <div class="input-group" style="width: 120px; margin: 0 auto;">
-									        <div class="input-group-prepend">
-									            <a th:href="@{'/cart/updateQTT/' + ${item.product.proId} + '/giam'}" class="btn btn-primary btn-auto btn-sm">-</a>
-									        </div>
-									        <input type="text" class="form-control text-center" th:value="${item.quantity.quantity}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" style="width: 60px;">
-									        <div class="input-group-append">
-									            <a th:href="@{'/cart/updateQTT/' + ${item.product.proId} + '/tang'}" class="btn btn-primary btn-auto btn-sm">+</a>
-									        </div>
-									    </div>
-									</td>
-							        <td class="product-total">
-							            <p class="text-black" th:text="${item.tong}"></p>
-							        </td>
-							        <td>
-							   			<a th:href="@{'/cart/deleteItem/' + ${item.product.proId}}" class="btn btn-primary btn-auto btn-sm">X</a>
 
-							        </td>
-							    </tr>
-                        </table>
-                    </div>
-                </form>
-            </div>
-
-            <div class="row mb-5">
-                <div class="col-md-6">
-                    <button class="btn btn-primary btn-sm btn-block">
-						<a href="/cart" class="text-decoration-none text-dark">Cập nhật giỏ hàng</a>
-					</button>
-                </div>
-                <div class="col-md-6">
-                   <button class="btn btn-outline-primary btn-sm btn-block">
-				    <a href="/" class="text-decoration-none text-dark">← Tiếp tục xem sản phẩm</a>
-					</button>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="text-black h4" for="coupon">Coupon</label>
-                    <p>Enter your coupon code if you have one.</p>
-                </div>
-                <div class="col-md-6">
-                    <input type="text" class="form-control py-3" id="coupon" placeholder="Mã ưu đãi">
-                    <button class="btn btn-primary btn-sm px-4 btn-grey mt-2">Áp dụng</button>
-                </div>
-            </div>
-
-            <div class="row mt-5">
-                <div class="col-md-6">
-                    <div class="text-end border-bottom mb-4">
-                        <h4 class="text-black text-uppercase">Cart Totals</h4>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <span class="text-black">Subtotal</span>
-                        </div>
-                        <div class="col-md-6 text-end">
-                            <strong class="text-black" th:text="${total}"></strong>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <span class="text-black">Total</span>
-                        </div>
-                        <div class="col-md-6 text-end">
-                            <strong class="text-black" th:text="${total}"></strong>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <a class="btn btn-primary btn-block btn-yellow mt-3" th:href="@{checkout}">Tiến hành thanh toán</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
-
-
-=======
 	
 	<!--Thêm dòng này vào-->
 	<div layout:fragment="content" class="cart">
@@ -153,7 +45,7 @@
 	
 	                    </td>
 	                    <td>[[${#numbers.formatDecimal(item.tong, 0, 'POINT', 0, 'POINT')}]].000 đ</td>
-	                    <td><a th:href="@{'cart/deleteItem/' + ${item.product.proId}}" class="btn btn-primary btn-auto btn-sm btn-remove"><strong>X</strong></a></td>
+	                    <td><a th:href="@{'/cart/deleteItem/' + ${item.product.proId}}" class="btn btn-primary btn-auto btn-sm">X</a></td>
 	                  </tr>
 	                </tbody>
 	              </table>
@@ -219,10 +111,17 @@
 	      
 	      <div class="container" th:if="${list.size() == 0}">
 			  <p class="text-center">Không có sản phẩm nào trong giỏ hàng</p>
-		  </div>
-	    </div>
-	</div>
+			  <div class="row">
+	          	<div class="col-md-6">
+	            	<div class="row mb-5">
+	             		 <div class="col-md-6">
+	                		<button class="btn btn-outline-primary btn-sm btn-block btn-back" th:href="@{home}">← Quay về trang chủ</button>
+	             		 </div>
+	            	</div>
+	           
+				</div>
+			</div>
+	      </div>
 </body>
 
 </html>
->>>>>>> dev
