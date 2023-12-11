@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import ori.config.scurity.AuthUser;
 import ori.entity.User;
 import ori.repository.UserRepository;
 
@@ -97,7 +99,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public Page<User> getAll(Integer pageNo) {
-		Pageable pageable = PageRequest.of(pageNo - 1, 100);
+		Pageable pageable = PageRequest.of(pageNo - 1, 10);
 		return userRepository.findAll(pageable);
 	}
 
@@ -112,5 +114,19 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public Optional<User> getByUserNameOrEmail(String username) {
 		return userRepository.findByUsernameOrEmail(username);
+	}
+
+	@Override
+	public User getUserLogged() {
+		Object authen = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (authen instanceof AuthUser) {
+			String email = ((AuthUser)authen).getEmail();
+			Optional<User> optUser = findByEmail(email);
+			if (optUser.isPresent()) {
+				User user = optUser.get();
+				return user;
+			}
+		}
+		return null;
 	}
 }

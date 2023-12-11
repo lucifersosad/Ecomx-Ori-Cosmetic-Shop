@@ -5,7 +5,7 @@
 <body>
 	
 	<!--Thêm dòng này vào-->
-	<section layout:fragment="content">
+	<section layout:fragment="content" class="product-admin">
 		
 		<!--Viết nội dung từ đây-->
 		<div class="row">
@@ -53,8 +53,8 @@
 
 									<label for="description" class="form-label">Description:</label>
 
-									<input type="text" class="form-control" th:value="${product.description}"
-										id="description" th:name="description">
+									<textarea type="text" class="form-control"
+										id="description" th:name="description" th:value="${product.description}" rows="7" th:text="${product.description}"></textarea>
 
 								</div>
 								
@@ -89,8 +89,8 @@
 
 									<label for="image_link" class="form-label">Image Link:</label>
 
-									<input type="text" class="form-control" th:value="${product.image_link}"
-										id="image_link" th:name="image_link">
+									<textarea type="text" class="form-control" th:value="${product.image_link}"
+										id="image_link" th:name="image_link" th:text="${product.image_link}" rows="2"></textarea>
 								</div>
 								
 								<div class="mb-3">

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -78,4 +79,34 @@ public class OrderServiceImpl implements IOrderService{
 	public List<Order> findOder(Integer userId) {
         return orderRepository.findOrderByUserId(userId);
     }
+
+	@Override
+	public Page<Order> getAll(Integer pageNo) {
+		Pageable pageable = PageRequest.of(pageNo - 1, 10);
+		return orderRepository.findAllCustom(pageable);
+	}
+
+	@Override
+	public void updateOrderState(Integer orderId, int newState) {
+		 Optional<Order> optionalOrder = orderRepository.findById(orderId);
+
+	        if (optionalOrder.isPresent()) {
+	            Order order = optionalOrder.get();
+	            order.setStatus(newState);
+	            orderRepository.save(order);
+	        } else {
+	}
+}
+
+	@Override
+	public List<Integer> getMonthlyTotal() {
+		// TODO Auto-generated method stub
+		return orderRepository.getMonthlyTotal();
+	}
+
+	@Override
+	public List<Integer> getQuarterTotal() {
+		// TODO Auto-generated method stub
+		return orderRepository.getQuarterTotal();
+	}
 }

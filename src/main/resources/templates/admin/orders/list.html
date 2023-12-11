@@ -25,31 +25,59 @@
 							<tr>
 								<th>OrderId</th>
 								<th>UserId</th>
+								<th>Name</th>
+								<th>Phone</th>
+								<th>Address</th>
 								<th>Order date</th>
 								<th>Payment method</th>
 								<th>Shipping method</th>
 								<th>Order status</th>
 								<th>Order total</th>
+								<th>Currency</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr th:each="item : ${order}">
+							<tr th:each="item : ${orders}">
 								<td th:text="${item.orderId}"></td>
-								<td th:text="${item.userId}"></td>
-								<td th:text="${item.order_date}"></td>
+								<td th:text="${item.userId.userId}"></td>
+								<td th:text="${item.userId.fullName}"></td>
+								<td th:text="${item.userId.phone}"></td>
+								<td th:text="${item.userId.address}"></td>
+								<td th:text="${item.date}"></td>
 								<td th:text="${item.payment_method}"></td>
 								<td th:text="${item.shipping_method}"></td>
-								<td th:text="${item.order_status}"></td>
-								<td th:text="${item.order_total}"></td>
+								<td th:text="${item.status == 1 ? 'Done' : 'Pending'}"
+								    th:style="${item.status == 1 ? 'color: green;' : 'color: orange;'}">
+								</td>
+								<td th:text="${item.total}"></td>
+								<td th:text="${item.currency}"></td>
 								<td>
-									<a th:href="@{'/admin/orders/detail}">Detail</a> ||
-									<a th:href="@{'/admin/orders/edit/' + ${item.orderId}}">Edit</a> || 
-									<a th:href="@{'/admin/orders/delete/' + ${item.orderId}}">Delete</a>
+								    
+								    <a th:href="@{'/admin/orders/delete/' + ${item.orderId}}" style="display: inline-block; margin-right: 10px;">Delete</a> 
+								    <form th:if="${item.status == 0}" th:action="@{'/admin/orders/updateState/' + ${item.orderId} + '/1'}" method="get" style="display: inline-block; margin-right: 10px;">
+								        <button type="submit" style="background-color: green; color: white;">Accept</button>
+								    </form>
+								    <form th:if="${item.status == 1}" th:action="@{'/admin/orders/updateState/' + ${item.orderId} + '/0'}" method="get" style="display: inline-block;">
+								        <button type="submit" style="background-color: red; color: rgb(255, 255, 0);">Cancel</button>
+								    </form>
 								</td>
 							</tr>
 						</tbody>
 					</table>
+					<nav aria-label="Page navigation example">
+					    <ul class="pagination">
+					        <li class="page-item">
+					            <a class="page-link" th:href="@{'?pageNo=' + ${currentPage - 1}}" th:if="${currentPage > 1}">Previous</a>
+					        </li>
+					        <li class="page-item" th:each="i:${#numbers.sequence(1, totalPage)}" th:classappend="${currentPage == i ? 'active' : ''}">
+					            <a class="page-link" th:href="@{'?pageNo=' + ${i}}" th:text="${i}"></a>
+					        </li>
+					        <li class="page-item">
+					            <a class="page-link" th:href="@{'?pageNo=' + ${currentPage + 1}}" th:if="${currentPage < totalPage}">Next</a>
+					        </li>
+					    </ul>
+					</nav>
 			
 				</div>
 			</div>

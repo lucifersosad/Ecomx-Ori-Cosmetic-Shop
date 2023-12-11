@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -12,12 +13,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.validation.Valid;
 import ori.entity.Brand;
 import ori.entity.Category;
 import ori.entity.Product;
+import ori.entity.User;
 import ori.model.ProductModel;
 import ori.service.IBrandService;
 import ori.service.ICategoryService;
@@ -35,10 +38,13 @@ public class ProductController {
 	@Autowired(required = true)
 	IBrandService brandService;
 	
+	
 	@RequestMapping("")
-	public String list(ModelMap model) {
-		List<Product> list = productService.findAll();
+	public String list(ModelMap model, @RequestParam(name="pageNo", defaultValue = "1") Integer pageNo) {
+		Page<Product> list = productService.getAll(pageNo);
 		model.addAttribute("products", list);
+		model.addAttribute("totalPage",list.getTotalPages());
+		model.addAttribute("currentPage",pageNo);
 		return "admin/products/list";
 	}
 	
