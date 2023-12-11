@@ -177,7 +177,14 @@ public class ProductWebController {
 		List<Product> listBrand = proService.findByBrand(enityBrand.getBrandId(), proModel.getPrice());
 		List<Product> listCate = proService.findByCategory(enityCate.getCateId(), proModel.getPrice());
 		
-		
+		String input = proModel.getDescription();
+		String description = input;
+		int index = input.indexOf("Thành phần sản phẩm");
+
+	    if (index != -1) {
+	        String thanhPhanSanPham = input.substring(index + "Thành phần sản phẩm".length()).trim();
+	        description = thanhPhanSanPham;
+	    }
 		LocalDate localDate = LocalDate.now();
 
         String formattedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -199,12 +206,22 @@ public class ProductWebController {
 	        	entitySS.setId(ssKey);
 	            entitySS.setProduct(entity);
 	            entitySS.setDate(formattedDate);
+	            List<Cart> entityCart = cartService.findByUserId(userId);
+	            int quantityCart = 0;
+	            for (Cart cart : entityCart) {
+					if(cart.getProduct().getProId()-proId ==0) {
+						quantityCart = cart.getQuantity();	
+					}
+				}
+	            System.out.println(quantityCart);
+	            model.addAttribute("quantityCart", quantityCart);
 	        }
         }
         int flagSave = 1;
         if(userId == -1) {
         	flagSave = 0;
         }
+        
         //System.out.println(proId);
         List<ShoppingSession> listSS = ssService.findByUser(userId);
         List<ShoppingSession> listSSAll = ssService.findAll();
@@ -232,6 +249,8 @@ public class ProductWebController {
 		String brandName = enityBrand.getName();
 		String cateName = enityCate.getName();
 		
+		
+		model.addAttribute("description", description);
 		model.addAttribute("isHasUser", userId);
 		model.addAttribute("cateName",cateName);
 		model.addAttribute("brandName", brandName);
