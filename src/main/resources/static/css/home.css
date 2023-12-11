@@ -184,3 +184,42 @@
 	font-size: 35px;
 	color: #fff !important;
 }
+
+.home .card .image {
+	position: relative;
+}
+
+.home .card .image:hover .overlay {
+	background-color: #FFF;
+	animation: fadeIn;
+	animation-duration: 0.8s;
+	opacity: 1;
+}
+
+.home .overlay {
+    position: absolute;
+    bottom: 0%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;   
+    opacity: 0;
+}
+
+.home .overlay span {
+	background-color: #FBA1B7;
+	display: block;
+	width: 100%;
+	text-align: center;
+	color: #fff;
+	text-transform: uppercase;
+}
+
+.home .overlay span:first-child {
+	margin-bottom: 10px;
+}
+
+.home .overlay a {
+    display: inline-block;
+}
+

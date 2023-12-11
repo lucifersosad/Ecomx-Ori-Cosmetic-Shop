@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Bean;
 
 @Configuration
 public class PaypalConfig {
-
+	public static String SUCCESS_URL ="http://localhost:8888/payment/paypal/success";
+	public static String CANCEL_URL ="http://localhost:8888/payment/paypal/cancel";
 	@Value("${paypal.client.id}")
 	private String clientId;
 	@Value("${paypal.client.secret}")

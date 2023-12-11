@@ -1,5 +1,6 @@
 package ori.controller.web;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -66,6 +67,20 @@ public class WebUserController {
 				    model.addAttribute("homeaddress", add.trim());
 				}
 				model.addAttribute("user", userModel);
+				
+				List<Order> listOrder = orderService.findOder(user.getUserId());
+				
+				model.addAttribute("listOrder", listOrder);
+				
+				List<OrderDetail> listOderDetail = orderDetailService.findAll();
+				model.addAttribute("listOderDetail", listOderDetail);
+				
+				List<Product> listPro = orderDetailService.listProByOderID(user.getUserId());
+				for (Product product : listPro) {
+					float oldprice = product.getPrice();
+					product.setPrice(Math.round(oldprice * (100 - product.getSale()) / 100));
+				}
+				model.addAttribute("listPro", listPro);
 				return "web/users/infor";
 			}	
 		} 
@@ -170,6 +185,8 @@ public class WebUserController {
 	
 	@PostMapping("/updateAddress")
     public ResponseEntity<String> updateAddress(@RequestParam("email") String email,
+    										   @RequestParam("fullName") String fullName,
+    										   @RequestParam("phone") String phone,
                                                @RequestParam("city") String city,
                                                @RequestParam("district") String district,
                                                @RequestParam("town") String town,
@@ -181,10 +198,12 @@ public class WebUserController {
             User user = optUser.get();
             String address = homeadd + " , " + town + " , " + district + " , " + city;
             user.setAddress(address);
+            user.setFullName(fullName);
+            user.setPhone(phone);
             userService.updateUser(user);
-            return new ResponseEntity<>("Address updated successfully!", HttpStatus.OK);
+            return new ResponseEntity<>("Cập nhật thông tin thành công", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Cập nhật thông tin không thành công", HttpStatus.NOT_FOUND);
         }
     }
 	

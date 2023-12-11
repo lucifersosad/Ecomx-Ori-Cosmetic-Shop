@@ -25,22 +25,35 @@
 				</div>
 			</div>
 			<p>
-				<span class="text-black-50">Sử dụng địa chỉ khác? </span> <a
-					class="checkout__couppon-btn" onclick="updateUser()">
-					Thay đổi địa chỉ </a>
+				<span class="text-black-50">Bạn muốn thay đổi thông tin thanh toán? </span> <a
+					class="checkout__couppon-btn" onclick="updateUser()" style="cursor: pointer;">
+					Thay đổi thông tin </a>
 			</p>
-			<button class="btn btn-primary btn-update" style="display: none;" onclick="updateAddress()">Thay đổi thông tin</button>
+			
 			<p id="thong-bao" class="text-danger"></p>
 		</section>
 
 		<section class="container mb-5">
 			<div class="row">
 				<div class="col-md-7">
-					<form method="post" class="colorlib-form" target="pay/cod">
-						<h3>
-							<strong>Thông tin thanh toán</strong>
-						</h3>
+					<form class="colorlib-form">
+						<div class="d-flex justify-content-between align-items-center">
+							<h3>
+								<strong>Thông tin thanh toán</strong>
+							</h3>
+							<button class="btn btn-primary btn-update" style="display: none;" onclick="updateAddress()">Thay đổi</button>
+						</div>
 						<div class="row">
+							
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="email">Email</label> <input type="text"
+										id="email" th:name="email" class="form-control"
+										th:value="${user.email}" placeholder="Email của bạn"
+										disabled>
+								</div>
+							</div>
+							
 							<div class="col-md-12">
 								<div class="form-group">
 									<label for="fullName">Họ và tên</label> <input type="text"
@@ -50,52 +63,39 @@
 								</div>
 							</div>
 
-							<div class="col-md-6">
+							<div class="col-md-12">
 								<div class="form-group">
-									<label for="fname">Số điện thoại</label> <input type="text"
+									<label for="phone">Số điện thoại</label> <input type="text"
 										id="phone" th:name="phone" class="form-control"
 										th:value="${user.phone}" placeholder="Số điện thoại của bạn"
 										disabled>
 								</div>
-							</div>
-
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="lname">Địa chỉ email</label> <input type="text"
-										id="email" th:name="email" class="form-control"
-										th:value="${user.email}" placeholder="Email của bạn" disabled>
-								</div>
-							</div>
-							<div class="col-md-6">
+							</div>						
+							
+							<div class="col-md-12">
 								<div class="form-group">
 									<label for="city">Tỉnh/Thành phố</label> <input type="text"
-										id="city" name="city" class="form-control"
-										th:value="${addressParts[3].trim()}" disabled>
+										id="city" name="city" class="form-control" th:value="${city}"
+										disabled>
 								</div>
 							</div>
-
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="district">Quận/Huyện</label> <input type="text"
-										id="district" name="district" class="form-control"
-										th:value="${addressParts[2].trim()}" disabled>
-								</div>
+							
+							<div class="form-group col-md-12">
+								<label for="district">Quận/Huyện</label> <input type="text"
+									id="district" name="district" class="form-control"
+									th:value="${district}" disabled>
 							</div>
 
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="town">Xã/Phường</label> <input type="text"
-										id="town" name="town" class="form-control"
-										th:value="${addressParts[1].trim()}" disabled>
-								</div>
+							<div class="form-group col-md-12">
+								<label for="town">Xã/Phường</label> <input type="text"
+									id="town" name="town" class="form-control" th:value="${town}"
+									disabled>
 							</div>
 
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="fname">Địa chỉ</label> <input type="text"
-										id="address" name="address" class="form-control"
-										th:value="${addressParts[0].trim()}" disabled>
-								</div>
+							<div class="form-group col-md-12">
+								<label for="fname">Địa chỉ</label> <input type="text"
+									id="address" name="address" class="form-control"
+									th:value="${homeaddress}" disabled>
 							</div>
 						</div>
 					</form>
@@ -108,27 +108,64 @@
 									<h3>
 										<strong>Đơn hàng của bạn</strong>
 									</h3>
-									<ul>
-										<li>
-											<ul>
-												<li><span>1 x Product Name</span> <span>$99.00</span></li>
-												<li><span>1 x Product Name</span> <span>$78.00</span></li>
-											</ul>
-										</li>
-										<li id="codOption" style="display: none;"><span>Shipping</span>
-											<span id="codValue">30.000 VND</span></li>
-										<li><span>Subtotal</span> <span>180.000 VND</span></li>
-										<li id="total"><span>Order Total</span> <span
-											id="totalValue">180.000 VND</span></li>
-									</ul>
 
+									<div class="product-list">
+										<!-- Sử dụng th:each để lặp qua danh sách sản phẩm -->
+										<div th:each="item : ${list}" class="product-info">
+											<div class="row align-items-center">
+												<div class="col-md-9">
+													<div class="product-name">
+														<span class="quantity"> <strong>[[${item.quantity.quantity}]]</strong><span
+															class="bold-x"> x</span>
+														</span> [[${item.product.name}]]
+													</div>
+												</div>
+												<div class="col-md-3">
+													<div class="total">[[${#numbers.formatDecimal(item.tong,
+														0, 'POINT', 0, 'POINT')}]].000 đ</div>
+												</div>
+											</div>
+										</div>
+										<div class="product-info">
+											<div class="row align-items-center">
+												<div class="col-md-9">
+													<div class="quantity product-name">Subtotal</div>
+												</div>
+												<div class="col-md-3">
+													<div class="total" id="subTotalValue">[[${#numbers.formatDecimal(total,
+														0, 'POINT', 0, 'POINT')}]].000 đ</div>
+												</div>
+											</div>
+										</div>
+										<div class="product-info" id="codOption" style="display: none">
+											<div class="row align-items-center">
+												<div class="col-md-9">
+													<div class="quantity product-name">Shipping cost</div>
+												</div>
+												<div class="col-md-3">
+													<div class="total" id="codValue">30.000 đ</div>
+												</div>
+											</div>
+										</div>
+										<div class="product-info">
+											<div class="row align-items-center">
+												<div class="col-md-9">
+													<div class="quantity product-name">Order Total</div>
+												</div>
+												<div class="col-md-3">
+													<div class="total" id="totalValue">[[${#numbers.formatDecimal(total,
+														0, 'POINT', 0, 'POINT')}]].000 đ</div>
+												</div>
+											</div>
+										</div>
+									</div>
 									<h3>
 										<strong>Phương thức thanh toán</strong>
 									</h3>
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
-												<label><input type="radio" name="paymentMethod"
+												<label><input type="radio" Checked="True" name="paymentMethod"
 													id="cod" class="optradio" value="COD"> Thanh toán
 													khi nhận hàng</label>
 											</div>
@@ -153,7 +190,8 @@
 									<div class="row">
 										<div class="col-md-12">
 											<p>
-												<button type="submit" class="btn btn-primary">ĐẶT
+												<button type="submit" class="btn btn-primary"
+													style="background-color: orange; color: white;">ĐẶT
 													HÀNG</button>
 											</p>
 										</div>

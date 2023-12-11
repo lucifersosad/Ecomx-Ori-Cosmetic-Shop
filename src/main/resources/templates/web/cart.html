@@ -44,7 +44,7 @@
 	
 	                    </td>
 	                    <td>[[${#numbers.formatDecimal(item.tong, 0, 'POINT', 0, 'POINT')}]].000 đ</td>
-	                    <td><a th:href="@{'cart/deleteItem/' + ${item.product.proId}}" class="btn btn-primary btn-auto btn-sm">X</a></td>
+	                    <td><a th:href="@{'cart/deleteItem/' + ${item.product.proId}}" class="btn btn-primary btn-auto btn-sm btn-remove"><strong>X</strong></a></td>
 	                  </tr>
 	                </tbody>
 	              </table>
@@ -56,7 +56,7 @@
 	          <div class="col-md-6">
 	            <div class="row mb-5">
 	              <div class="col-md-6">
-	                <button class="btn btn-outline-primary btn-sm btn-block">← Tiếp tục xem sản phẩm</button>
+	                <button class="btn btn-outline-primary btn-sm btn-block btn-back">← Tiếp tục xem sản phẩm</button>
 	              </div>
 	            </div>
 	            <div class="row">
@@ -99,7 +99,7 @@
 	
 	                <div class="row">
 	                  <div class="col-md-12">
-	                    <a class="btn btn-primary btn-block btn-yellow" th:href="@{checkout}">Tiến hành thanh toán</a>
+	                    <a class="btn btn-primary btn-block btn-yellow" th:href="@{CheckOut}">Tiến hành thanh toán</a>
 	                  </div>
 	                </div>
 	              </div>

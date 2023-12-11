@@ -1,7 +1,7 @@
 $(document).ready(function() {
-	var originalTotalValue = $("#totalValue").html();
+	var originalTotalValue = $("#subTotalValue").html();
 
-	$("#cod").on("click", function(e) {
+	$("#cod").on("click", function() {
 		$("#codOption").css("display", "block");
 		var codHtml = $("#codValue").html();
 		var codValue = parseFloat(codHtml.replace(/[^\d.]/g, ''));
@@ -9,31 +9,20 @@ $(document).ready(function() {
 		var totalHtml = $("#totalValue").html();
 		var totalValue = parseFloat(totalHtml.replace(/[^\d.]/g, ''));
 
-		$("#totalValue").html((codValue + totalValue) + ".000 VND");
+		$("#totalValue").html((codValue + totalValue) + ".000 đ");
 		$("#codOption").css("font-weight", "bold");
 		$("#total").css("font-weight", "bold");
 	});
 
-	$(document).on("mouseup", function(e) {
-		var container = $("#cod");
-
-		if (!container.is(e.target) && container.has(e.target).length === 0) {
+	$(document).on("click", function(e) {
+		var clickedElement = $(e.target);
+		if (clickedElement.is("#vnpay") || clickedElement.is("#paypal")) {
 			$("#totalValue").html(originalTotalValue);
 			$("#codOption").css("display", "none");
 			$("#total").css("font-weight", "normal");
 		}
 	});
 });
-
-function checkPaymentOption(form) {
-	var paymentOption = $("input[name='optradio']:checked").val();
-	console.log(paymentOption);
-	if (paymentOption == "paypal") {
-		var url = "/pay";
-		window.location.href = url;
-	}
-	return false;
-}
 
 function updateQuantity(proid, qtt) {
 	fetch('cart/updateQTT', {
@@ -56,7 +45,7 @@ function updateQuantity(proid, qtt) {
 		});
 }
 
-document.addEventListener('click', function(event) {
+$(document).on('click', function(event) {
 	var target = event.target;
 	if (target.classList.contains('btn-quantity')) {
 		var row = target.closest('tr');
@@ -77,7 +66,9 @@ document.addEventListener('click', function(event) {
 				updateQuantity(proid, inputValue - 1);
 			}
 		} else if (target.classList.contains('js-btn-plus')) {
-
+			if (currentQuantity < 1) {
+				inputValue = 0;
+			}
 			updateQuantity(proid, inputValue + 1);
 		}
 	}
@@ -85,18 +76,21 @@ document.addEventListener('click', function(event) {
 
 function updateAddress() {
 	var email = document.querySelector('#email').value;
+	var fullName = document.querySelector('#fullName').value;
+	var phone = document.querySelector('#phone').value;
 	var city = document.querySelector('#city').value;
 	var district = document.querySelector('#district').value;
 	var town = document.querySelector('#town').value;
 	var homeaddress = document.querySelector('#address').value;
 
-	// Gửi request tới controller để cập nhật địa chỉ
 	fetch('/web/users/updateAddress', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 		body: 'email=' + email +
+			'&fullName=' + fullName +
+			'&phone=' + phone +
 			'&city=' + city +
 			'&district=' + district +
 			'&town=' + town +
@@ -105,55 +99,142 @@ function updateAddress() {
 		.then(response => response.text())
 		.then(data => {
 			localStorage.setItem('updatedAddress', JSON.stringify({
-            city: city,
-            district: district,
-            town: town,
-            homeaddress: homeaddress,
-            data: data,
-        }));
+				email: email,
+				fullName: fullName,
+				phone: phone,
+				city: city,
+				district: district,
+				town: town,
+				homeaddress: homeaddress,
+				data: data,
+			}));
 			location.reload();
 		})
 		.catch(error => console.error('Error:', error));
 }
 function updateUser() {
 	$(".btn-update").css("display", "block");
+	$("#fullName").prop("disabled", false);
+	$("#phone").prop("disabled", false);
 	$("#city").prop("disabled", false);
 	$("#district").prop("disabled", false);
 	$("#town").prop("disabled", false);
 	$("#address").prop("disabled", false);
-}
-
-function loadUpdate() {
-    // Kiểm tra nếu có thông tin đã lưu trong localStorage
-    var updatedAddress = localStorage.getItem('updatedAddress');
-    if (updatedAddress) {
-        // Parse và áp dụng thông tin vào thẻ DOM
-        var addressInfo = JSON.parse(updatedAddress);
-        document.querySelector('#city').value = addressInfo.city;
-        document.querySelector('#district').value = addressInfo.district;
-        document.querySelector('#town').value = addressInfo.town;
-        document.querySelector('#address').value = addressInfo.homeaddress;
-        document.querySelector('#thong-bao').innerHTML = "cc";
-        console.log("OK");
-
-        // Xóa thông tin đã lưu trong localStorage
-        localStorage.removeItem('updatedAddress');
-    }
+	$("#fullName").focus();
 }
 
 $(document).ready(function() {
-    // Kiểm tra nếu có thông tin đã lưu trong localStorage
-    var updatedAddress = localStorage.getItem('updatedAddress');
-    if (updatedAddress) {
-        // Parse và áp dụng thông tin vào thẻ DOM
-        var addressInfo = JSON.parse(updatedAddress);
-        $('#city').val(addressInfo.city);
-        $('#district').val(addressInfo.district);
-        $('#town').val(addressInfo.town);
-        $('#address').val(addressInfo.homeaddress);
-        $('#thong-bao').html(addressInfo.data);
-        console.log("OK");
-        // Xóa thông tin đã lưu trong localStorage
-        localStorage.removeItem('updatedAddress');
-    }
+
+	var updatedAddress = localStorage.getItem('updatedAddress');
+	if (updatedAddress) {
+
+		var addressInfo = JSON.parse(updatedAddress);
+		$('#email').val(addressInfo.email);
+		$('#fullName').val(addressInfo.fullName);
+		$('#phone').val(addressInfo.phone);
+		$('#city').val(addressInfo.city);
+		$('#district').val(addressInfo.district);
+		$('#town').val(addressInfo.town);
+		$('#address').val(addressInfo.homeaddress);
+		$('#thong-bao').html(addressInfo.data);
+		console.log("OK");
+
+		localStorage.removeItem('updatedAddress');
+	}
+});
+
+$(document).ready(function() {
+	var codInput = $('#cod');
+	if (codInput.length) {
+		codInput.click();
+	}
+});
+
+function updateCartQuantity() {
+	fetch('/cartQty')
+		.then(response => response.json())
+		.then(data => {
+			if (data < 100) {
+				$('#cartQty').html(data);
+			} else {
+				$('#cartQty').html("99+")
+			}
+
+		})
+		.catch(error => {
+			console.error('Error fetching cart quantity:', error);
+		});
+}
+
+$(document).ready(function() {
+	updateCartQuantity();
+});
+
+$(document).ready(function() {
+	$('.buyNow').click(function(event) {
+		event.preventDefault();
+		var clickedElement = $(event.target);
+		var proId = clickedElement.data('proid');
+		var redirectUrl = '/web/product/add-to-cart/' + proId + '&&' + 1;
+		window.location.href = redirectUrl;
+	});
+});
+
+$(document).ready(function() {
+    $('.addToCart').click(async function(event) {
+        event.preventDefault();
+        var clickedElement = $(event.target);
+        var proId = clickedElement.data('proid');
+        var qty = 1;
+
+        try {
+            const response = await fetch(`/web/product/addToCart/${proId}&&${qty}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.text();
+            console.log(data);
+            updateCartQuantity();
+            showSuccess();
+        } catch (error) {
+            showError("Đăng nhập để tiếp tục");
+        }
+    });
+});
+
+
+function showSuccess(title) {
+	Swal.fire({
+		position: "top-end",
+		icon: 'success',
+		title:  title || 'Thêm vào giỏ hàng thành công',
+		timer: 1500,
+		showConfirmButton: false,
+		toast: true,
+		timerProgressBar: true,
+	})
+};
+
+function showError(text) {
+	Swal.fire({
+	  icon: "error",
+	  title: "Lỗi",
+	  text: text || "Lỗi",
+	  showConfirmButton: false,
+	  showCancelButton: true,
+	  timer: 1500,
+	});
+}
+
+$(document).ready(function() {
+	$(".btn-back").on("click", function() {
+		window.history.back();
+	});
 });
