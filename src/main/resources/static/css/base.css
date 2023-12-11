@@ -6,5 +6,5 @@
 }
 
 .form-control:disabled {
-	background-color: #e9ecef !important;
+	background-color: #ddd !important;
 }

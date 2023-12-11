@@ -72,30 +72,30 @@
 								</div>
 							</div>						
 							
-							<div class="col-md-6">
+							<div class="col-md-12">
 								<div class="form-group">
 									<label for="city">Tỉnh/Thành phố</label> <input type="text"
 										id="city" name="city" class="form-control" th:value="${city}"
 										disabled>
 								</div>
+							</div>
+							
+							<div class="form-group col-md-12">
+								<label for="district">Quận/Huyện</label> <input type="text"
+									id="district" name="district" class="form-control"
+									th:value="${district}" disabled>
+							</div>
 
-								<div class="form-group col-md-12">
-									<label for="district">Quận/Huyện</label> <input type="text"
-										id="district" name="district" class="form-control"
-										th:value="${district}" disabled>
-								</div>
+							<div class="form-group col-md-12">
+								<label for="town">Xã/Phường</label> <input type="text"
+									id="town" name="town" class="form-control" th:value="${town}"
+									disabled>
+							</div>
 
-								<div class="form-group col-md-12">
-									<label for="town">Xã/Phường</label> <input type="text"
-										id="town" name="town" class="form-control" th:value="${town}"
-										disabled>
-								</div>
-
-								<div class="form-group col-md-12">
-									<label for="fname">Địa chỉ</label> <input type="text"
-										id="address" name="address" class="form-control"
-										th:value="${homeaddress}" disabled>
-								</div>
+							<div class="form-group col-md-12">
+								<label for="fname">Địa chỉ</label> <input type="text"
+									id="address" name="address" class="form-control"
+									th:value="${homeaddress}" disabled>
 							</div>
 						</div>
 					</form>
