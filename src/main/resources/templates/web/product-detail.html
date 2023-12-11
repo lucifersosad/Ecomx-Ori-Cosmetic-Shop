@@ -91,7 +91,9 @@
 							        // Lấy ID sản phẩm từ Thymeleaf expression
 							        var productId = "[(${detailPro.proId})]";
 							        var stock = "[(${detailPro.stock})]";
+							        var quantityInCart = "[(${quantityCart})]";
 							        var qty = parseInt(document.getElementsByName("qty")[0].value);
+							       
 							        if (isNaN(qty)){
 										showError("Chỉ được nhập số");
 										return;
@@ -101,6 +103,10 @@
 										return;
 									}
 							        if (qty > stock){
+										showError("Không đủ số lượng sản phẩm");
+										return;
+									}
+									if (qty > stock - quantityInCart){
 										showError("Không đủ số lượng sản phẩm");
 										return;
 									}

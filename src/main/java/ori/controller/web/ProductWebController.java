@@ -98,12 +98,22 @@ public class ProductWebController {
 	        	entitySS.setId(ssKey);
 	            entitySS.setProduct(entity);
 	            entitySS.setDate(formattedDate);
+	            List<Cart> entityCart = cartService.findByUserId(userId);
+	            int quantityCart = 0;
+	            for (Cart cart : entityCart) {
+					if(cart.getProduct().getProId()-proId ==0) {
+						quantityCart = cart.getQuantity();	
+					}
+				}
+	            System.out.println(quantityCart);
+	            model.addAttribute("quantityCart", quantityCart);
 	        }
         }
         int flagSave = 1;
         if(userId == -1) {
         	flagSave = 0;
         }
+        
         //System.out.println(proId);
         List<ShoppingSession> listSS = ssService.findByUser(userId);
         List<ShoppingSession> listSSAll = ssService.findAll();
