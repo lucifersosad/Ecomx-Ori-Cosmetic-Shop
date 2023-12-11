@@ -45,7 +45,7 @@ function updateQuantity(proid, qtt) {
 		});
 }
 
-document.addEventListener('click', function(event) {
+$(document).on('click', function(event) {
 	var target = event.target;
 	if (target.classList.contains('btn-quantity')) {
 		var row = target.closest('tr');
@@ -66,7 +66,9 @@ document.addEventListener('click', function(event) {
 				updateQuantity(proid, inputValue - 1);
 			}
 		} else if (target.classList.contains('js-btn-plus')) {
-
+			if (currentQuantity < 1) {
+				inputValue = 0;
+			}
 			updateQuantity(proid, inputValue + 1);
 		}
 	}
@@ -179,40 +181,57 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-	$('.addToCart').click(function(event) {
-		event.preventDefault();
-		var clickedElement = $(event.target);
-		var proId = clickedElement.data('proid');
-		var qty = 1;
-		fetch('/web/product/addToCart/' + proId + '&&' + qty, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-		})
-			.then(response => response.text())
-			.then(data => {
-				console.log(data);
-				updateCartQuantity();
-				showSucess();
-			})
-			.catch(error => {
-				console.error('Thêm vào giỏ hàng không thành công. Lỗi: ', error);
-			});
-	});
+    $('.addToCart').click(async function(event) {
+        event.preventDefault();
+        var clickedElement = $(event.target);
+        var proId = clickedElement.data('proid');
+        var qty = 1;
+
+        try {
+            const response = await fetch(`/web/product/addToCart/${proId}&&${qty}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.text();
+            console.log(data);
+            updateCartQuantity();
+            showSuccess();
+        } catch (error) {
+            showError("Đăng nhập để tiếp tục");
+        }
+    });
 });
 
-function showSucess(title) {
+
+function showSuccess(title) {
 	Swal.fire({
 		position: "top-end",
 		icon: 'success',
-		title: 'Thêm vào giỏ hàng thành công' || title,
+		title:  title || 'Thêm vào giỏ hàng thành công',
 		timer: 1500,
 		showConfirmButton: false,
 		toast: true,
 		timerProgressBar: true,
 	})
 };
+
+function showError(text) {
+	Swal.fire({
+	  icon: "error",
+	  title: "Lỗi",
+	  text: text || "Lỗi",
+	  showConfirmButton: false,
+	  showCancelButton: true,
+	  timer: 1500,
+	});
+}
 
 $(document).ready(function() {
 	$(".btn-back").on("click", function() {

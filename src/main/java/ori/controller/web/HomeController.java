@@ -64,15 +64,4 @@ public class HomeController {
 	    }
 	    return 0;
 	}
-	
-	@GetMapping("/cartDetail")
-	@ResponseBody
-	public int getCartDetail() {
-	    User userLogged = userService.getUserLogged();
-	    if (userLogged != null) {
-	        List<Cart> list = cartService.findByUserId(userLogged.getUserId());
-	        return list.size();
-	    }
-	    return 0;
-	}
 }

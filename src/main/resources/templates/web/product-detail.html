@@ -74,13 +74,13 @@
 			                        <div class="input-group-prepend">
 			                          <button class="btn btn-outline-primary js-btn-minus-cart btn-quantity-cart" style="border-top-right-radius: 0;border-bottom-right-radius: 0;" type="button">&minus;</button>
 			                        </div>
-			                        <input type="texts" class="cart-input form-control text-center" th:value="1" th:attr="data-proid-cart=${detailPro.proId}"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" name="qty">
+			                        <input type="text" class="cart-input form-control text-center" th:value="1" th:attr="data-proid-cart=${detailPro.proId}"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" name="qty">
 			                        <div class="input-group-append">
 			                          <button class="btn btn-outline-primary js-btn-plus-cart btn-quantity-cart" style="border-top-left-radius: 0;border-bottom-left-radius: 0;" type="button">&plus;</button>
 			                        </div>
 			                	</div>
 			                <div class="add-to-cart">
-							    <button class="add-to-cart-btn" onclick="addToCart()">
+							    <button class="add-to-cart-btn" onclick="addToCart()" th:if="${detailPro.stock > 0 ? '' : 'disabled'}">
 							        <i class="fa fa-shopping-cart"></i> Add to cart
 							    </button>
 							</div>
@@ -89,8 +89,20 @@
 							    function addToCart() {
 							        // Lấy ID sản phẩm từ Thymeleaf expression
 							        var productId = "[(${detailPro.proId})]";
-							        
+							        var stock = "[(${detailPro.stock})]";
 							        var qty = document.getElementsByName("qty")[0].value;
+							        if (isNaN(qty)){
+										showError("Chỉ được nhập số");
+										return;
+									}
+							        if (qty < 1){
+										showError("Không nhập số lượng nhỏ hơn 1");
+										return;
+									}
+							        if (qty > stock){
+										showError("Không đủ số lượng sản phẩm");
+										return;
+									}
         
 							        // Xây dựng đường dẫn chuyển hướng với tham số qty
 							        var redirectUrl = '/web/product/add-to-cart/' + productId + '&&' + qty;
@@ -99,6 +111,29 @@
 							        // Chuyển hướng trình duyệt
 							        window.location.href = redirectUrl;
 							    }
+							    
+							    document.addEventListener("click", function(event) {
+								    var target = event.target;
+								    
+								
+								    if (target.classList.contains('btn-quantity-cart')) {
+										var qtyInput = document.getElementsByName("qty")[0];
+								    	var oldQty = parseInt(qtyInput.value, 10);
+								        if (target.classList.contains('js-btn-minus-cart')) {
+								            if (oldQty > 1) {
+								                qtyInput.value = oldQty - 1;
+								            } else {
+								                showError("Số lượng không nhỏ hơn 1");
+								            }
+								        } else if (target.classList.contains('js-btn-plus-cart')) {
+											if (oldQty > 0) {
+								                qtyInput.value = oldQty + 1;
+								            } else {
+								                showError("Số lượng không nhỏ hơn 1");
+								            }					            
+								        }
+								    }
+								});
 							</script>
 
 							</div>

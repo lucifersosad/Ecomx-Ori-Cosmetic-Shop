@@ -86,6 +86,7 @@ public class SecurityConfiguration {
                         .requestMatchers(antMatcher("/cart/**")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())
                         .requestMatchers(antMatcher("/CheckOut/**")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())
                         .requestMatchers(antMatcher("/web/users/**")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())
+                        .requestMatchers(antMatcher("/web/product/add-to-cart/**")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())
                         .requestMatchers(antMatcher("/api/**")).permitAll()
                         .requestMatchers(antMatcher("/auth/sign-up/**")).permitAll()
                         .requestMatchers(antMatcher("/auth/login1")).permitAll()

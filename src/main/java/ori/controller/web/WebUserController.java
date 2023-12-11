@@ -1,6 +1,8 @@
 package ori.controller.web;
 
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +71,7 @@ public class WebUserController {
 				model.addAttribute("user", userModel);
 				
 				List<Order> listOrder = orderService.findOder(user.getUserId());
-				
+				Collections.sort(listOrder, Comparator.comparing(Order::getOrderId).reversed());
 				model.addAttribute("listOrder", listOrder);
 				
 				List<OrderDetail> listOderDetail = orderDetailService.findAll();
@@ -146,6 +148,7 @@ public class WebUserController {
 			model.addAttribute("user", userModel);
 			
 			List<Order> listOrder = orderService.findOder(user.getUserId());
+			Collections.sort(listOrder, Comparator.comparing(Order::getOrderId).reversed());
 			model.addAttribute("listOrder", listOrder);
 			
 			List<OrderDetail> listOderDetail = orderDetailService.findAll();

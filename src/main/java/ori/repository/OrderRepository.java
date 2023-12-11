@@ -1,5 +1,7 @@
 package ori.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -64,4 +66,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer>{
 	        + "GROUP BY q.quarter_number;"
 	    )
 	    List<Integer> getQuarterTotal();
+	
+	@Query(nativeQuery = true, value = "SELECT * FROM ORDERS ORDER BY date DESC")
+    Page<Order> findAllCustom(Pageable pageable);
 }
