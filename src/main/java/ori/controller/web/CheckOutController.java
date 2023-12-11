@@ -20,6 +20,7 @@ import ori.entity.Product;
 import ori.entity.User;
 import ori.model.CartModel;
 import ori.model.ProductModel;
+import ori.model.UserModel;
 import ori.service.ICartService;
 import ori.service.IUserService;
 
@@ -37,8 +38,17 @@ public class CheckOutController {
 	public String ThongtinKh(ModelMap model) {
 		double sum = 0;
 		User user = userService.getUserLogged();
-		String[] addressParts = user.getAddress().split(",");
-		model.addAttribute("addressParts", addressParts);
+		String add = user.getAddress();
+		String[] parts = add.split("\\s*,\\s*");
+		if(parts.length >= 3) {
+			model.addAttribute("city", parts[3].trim());
+			model.addAttribute("district", parts[2].trim());
+			model.addAttribute("town", parts[1].trim());
+			model.addAttribute("homeaddress", parts[0].trim());
+		}
+		else {
+			model.addAttribute("homeaddress", add.trim());
+		}
 		model.addAttribute("user", user);
 
 		List<Cart> list = cartService.findByUserId(user.getUserId());
