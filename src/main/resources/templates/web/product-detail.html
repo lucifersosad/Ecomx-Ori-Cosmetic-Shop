@@ -91,7 +91,7 @@
 							        // Lấy ID sản phẩm từ Thymeleaf expression
 							        var productId = "[(${detailPro.proId})]";
 							        var stock = "[(${detailPro.stock})]";
-							        var qty = document.getElementsByName("qty")[0].value;
+							        var qty = parseInt(document.getElementsByName("qty")[0].value);
 							        if (isNaN(qty)){
 										showError("Chỉ được nhập số");
 										return;
