@@ -14,10 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ori.common.enums.UserRole;
 import ori.entity.Roles;
 import ori.entity.User;
-import ori.model.LoginRequest;
+import ori.model.ResetPasswordRequest;
 import ori.model.SignUpRequest;
 import ori.model.VerifyCodeRequest;
 import ori.repository.RoleRepository;
@@ -29,7 +28,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
+
 
 
 @Controller
@@ -88,7 +87,7 @@ public class AuthController {
     @GetMapping(path = "/auth/verify-code")
     public String showVerifyCodePage(Model model) {
         model.addAttribute("verifyCodeRequest", new VerifyCodeRequest());
-        return "web/auth/verify-code"; // Create a new HTML page for code verification
+        return "web/auth/verify-code";
     }
 
     @PostMapping(path = "/auth/verify-code")
@@ -106,7 +105,7 @@ public class AuthController {
             // Update user's isEnabled status
             user.setIsEnabled(true);
             userService.save(user);
-            return "redirect:/auth/login"; // Redirect to the login page after successful verification
+            return "redirect:/auth/login";
         } else {
             result.rejectValue("code", null, "Invalid code");
             return "web/auth/verify-code";
@@ -121,21 +120,18 @@ public class AuthController {
     public String signUpPostForm(@ModelAttribute("user") @Valid SignUpRequest userReq, BindingResult result,
                                  Model model, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        // Thực hiện kiểm tra validation errors
+
         if (result.hasErrors()) {
             model.addAttribute("user", userReq);
             request.getSession().setAttribute("errorMessage", "error");
             return "redirect:/auth/sign-up";
         }
 
-        // Kiểm tra xem email đã được đăng ký trước đó chưa
         User user = userService.findByEmail(userReq.getEmail()).orElse(null);
         if(user != null) {
             result.rejectValue("email", null, "There is already an account registered with that email");
             return "redirect:/auth/sign-up";
         }
-
-        // Xử lý lưu thông tin người dùng mới
         Set<Roles> role = new HashSet<>();
         Roles roleuser = roleRepository.findById(1).orElse(null);
         if(roleuser != null){
@@ -166,6 +162,80 @@ public class AuthController {
         return "redirect:/auth/verify-code?="
                 ;
     }
+    @GetMapping("/auth/reset-password")
+    public String showResetPasswordForm(Model model) {
+        model.addAttribute("resetPasswordRequest", new ResetPasswordRequest());
+        return "web/auth/reset-password";
+    }
+
+    @PostMapping("/auth/reset-password")
+    public String processResetPassword(@ModelAttribute("resetPasswordRequest") @Valid ResetPasswordRequest resetPasswordRequest, BindingResult result, Model model, HttpServletRequest request) {
+        User user = userService.findByEmail(resetPasswordRequest.getEmail()).orElse(null);
+
+        if (user == null) {
+            // Handle invalid email
+            result.rejectValue("email", null, "Invalid email");
+            return "web/auth/reset-password";
+        }
+        String randomCode = email.getRandom();
+        user.setCode(randomCode);
+        email.sendEmail(user);
+        userService.save(user);
+
+
+
+        request.getSession().setAttribute("resetPasswordRequest", resetPasswordRequest);
+
+        return "redirect:/auth/enter-verification-code";
+    }
+
+    @GetMapping("/auth/enter-verification-code")
+    public String showEnterVerificationCodeForm(Model model, HttpServletRequest request,HttpServletResponse response) {
+        model.addAttribute("resetPasswordRequest", request.getSession().getAttribute("resetPasswordRequest"));
+        return "web/auth/enter-verification-code";
+    }
+
+    @PostMapping("/auth/enter-verification-code")
+    public String processEnterVerificationCode(@ModelAttribute("resetPasswordRequest") @Valid ResetPasswordRequest resetPasswordRequest, BindingResult result, Model model) {
+        User user = userService.findByEmail(resetPasswordRequest.getEmail()).orElse(null);
+        if (user == null) {
+            result.rejectValue("email", null, "Invalid email");
+            return "web/auth/reset-password";
+        }
+
+        // Check if the entered code matches the generated code
+        if (resetPasswordRequest.getCode().equals(user.getCode())) {
+            return "redirect:/auth/enter-new-password";
+        } else {
+            result.rejectValue("code", null, "Invalid code");
+            return "web/auth/enter-verification-code";
+        }
+    }
+
+    @GetMapping("/auth/enter-new-password")
+    public String showEnterNewPasswordForm(Model model ,HttpServletRequest request) {
+
+        model.addAttribute("resetPasswordRequest", request.getSession().getAttribute("resetPasswordRequest"));
+
+        request.getSession().removeAttribute("resetPasswordRequest");
+
+        return "web/auth/enter-new-password";
+    }
+
+    @PostMapping("/auth/enter-new-password")
+    public String processEnterNewPassword(@ModelAttribute("resetPasswordRequest") @Valid ResetPasswordRequest resetPasswordRequest, BindingResult result, Model model) {
+        User user = userService.findByEmail(resetPasswordRequest.getEmail()).orElse(null);
+        if (user == null) {
+            // Handle invalid email
+            result.rejectValue("email", null, "Invalid email");
+            return "web/auth/reset-password";
+        }
+        user.setPasswordHash(passwordEncoder.encode(resetPasswordRequest.getConfirmPassword()));
+        userService.save(user);
+        return "redirect:/auth/login";
+    }
+
+
 
 
     @GetMapping("/auth/logout")

@@ -84,8 +84,8 @@ public class SecurityConfiguration {
                 auth -> auth
                         .requestMatchers(antMatcher("/admin/**")).hasAnyAuthority(UserRole.ADMIN.getRoleName())
                         .requestMatchers(antMatcher("/api/**")).permitAll()
-                        .requestMatchers(antMatcher("/auth/sign-up/**")).permitAll()
-                        .requestMatchers(antMatcher("/auth/verify-code")).permitAll()
+                        .requestMatchers(antMatcher("/auth/**")).permitAll()
+//                        .requestMatchers(antMatcher("/auth/verify-code")).permitAll()
                         .requestMatchers(antMatcher("/**")).permitAll()
                         .anyRequest().authenticated()
         ).formLogin(login -> login

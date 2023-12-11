@@ -48,9 +48,9 @@ public class Email {
             // set to email address or destination email address
             mess.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
             // set email subject
-            mess.setSubject("Confim code");
+            mess.setSubject("Tài khoản tham gia Orishop của quý khách đã được đăng ký thành công.");
             // set message text
-            mess.setText("You is code: " + user.getCode());
+            mess.setText("Cảm ơn bạn đã tham Orishop! Đây là mã kích hoạt tài khoản của bạn : " + user.getCode());
             // send the message
             Transport.send(mess);
             test = true;

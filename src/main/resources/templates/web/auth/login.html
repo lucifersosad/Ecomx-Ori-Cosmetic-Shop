@@ -111,13 +111,22 @@
     <!-- Container-fluid starts -->
     <div class="container">
         <div class="row">
+            <div class="center-text">
+                <h2 style="color: #000000; font-family: 'Arial', sans-serif; font-size: xx-large;">OriShop</h2>
+                <h2 style="color: #000000; font-family: 'Arial', sans-serif; font-size: x-large;">Chào quý khách.</h2>
+            </div>
             <div class="col-sm-12">
+
                 <!-- Authentication card start -->
 
                 <form th:action="@{/auth/login}" method="post" role="form" >
+
                     <div class="card" style="margin: 20px auto 0 auto;max-width: 450px;">
+
                         <div class="card-body">
+
                             <div class="row mb-4">
+
 								<div class="col-md-12" th:if="${errorMessage}">
 									<h6 class="text-danger" th:text="'Tài khoản hoặc mật khẩu không đúng'"></h6>
 								</div>
@@ -140,7 +149,8 @@
                                 <div class="col-12">
                                     <div class="checkbox-fade fade-in-primary d-">
                                         <div class="text-create forgot-phone text-right f-right">
-                                            <a href="/auth/sign-up" class="text-right f-w-600">Create a Account</a>
+                                            <a href="/auth/sign-up" class="text-right f-w-600" style="color: #4caf50;">Create an Account/</a>
+                                            <a href="/auth/reset-password" class="text-right f-w-600" style="color: #cc0000;">Forgot your password</a>
                                         </div>
                                     </div>
                                 </div>
