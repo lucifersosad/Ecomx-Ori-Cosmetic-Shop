@@ -108,6 +108,7 @@ public class CheckOutController {
 		else {
 			discountRate = 0;
 		}
+		System.out.println("=============================" + discountRate + "========================================");
 		session.removeAttribute("promoCode");
 		//
 		int total = 0;
@@ -119,7 +120,9 @@ public class CheckOutController {
 		}
 		total =  total - (int)(total * discountRate);
 		if ("PayPal".equals(PaymentMethod)) {
+			redirectAttributes.addAttribute("discount", discountRate);
 			return "redirect:/payment/paypal/create";
+
 		} else if ("VNPAY".equals(PaymentMethod)) {
 			redirectAttributes.addAttribute("amount", String.valueOf(total));
 			return "redirect:/payment/vnpay/option";
@@ -147,7 +150,7 @@ public class CheckOutController {
 	public ResponseEntity<Double> DiscountPost(@RequestParam("promo") String promoCode, HttpSession session) {
 		Promotion promotion = promoService.findpromotionByname(promoCode);
 		double discountRate =0;
-		if(promotion.getIs_active() == 0) {
+		if(promotion.getIs_active() == 1) {
 			discountRate = (double) promotion.getDiscount_rate()/100;
 			session.setAttribute("promoCode", promotion);
 		}
