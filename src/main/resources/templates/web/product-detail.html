@@ -25,7 +25,10 @@
 						<div class="product-details">
 							<h2 class="product-name" th:text=${detailPro.name}></h2>
 							<div>
-								<h3 class="product-price-old">
+								<h3 th:if="${detailPro.sale == 0}">
+									[[${#numbers.formatDecimal(detailPro.oldPrice, 0, 'POINT', 0, 'POINT')}]].000 đ
+								</h3>
+								<h3 th:if="${detailPro.sale > 0}" class="product-price-old">
 									[[${#numbers.formatDecimal(detailPro.oldPrice, 0, 'POINT', 0, 'POINT')}]].000 đ
 								</h3>
 								<h3 class="product-price" th:if="${detailPro.sale > 0}">

@@ -38,7 +38,7 @@ import ori.service.IUserService;
 
 @RequestMapping(value = {"", "/", "home"})
 @Controller
-@RequestMapping(value = {"/", "home"})
+
 public class HomeController {
 	@Autowired
 	ICategoryService categoryService;
