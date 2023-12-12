@@ -169,49 +169,15 @@
 		<section class="rating">
 			<div class="container">
 				<div class="rating-carousel">
-					<div class="rating__box">
+					<div class="rating__box" th:each="rating : ${ratings}">
 						<ul class="d-flex px-0 rating__star mb-1">
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
+							<li th:each="i : ${#numbers.sequence(1, rating.rate)}"><i class="fa-solid fa-star"></i></li>
 						</ul>
-						<p class="rating__content mb-1">Tôi đã sử dụng sản phẩm này trong vài tuần và tôi rất ấn tượng. Da tôi trở nên mềm mịn hơn, mờ các vết thâm và tàn nhang. Tôi thật sự rất hạnh phúc với kết quả</p>
+						<p class="rating__content mb-1">[[${rating.content}]]</p>
 						<div class="rating__user">
-			            	<strong class="testimonial-name test_name">Khánh Linh</strong>
+			            	<strong class="testimonial-name test_name">[[${rating.nickname}]]</strong>
 			            	<span class="testimonial-name-divider"> / </span>             
-			            	<span class="testimonial-company test_company">Facebook</span>
-			          	</div>
-					</div>
-					<div class="rating__box">
-						<ul class="d-flex px-0 rating__star mb-1">
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-						</ul>
-						<p class="rating__content mb-1">Sản phẩm này thực sự đáng tiền! Màu sắc của son môi rất tươi sáng và lâu phai. Nó cũng không gây khô môi và có mùi thơm dễ chịu.</p>
-						<div class="rating__user">
-			            	<strong class="testimonial-name test_name">Phương Thảo</strong>
-			            	<span class="testimonial-name-divider"> / </span>             
-			            	<span class="testimonial-company test_company">Facebook</span>
-			          	</div>
-					</div>
-					<div class="rating__box">
-						<ul class="d-flex px-0 rating__star mb-1">
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-						</ul>
-						<p class="rating__content mb-1">Sản phẩm chăm sóc da này thực sự làm cho da tôi cải thiện rõ rệt. Tôi đã có vết nám và sau một thời gian sử dụng, chúng trở nên nhạt đi đáng kể. Tôi cảm thấy tự tin hơn về làn da của mình.</p>
-						<div class="rating__user">
-			            	<strong class="testimonial-name test_name">Vân Anh</strong>
-			            	<span class="testimonial-name-divider"> / </span>             
-			            	<span class="testimonial-company test_company">Facebook</span>
+			            	<span class="testimonial-company test_company">[[${rating.platform}]]</span>
 			          	</div>
 					</div>
 				</div>
