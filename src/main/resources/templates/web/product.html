@@ -76,11 +76,11 @@
 							<strong class="d-block py-2">[[${countPro}]] Items found </strong>
 							<div class="ms-auto">
 								<select class="form-select d-inline-block w-auto border pt-1" onchange="location=this.value;">
-									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=menu_order'}" th:selected="${orderby == 'menu_order'}">Thứ tự mặc định</option>
-									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=selling'}" th:selected="${orderby == 'selling'}">Thứ tự theo mực độ bán chạy</option>
-									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=date'}" th:selected="${orderby == 'date'}">Mới nhất</option>
-									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=price'}" th:selected="${orderby == 'price'}">Theo thứ tự giá: thấp đến cao</option>
-									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=price-desc'}" th:selected="${orderby == 'price-desc'}">Theo thứ tự giá: cao đến thấp</option>
+									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=menu_order' + '&brandID=' + ${brandID}}" th:selected="${orderby == 'menu_order'}">Thứ tự mặc định</option>
+									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=selling'+ '&brandID=' + ${brandID}}" th:selected="${orderby == 'selling'}">Thứ tự theo mực độ bán chạy</option>
+									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=date'+ '&brandID=' + ${brandID}}" th:selected="${orderby == 'date'}">Mới nhất</option>
+									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=price'+ '&brandID=' + ${brandID}}" th:selected="${orderby == 'price'}">Theo thứ tự giá: thấp đến cao</option>
+									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=price-desc'+ '&brandID=' + ${brandID}}" th:selected="${orderby == 'price-desc'}">Theo thứ tự giá: cao đến thấp</option>
 								</select>								
 							</div>
 						</header>
