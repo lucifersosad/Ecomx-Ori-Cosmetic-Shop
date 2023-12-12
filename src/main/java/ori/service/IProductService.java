@@ -39,4 +39,8 @@ public interface IProductService {
 	Page<Product> findAll(Pageable pageable);
 	
 	public Page<Product> findByCategory(Category category, Pageable pageable);
+
+	List<Product> findByCategory(Category category);
+
+	List<Product> findProductsByPriceRange(float start_price, float end_price);
 }

@@ -27,4 +27,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	@Query(value = "SELECT * FROM product where cateId = :id ORDER BY ABS(price - :proPrice) LIMIT 4 ", nativeQuery = true)
 	List<Product> findByCategory(@Param("id") Integer cateId, @Param("proPrice") float proPrice);
 	Page<Product> findByCategory(Category category, Pageable pageable);
+	List<Product> findByCategory(Category category);
+	@Query("SELECT p FROM Product p WHERE p.price >= :startPrice AND p.price <= :endPrice")
+    List<Product> findProductsByPriceRange(@Param("startPrice") float startPrice, @Param("endPrice") float endPrice);
 }

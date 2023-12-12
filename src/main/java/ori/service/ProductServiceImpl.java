@@ -87,6 +87,14 @@ public class ProductServiceImpl implements IProductService  {
 	public Page<Product> findByCategory(Category category, Pageable pageable) {
 		return productRepository.findByCategory(category, pageable);
 	}
+	@Override
+	public List<Product> findByCategory(Category category) {
+		return productRepository.findByCategory(category);
+	}
+	@Override
+	public List<Product> findProductsByPriceRange(float start_price, float end_price) {
+		return productRepository.findProductsByPriceRange(start_price, end_price);
+	}
 	
 	
 }
