@@ -109,15 +109,15 @@
 				</div>
 			</section>
 			
-			<section class="mb-5 section-brand">
+			<section class="mb-5 section-brand mt-5">
 				<h3 class="section-title section-title-center mt-5 mb-5">
 					<b></b>
 					<span class="section-title-main">Nhãn hàng</span>
 					<b></b>
 				</h3>
-				<div class="brand-carousel">
+				<div class="brand-carousel"> th:href="@{'/web/product/' + ${category.cateId} + '/page/1' }"
 					<div class="card" style="width: 16rem;" th:each="brand : ${brands}">
-						<a th:href="@{'/web/product/' + ${brand.brandId} + '/page/1' }" style="width: 100%; height: auto;">
+						<a th:href="@{'/web/product/0/page/1?brandID=' + ${brand.brandId}}" style="width: 100%; height: auto;">
 							<img th:src="${brand.logo}" class="card-img-top" alt="brand_logo" style="aspect-ratio: 16/9; width: 16rem; height: auto; object-fit: contain;">
 						</a>
 					</div>
