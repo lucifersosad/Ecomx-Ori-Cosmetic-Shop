@@ -49,11 +49,6 @@ ul {
 	color: #FBA1B7 !important;
 }
 
-.home .card {
-	border: none;
-	height: 100%;
-}
-
 .form-control {
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
@@ -167,4 +162,13 @@ ul {
     animation: bounceIn 2s;
 }
 
+.body {
+	position: relative;
+}
+
+.body .btn-ykien {
+	border: 1px solid var(--color-primary);
+	background-color: #fff;
+	color: var(--color-primary);
+}
  

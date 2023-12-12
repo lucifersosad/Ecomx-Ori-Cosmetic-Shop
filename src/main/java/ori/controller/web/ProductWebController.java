@@ -69,8 +69,11 @@ public class ProductWebController {
             @RequestParam(name="min_price", defaultValue = "0") int min_price,
             @RequestParam(name="max_price", defaultValue = "0") int max_price) {	
 		
-		
-		
+		Optional<Category> optCate1 = categoryService.findById(cateID);
+		if (optCate1.isPresent()) {
+			Category cate = optCate1.get();
+			model.addAttribute("cate", cate);
+		}
 		List<Category> listCate = categoryService.findAll();
 		model.addAttribute("listAllCategory", listCate);	
 		
@@ -254,6 +257,7 @@ public class ProductWebController {
 				}			    
 			}	
 		}
+		model.addAttribute("selectedCategoryId", cateID);
 		return "web/product";
 	}
 	
@@ -384,6 +388,9 @@ public class ProductWebController {
 		for (Cart cart : list) {
 			System.out.println(cart.getProduct().getProId());
 			if(cart.getProduct().getProId() - proId == 0) {
+				if (cart.getQuantity() >= cart.getProduct().getStock()) {
+					return "redirect:/cart";
+				}
 				quatity = cart.getQuantity()+qty;
 				cart.setQuantity(quatity);
 				cartService.save(cart);
@@ -402,7 +409,7 @@ public class ProductWebController {
 	@GetMapping(value = "addToCart/{proId}&&{qty}")
     public ResponseEntity<String> addToCart(@PathVariable("proId") Integer proId, @PathVariable("qty") Integer qty) {
         try {
-        	String successMessage = "Product added to cart successfully.";
+        	String successMessage = "Thêm vào giỏ hàng thành công";
         	
         	Optional<Product> optProduct = proService.findById(proId);
     		
@@ -423,6 +430,10 @@ public class ProductWebController {
     		for (Cart cart : list) {
     			System.out.println(cart.getProduct().getProId());
     			if(cart.getProduct().getProId() - proId == 0) {
+    				if (cart.getQuantity() == cart.getProduct().getStock()) {
+    					String errorMessage = "Số lượng sản phẩm trong giỏ hàng lớn hơn số lượng tồn kho.";
+    					return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+    				}
     				quatity = cart.getQuantity()+qty;
     				cart.setQuantity(quatity);
     				cartService.save(cart);

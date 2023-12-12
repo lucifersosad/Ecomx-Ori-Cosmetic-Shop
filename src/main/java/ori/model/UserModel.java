@@ -18,9 +18,6 @@ public class UserModel {
 	private String phone;
 	private String address;
 	private Boolean active;
-	private MultipartFile imageFile;
 	private Boolean isEdit=false;
 	private String code;
-	
-	
 }

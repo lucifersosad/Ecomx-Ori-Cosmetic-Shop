@@ -53,6 +53,12 @@
 							  	</span>
 								<i class="fa-solid fa-cart-shopping"></i>
 							</a>
+							<ul class="dropdown-menu">
+								<li><a sec:authorize="hasAuthority('ADMIN')" class="dropdown-item" th:href="@{admin}">Admin</a></li>
+								<li><a sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{my-account}">My profile</a></li>
+								<li><a sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{my-account/don-hang}">My orders</a></li>
+								<li><a sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{auth/logout}">Logout</a></li>
+							</ul>
 						</li>
 					</ul>
 				</div>

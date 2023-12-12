@@ -36,7 +36,7 @@
 	                        <div class="input-group-prepend">
 	                          <button class="btn btn-outline-primary js-btn-minus btn-quantity" style="border-top-right-radius: 0;border-bottom-right-radius: 0;" type="button">&minus;</button>
 	                        </div>
-	                        <input type="text" class="form-control text-center" th:value="${item.quantity.quantity}" th:attr="data-proid=${item.product.proId}"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+	                        <input type="text" class="form-control text-center quantityInputCart" th:value="${item.quantity.quantity}" th:attr="data-proid=${item.product.proId}, data-stock=${item.product.stock}"  placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
 	                        <div class="input-group-append">
 	                          <button class="btn btn-outline-primary js-btn-plus btn-quantity" style="border-top-left-radius: 0;border-bottom-left-radius: 0;" type="button">&plus;</button>
 	                        </div>
