@@ -14,6 +14,12 @@
 								th:value="@{'/web/product/' + ${t.cateId} + '/page/' + '1'}" th:text="${t.name}"
 								th:class="${t.cateId == targetactive ? 'selected' : ''}" th:selected="${t.cateId == selectedCategoryId}"></option>
 						</select>
+						<select id="mySelectBrand" onchange="location=this.value;">	
+							<option th:value="@{'/web/product/0/page/1?brandID=0'}">Select Brand</option>
+							<option th:each="t : ${listAllBrand}"
+								th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?brandID=' + ${t.brandId}}" th:text="${t.name}"
+								th:class="${t.brandId == targetactive ? 'selected' : ''}" th:selected="${t.brandId == brandID}"></option>
+						</select>
 
 						<!-- Toggle button -->
 						<button class="btn btn-outline-secondary mb-3 w-100 d-lg-none" type="button"
@@ -39,6 +45,7 @@
 												<div>
 													<input type="hidden" id="range-price-min" th:value="${min_price}" name="min_price" />
 													<input type="hidden" id="range-price-max" th:value="${max_price}" name ="max_price"/>
+													<input type="hidden" th:value="${brandID}" name ="brandID"/>
 												</div>
 												<div>
 													<input type="text" class="js-range-slider" value="" 
@@ -56,6 +63,7 @@
 													class="btn btn-white w-100 border border-secondary">Apply</button>
 											</form>
 										</div>
+										
 									</div>
 								</div>
 							</div>
@@ -67,20 +75,13 @@
 						<header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
 							<strong class="d-block py-2">[[${countPro}]] Items found </strong>
 							<div class="ms-auto">
-								<select class="form-select d-inline-block w-auto border pt-1">
-									<option value="0">Best match</option>
-									<option value="1">Recommended</option>
-									<option value="2">High rated</option>
-									<option value="3">Randomly</option>
-								</select>
-								<div class="btn-group shadow-0 border">
-									<a href="#" class="btn btn-light" title="List view">
-										<i class="fa fa-bars fa-lg"></i>
-									</a>
-									<a href="#" class="btn btn-light active" title="Grid view">
-										<i class="fa fa-th fa-lg"></i>
-									</a>
-								</div>
+								<select class="form-select d-inline-block w-auto border pt-1" onchange="location=this.value;">
+									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=menu_order' + '&brandID=' + ${brandID}}" th:selected="${orderby == 'menu_order'}">Thứ tự mặc định</option>
+									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=selling'+ '&brandID=' + ${brandID}}" th:selected="${orderby == 'selling'}">Thứ tự theo mực độ bán chạy</option>
+									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=date'+ '&brandID=' + ${brandID}}" th:selected="${orderby == 'date'}">Mới nhất</option>
+									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=price'+ '&brandID=' + ${brandID}}" th:selected="${orderby == 'price'}">Theo thứ tự giá: thấp đến cao</option>
+									<option th:value="@{'/web/product/' + ${cateID} + '/page/' + '1?orderby=price-desc'+ '&brandID=' + ${brandID}}" th:selected="${orderby == 'price-desc'}">Theo thứ tự giá: cao đến thấp</option>
+								</select>								
 							</div>
 						</header>
 
@@ -113,18 +114,18 @@
 						<nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
 							<ul class="pagination">
 								<li class="page-item">
-									<a class="page-link" th:href="@{'/web/product/' + ${cateID} + '/page/1'}">Trang
+									<a class="page-link" th:href="@{'/web/product/' + ${cateID} + '/page/1' + '?brandID=' +${brandID}}">Trang
 										đầu</a>
 								</li>
 								<th:block th:each="i : ${#numbers.sequence(startPage, endPage)}">
 									<li th:class="${i == currentPage ? 'page-item active' : 'page-item'}">
-										<a class="page-link" th:href="@{'/web/product/' + ${cateID} + '/page/' + ${i}}"
+										<a class="page-link" th:href="@{'/web/product/' + ${cateID} + '/page/' + ${i} + '?brandID=' +${brandID}}"
 											th:text="${i}"></a>
 									</li>
 								</th:block>
 								<li class="page-item">
 									<a class="page-link"
-										th:href="@{'/web/product/' + ${cateID} + '/page/' + ${lastPage}}">Trang cuối</a>
+										th:href="@{'/web/product/' + ${cateID} + '/page/' + ${lastPage} + '?brandID=' +${brandID}}">Trang cuối</a>
 								</li>
 							</ul>
 						</nav>
