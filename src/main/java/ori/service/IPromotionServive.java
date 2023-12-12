@@ -14,4 +14,6 @@ public interface IPromotionServive {
 
 	Promotion findpromotionByname(String name);
 
+	long count();
+
 }

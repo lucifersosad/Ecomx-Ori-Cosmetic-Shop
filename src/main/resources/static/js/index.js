@@ -20,6 +20,7 @@ $(document).ready(function() {
 			$("#totalValue").html(originalTotalValue);
 			$("#codOption").css("display", "none");
 			$("#total").css("font-weight", "normal");
+			//gọi đến hành động bên dưới
 			$('#applydiscount').trigger('click');
 		}
 	});
@@ -34,52 +35,74 @@ $(document).ready(function() {
 		var totalValueFloat = parseFloat(totalValues);
 
 		var promoCode = $('#promoInput').val();
+		if (promoCode !== "") {
+			$.ajax({
+				url: '/CheckOut/DiscountPost',
+				method: 'POST',
+				dataType: 'json',
+				data: { promo: promoCode },
+				success: function(data) {
+					var receivedInteger = parseFloat(data);
+					if (receivedInteger === 2) {
+						$('#collapseExample').collapse('hide');
+						$('#error').text('Áp dụng mã không thành công');
+					}
+					else if (receivedInteger === 0) {
+						$('#promoInput').val('');
+						$('#collapseExample').collapse('hide');
+						$('#error').text('Mã đã được dùng');
+					}
+					else {
+						var afterDiscount = receivedInteger * subtotal * 1000;
+						var total = afterDiscount.toLocaleString('vi-VN');
+						var totalafter = ((totalValueFloat * 1000) - afterDiscount).toLocaleString('vi-VN');
 
+						$('#discountvalue').text('-' + total + ' đ');
+
+						$("#totalValue").html(totalafter + ' đ');
+
+						$('#collapseExample').collapse('hide');
+						$('#mess').text('Áp dụng mã thành công');
+					}
+					setTimeout(hideMessages, 1000);
+				},
+				error: function(error) {
+					console.error('Lỗi khi gửi yêu cầu:', error);
+					$('#collapseExample').collapse('hide');
+					$('#error').text('Lỗi');
+					setTimeout(hideMessages, 3000);
+				}
+			});
+		}
+	});
+
+	$('#layma').click(function() {
 		$.ajax({
-			url: '/CheckOut/DiscountPost',
-			method: 'POST',
-			dataType: 'json',
-			data: { promo: promoCode },
+			url: '/CheckOut/RandomDiscount',
+			method: 'GET',
 			success: function(data) {
-				var receivedInteger = parseFloat(data);
-				var afterDiscount = receivedInteger * subtotal * 1000;
-				var total = afterDiscount.toLocaleString('vi-VN');
-				var totalafter = ((totalValueFloat * 1000) - afterDiscount).toLocaleString('vi-VN');
-
-				$('#discountvalue').text('-' + total + ' đ');
-
-				$("#totalValue").html(totalafter + ' đ');
-
-				$('#collapseExample').collapse('hide');
-
-				$('#mess').text('Áp dụng mã thành công');
-				setTimeout(hideMessages,1000);
+				var collapseExample = $('#collapseExample');
+				if (!collapseExample.hasClass('show')) {
+					collapseExample.collapse('toggle');
+				}
+				$('#promoInput').val(data);
+				console.log('ma giam gia', data);
 			},
 			error: function(error) {
-				console.error('Lỗi khi gửi yêu cầu:', error);
-				$('#collapseExample').collapse('hide');
-				$('#error').text('Áp dụng mã không thành công');
-				setTimeout(hideMessages,3000);
+				console.error('Lỗi khi lấy dữ liệu:', error);
 			}
 		});
 	});
+	$('#layma').one('click', function() {
+		$(this).prop('disabled', true);
+	});
 
-	/*$('#anvaoday').click(function() {
-		var messes = $('#mess').html().trim();
-		var errorr = $('#error').html().trim();
-
-		if (messes !== '') {
-			$('#mess').hide();
-		}
-		if (errorr !== '') {
-			$('#error').hide();
-		}
-	});*/
 	function hideMessages() {
 		$("#mess").hide();
 		$("#error").hide();
 	}
 	//----------------------------------
+
 });
 
 
