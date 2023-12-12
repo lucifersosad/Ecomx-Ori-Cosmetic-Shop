@@ -2,22 +2,31 @@ package ori.controller.web;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.validation.Valid;
 import ori.entity.Brand;
 import ori.entity.Cart;
 import ori.entity.Category;
 import ori.entity.Product;
+import ori.entity.Rating;
 import ori.entity.User;
+import ori.model.RatingModel;
 import ori.service.IBrandService;
 import ori.service.ICartService;
 import ori.service.ICategoryService;
 import ori.service.IProductService;
+import ori.service.IRatingService;
 import ori.service.IUserService;
 
 @RequestMapping(value = {"", "/", "home"})
@@ -33,12 +42,15 @@ public class HomeController {
 	IUserService userService;
 	@Autowired
 	ICartService cartService;
+	@Autowired
+	IRatingService ratingService;
 
 	@GetMapping()
 	public String trangchu(ModelMap model) {
 		List<Product> products = productService.findProductsMostSaleByCategory(); 
 		List<Brand> brands = brandService.findAll();
 		List<Category> categories = categoryService.findTop10(); 
+		List<Rating> ratings = ratingService.findAllRatingDisplayed();
 		User userLogged = userService.getUserLogged();
 		if (userLogged != null) {
 			List<Cart> list = cartService.findByUserId(userLogged.getUserId());
@@ -47,6 +59,7 @@ public class HomeController {
 		model.addAttribute("brands", brands);
 		model.addAttribute("categories", categories);
 		model.addAttribute("products", products);
+		model.addAttribute("ratings", ratings);
 		return "web/index";
 	}
 	
@@ -63,6 +76,25 @@ public class HomeController {
 	        return total;
 	    }
 	    return 0;
+	}
+	
+	@GetMapping("/add-rating")
+	public String add(@RequestParam("nickname") String nickname,
+	                  @RequestParam("content") String content,
+	                  @RequestParam("platform") String platform,
+	                  @RequestParam("rate") int rate,
+	                  ModelMap model) {
+
+	    Rating entity = new Rating();
+	    entity.setNickname(nickname);
+	    entity.setContent(content);
+	    entity.setPlatform(platform);
+	    entity.setRate(rate);
+	    entity.setDisplay(0);
+
+	    ratingService.save(entity);
+
+	    return "redirect:/"; // Điều hướng đến trang chính hoặc trang khác tùy ý
 	}
 
 }

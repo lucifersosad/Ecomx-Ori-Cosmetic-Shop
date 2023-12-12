@@ -27,7 +27,7 @@
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css}"/>
 </head>
 
-<body>
+<body class="body">
 	<header class="row header">
 		<div class="col">
 			<div th:replace="web/fragments/header :: header"></div>
@@ -37,7 +37,47 @@
 	<main>
 		<div layout:fragment="content"></div>
 	</main>
-
+	<button type="button" class="btn btn-primary btn-ykien" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">GỬI PHẢN HỒI</button>
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-scrollable">
+	    <div class="modal-content">
+	      <form action="/add-rating" method="get">
+			  <div class="modal-header">
+	        <h1 class="modal-title fs-5" id="exampleModalLabel">PHẢN HỒI KHÁCH HÀNG</h1>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+			<div class="mb-3">
+	            <label for="nickname" class="col-form-label">Tên khách hàng</label>
+	            <input type="text" class="form-control" id="nickname" th:name="nickname" required>
+	          </div>
+	          <div class="mb-3">
+	            <label for="content" class="col-form-label">Lời nhắn:</label>
+	            <textarea class="form-control" id="content" name="content" required></textarea>
+	          </div>
+	          <div class="mb-3">
+	            <label for="platform" class="col-form-label">Bạn biết shop qua nền tảng nào:</label>
+	            <select class="form-control" th:name="platform">
+					<option th:value="Facebook">Facebook</option>
+					<option defaultValue th:value="Instagram">Instagram</option>
+					<option th:value="Internet">Internet</option>
+				</select>
+	          </div>
+	          <div class="mb-3">
+	            <label for="rate" class="col-form-label">Số sao:</label>
+	            <select th:name="rate" class="form-control">
+					<option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}">[[${i}]]</option>
+				</select>
+	          </div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+	        <button type="submit" class="btn btn-primary">Gửi</button>
+	      </div>
+		  </form>
+	    </div>
+	  </div>
+	</div>
 	<footer class="row text-center text-lg-start text-muted mt-3" style="background-color: #f5f5f5;">
 		<div class="col">
 			<div th:replace="web/fragments/footer :: footer"></div>
