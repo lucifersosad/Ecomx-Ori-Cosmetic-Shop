@@ -4,12 +4,15 @@ $(document).ready(function() {
 	$("#cod").on("click", function() {
 		$("#codOption").css("display", "block");
 		var codHtml = $("#codValue").html();
-		var codValue = parseFloat(codHtml.replace(/[^\d.]/g, ''));
+		var codValue = parseFloat(codHtml.replace(/\D/g, ''));
 
 		var totalHtml = $("#totalValue").html();
-		var totalValue = parseFloat(totalHtml.replace(/[^\d.]/g, ''));
+		var totalValue = parseFloat(totalHtml.replace(/\D/g, ''));
 
-		$("#totalValue").html(((codValue + totalValue) * 1000).toLocaleString('vi-VN') + ' đ');
+		$("#totalValue").html((codValue + totalValue).toLocaleString('vi-VN') + ' đ');
+		console.log('giá vận chuyển : ', $("#subTotalValue").html());
+		console.log('giá : ', codValue);
+		console.log('giá cuối: ', codValue + totalValue);
 		$("#codOption").css("font-weight", "bold");
 		$("#total").css("font-weight", "bold");
 	});
@@ -27,11 +30,11 @@ $(document).ready(function() {
 	//----------------------- xử lí hiển thị liên quan giảm giá checkout
 	$('#applydiscount').on('click', function() {
 		var totalValue = $("#subTotalValue").html();
-		var cleanPrice = totalValue.replace(/[^\d.-]/g, '');
+		var cleanPrice = totalValue.replace(/\D/g, '');
 		var subtotal = parseFloat(cleanPrice);
 
 		var totalHtml = $("#totalValue").html();
-		var totalValues = parseFloat(totalHtml.replace(/[^\d.]/g, ''));
+		var totalValues = parseFloat(totalHtml.replace(/\D/g, ''));
 		var totalValueFloat = parseFloat(totalValues);
 
 		var promoCode = $('#promoInput').val();
@@ -53,9 +56,9 @@ $(document).ready(function() {
 						$('#error').text('Mã đã được dùng');
 					}
 					else {
-						var afterDiscount = receivedInteger * subtotal * 1000;
+						var afterDiscount = receivedInteger * subtotal;
 						var total = afterDiscount.toLocaleString('vi-VN');
-						var totalafter = ((totalValueFloat * 1000) - afterDiscount).toLocaleString('vi-VN');
+						var totalafter = ((totalValueFloat) - afterDiscount).toLocaleString('vi-VN');
 
 						$('#discountvalue').text('-' + total + ' đ');
 
