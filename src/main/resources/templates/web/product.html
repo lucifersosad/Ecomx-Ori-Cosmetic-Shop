@@ -8,11 +8,11 @@
 				<div class="row">
 					<!-- sidebar -->
 					<div class="col-lg-3">
-						<select id="mySelect" onchange="location=this.value;text=this.textContent">	
+						<select id="mySelect" onchange="location=this.value;">	
 							<option th:value="@{/web/product/0/page/1}">Select Category</option>
 							<option th:each="t : ${listAllCategory}"
 								th:value="@{'/web/product/' + ${t.cateId} + '/page/' + '1'}" th:text="${t.name}"
-								th:class="${t.cateId == targetactive ? 'selected' : ''}"></option>
+								th:class="${t.cateId == targetactive ? 'selected' : ''}" th:selected="${t.cateId == selectedCategoryId}"></option>
 						</select>
 
 						<!-- Toggle button -->
@@ -35,27 +35,25 @@
 									<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show"
 										aria-labelledby="headingThree">
 										<div class="accordion-body">
-											<form>
+											<form action="" method="get">
 												<div>
-													<input type="text" class="js-range-slider" name="my_range" value="" 
+													<input type="hidden" id="range-price-min" th:value="${min_price}" name="min_price" />
+													<input type="hidden" id="range-price-max" th:value="${max_price}" name ="max_price"/>
+												</div>
+												<div>
+													<input type="text" class="js-range-slider" value="" 
 														data-type="double"
-														th:attr="data-min=${min_price}, data-max=${max_price}, data-from=${min_price}, data-to=${max_price}"
-												        data-skin="round"
-													/>
-													
+														th:attr="data-type='double', data-min=${min_price}, data-max=${max_price}, data-from=${min_form}, data-to=${max_form}, data-skin='round'" />
 												</div>
 												<div class="mb-3 mt-3 d-flex justify-content-between align-items-center">
 													<span>Giá:</span> 
 													<div>
-														<span id="ui-price-min">[[${min_price}]].000đ</span> - <span id="ui-price-max">[[${max_price}]].000đ</span>
+														<span id="ui-price-min">[[${min_form}]].000đ</span> - <span id="ui-price-max">[[${max_form}]].000đ</span>
 													</div>
 												</div>
-												<div>
-													<input type="hidden" id="range-price-min" th:value="${min_price}" />
-													<input type="hidden" id="range-price-max" th:value="${max_price}"/>
-												</div>
-												<button type="button"
-													class="btn btn-white w-100 border border-secondary">apply</button>
+												
+												<button type="submit"
+													class="btn btn-white w-100 border border-secondary">Apply</button>
 											</form>
 										</div>
 									</div>
@@ -126,7 +124,7 @@
 								</th:block>
 								<li class="page-item">
 									<a class="page-link"
-										th:href="@{'/web/product/' + ${cateID} + '/page/' + totalPages}">Trang cuối</a>
+										th:href="@{'/web/product/' + ${cateID} + '/page/' + ${lastPage}}">Trang cuối</a>
 								</li>
 							</ul>
 						</nav>
@@ -136,7 +134,6 @@
 			</div>
 		</div>
 	</div>
-
 </body>
 
 </html>

@@ -247,13 +247,14 @@ $(document).ready(function() {
 	});
 });
 
-$(document).ready(function() {
-	$(".js-range-slider").ionRangeSlider({
+$(document).ready(function() {  
+	console.log($("#range-price-min").val());
+    $(".js-range-slider").ionRangeSlider({
 		hide_min_max: true,
 		hide_from_to: true,
 		onChange: updateInputs,
 	});
-	
+    
 	function updateInputs(data) {
 		var $inputFrom = $("#range-price-min");
 	    var $inputTo = $("#range-price-max");

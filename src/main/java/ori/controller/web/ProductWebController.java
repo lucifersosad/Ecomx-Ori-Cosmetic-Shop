@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,12 +65,20 @@ public class ProductWebController {
 	public String viewProduct(
 			ModelMap model,
 			@PathVariable("cateID") Integer cateID,
-            @PathVariable("pageNo") Integer pageNo) {		
+            @PathVariable("pageNo") Integer pageNo,
+            @RequestParam(name="min_price", defaultValue = "0") int min_price,
+            @RequestParam(name="max_price", defaultValue = "0") int max_price) {	
+		
+		Optional<Category> optCate1 = categoryService.findById(cateID);
+		if (optCate1.isPresent()) {
+			Category cate = optCate1.get();
+			model.addAttribute("cate", cate);
+		}
 		List<Category> listCate = categoryService.findAll();
 		model.addAttribute("listAllCategory", listCate);	
 		
 		if (cateID == 0) {
-			int pageSize = 27;
+			int pageSize = 21;
 			int totalProducts = proService.findAll().size(); // Số lượng sản phẩm tổng cộng trong cơ sở dữ liệu
 			int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
 			
@@ -78,7 +87,10 @@ public class ProductWebController {
 		        startPage = 1;
 		        if (totalPages > 0)
 		        	endPage = totalPages;
-		        else endPage = 1;
+		        else {
+					endPage = 1;
+					totalPages = 1;
+				}
 		    } else {
 		        if (pageNo <= 3) {
 		            startPage = 1;
@@ -94,20 +106,66 @@ public class ProductWebController {
 		    
 		    model.addAttribute("startPage", startPage);
 		    model.addAttribute("endPage", endPage);
+		    model.addAttribute("lastPage", totalPages);
 			if (pageNo > totalPages) {
 			    pageNo = totalPages; // Đặt pageNo bằng totalPages nếu vượt quá số trang thực tế
 			}
 			Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
 			Page<Product> listPro = proService.findAll(pageable);
-			model.addAttribute("cateID", cateID);
-			model.addAttribute("countPro", totalProducts);
-			model.addAttribute("listAllProduct", listPro);
-			model.addAttribute("currentPage", pageNo);
+			if (min_price == 0 && max_price == 0) {
+				model.addAttribute("cateID", cateID);
+				model.addAttribute("countPro", totalProducts);
+				model.addAttribute("listAllProduct", listPro);
+				model.addAttribute("currentPage", pageNo);
 
-			double minPrice = listPro.stream().mapToDouble(Product::getPrice).min().orElse(0);
-			double maxPrice = listPro.stream().mapToDouble(Product::getPrice).max().orElse(0);
-			model.addAttribute("min_price", minPrice);
-			model.addAttribute("max_price", maxPrice);
+				double minPriceSale = listPro.stream()
+				        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
+				        .min()
+				        .orElse(0);
+
+				// Tính giá bán tối đa sau khi giảm giá
+				double maxPriceSale = listPro.stream()
+				        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
+				        .max()
+				        .orElse(0);
+
+				int minPriceSaleInt = (int) Math.round(minPriceSale);
+				int maxPriceSaleInt = (int) Math.round(maxPriceSale);
+				model.addAttribute("min_price", minPriceSaleInt);
+				model.addAttribute("max_price", maxPriceSaleInt);
+				model.addAttribute("min_form", minPriceSaleInt);
+				model.addAttribute("max_form", maxPriceSaleInt);
+			}
+			else {
+				List<Product> filteredList = listPro.getContent().stream()
+					    .filter(product -> product.getPrice() * (100-product.getSale()) / 100 >= min_price && product.getPrice() * (100-product.getSale()) / 100 <= max_price)
+					    .collect(Collectors.toList());
+				model.addAttribute("cateID", cateID);
+				model.addAttribute("countPro", totalProducts);
+				model.addAttribute("listAllProduct", filteredList);
+				model.addAttribute("currentPage", pageNo);
+
+				double minPriceSale = listPro.stream()
+				        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
+				        .min()
+				        .orElse(0);
+
+				// Tính giá bán tối đa sau khi giảm giá
+				double maxPriceSale = listPro.stream()
+				        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
+				        .max()
+				        .orElse(0);
+
+				int minPriceSaleInt = (int) Math.round(minPriceSale);
+				int maxPriceSaleInt = (int) Math.round(maxPriceSale);
+				model.addAttribute("min_price", minPriceSaleInt);
+				model.addAttribute("max_price", maxPriceSaleInt);
+				model.addAttribute("min_form", min_price);
+				model.addAttribute("max_form", max_price);
+				System.out.println("=================" + min_price + " " + "========================");
+				System.out.println("=================" + max_price + " " + "========================");
+			}
+			
 		}
 		else {		
 			Optional<Category> optCate = categoryService.findById(cateID);
@@ -117,11 +175,14 @@ public class ProductWebController {
 				int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
 				
 				int startPage, endPage;
-			    if (totalPages <= 5) {
-			        startPage = 1;
-			        if (totalPages > 0)
-			        	endPage = totalPages;
-			        else endPage = 1;
+				if (totalPages <= 5) {
+					startPage = 1;
+					if (totalPages > 0)
+						endPage = totalPages;
+					else {
+						endPage = 1;
+						totalPages = 1;
+					}
 			    } else {
 			        if (pageNo <= 3) {
 			            startPage = 1;
@@ -134,24 +195,69 @@ public class ProductWebController {
 			            endPage = pageNo + 2;
 			        }
 			    }
-			    
-			    model.addAttribute("startPage", startPage);
+				model.addAttribute("startPage", startPage);
 			    model.addAttribute("endPage", endPage);
+			    model.addAttribute("lastPage", totalPages);
 				if (pageNo > totalPages) {
 				    pageNo = totalPages; // Đặt pageNo bằng totalPages nếu vượt quá số trang thực tế
 				}
-				Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-				Page<Product> listPro = proService.findByCategory(optCate.get(),pageable);
-				model.addAttribute("cateID", cateID);
-				model.addAttribute("countPro", totalProducts);
-				model.addAttribute("listAllProduct", listPro);
-				model.addAttribute("currentPage", pageNo);
-				double minPrice = listPro.stream().mapToDouble(Product::getPrice).min().orElse(0);
-				double maxPrice = listPro.stream().mapToDouble(Product::getPrice).max().orElse(0);
-				model.addAttribute("min_price", minPrice);
-				model.addAttribute("max_price", maxPrice);
+				if (min_price == 0 && max_price == 0) {
+					
+					Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+					Page<Product> listPro = proService.findByCategory(optCate.get(),pageable);
+					model.addAttribute("cateID", cateID);
+					model.addAttribute("countPro", totalProducts);
+					model.addAttribute("listAllProduct", listPro);
+					model.addAttribute("currentPage", pageNo);
+					double minPriceSale = listPro.stream()
+					        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
+					        .min()
+					        .orElse(0);
+
+					// Tính giá bán tối đa sau khi giảm giá
+					double maxPriceSale = listPro.stream()
+					        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
+					        .max()
+					        .orElse(0);
+
+					int minPriceSaleInt = (int) Math.round(minPriceSale);
+					int maxPriceSaleInt = (int) Math.round(maxPriceSale);
+					model.addAttribute("min_price", minPriceSaleInt);
+					model.addAttribute("max_price", maxPriceSaleInt);
+					model.addAttribute("min_form", minPriceSaleInt);
+					model.addAttribute("max_form", maxPriceSaleInt);
+				}
+				else {					
+					Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+					Page<Product> listPro = proService.findByCategory(optCate.get(),pageable);
+					List<Product> filteredList = listPro.getContent().stream()
+						    .filter(product -> product.getPrice() * (100-product.getSale()) / 100 >= min_price && product.getPrice() * (100-product.getSale()) / 100 <= max_price)
+						    .collect(Collectors.toList());
+					model.addAttribute("cateID", cateID);
+					model.addAttribute("countPro", totalProducts);
+					model.addAttribute("listAllProduct", filteredList);
+					model.addAttribute("currentPage", pageNo);
+					double minPriceSale = listPro.stream()
+					        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
+					        .min()
+					        .orElse(0);
+
+					// Tính giá bán tối đa sau khi giảm giá
+					double maxPriceSale = listPro.stream()
+					        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
+					        .max()
+					        .orElse(0);
+
+					int minPriceSaleInt = (int) Math.round(minPriceSale);
+					int maxPriceSaleInt = (int) Math.round(maxPriceSale);
+					model.addAttribute("min_price", minPriceSaleInt);
+					model.addAttribute("max_price", maxPriceSaleInt);
+					model.addAttribute("min_form", min_price);
+					model.addAttribute("max_form", max_price);
+				}			    
 			}	
 		}
+		model.addAttribute("selectedCategoryId", cateID);
 		return "web/product";
 	}
 	
