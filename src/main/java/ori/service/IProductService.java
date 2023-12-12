@@ -43,4 +43,6 @@ public interface IProductService {
 	List<Product> findByCategory(Category category);
 
 	List<Product> findProductsByPriceRange(float start_price, float end_price);
+	
+	List<Product> findProductsMostOrder();
 }

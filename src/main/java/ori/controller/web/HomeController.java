@@ -55,7 +55,8 @@ public class HomeController {
 
 	@GetMapping()
 	public String trangchu(ModelMap model) {
-		List<Product> products = productService.findProductsMostSaleByCategory(); 
+		List<Product> productsMostSale = productService.findProductsMostSaleByCategory(); 
+		List<Product> productsMostOrder = productService.findProductsMostOrder(); 
 		List<Brand> brands = brandService.findAll();
 		List<Category> categories = categoryService.findTop10(); 
 		List<Rating> ratings = ratingService.findAllRatingDisplayed();
@@ -66,7 +67,7 @@ public class HomeController {
 		}
 		model.addAttribute("brands", brands);
 		model.addAttribute("categories", categories);
-		model.addAttribute("products", products);
+		model.addAttribute("products", productsMostOrder);
 		model.addAttribute("ratings", ratings);
 		return "web/index";
 	}
