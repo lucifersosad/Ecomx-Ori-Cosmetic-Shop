@@ -37,6 +37,7 @@ public class PaypalService {
 	public static final double unit = (double) 0.000041;
 	public Payment createPayment(
 			Integer userId,
+			Double discount,
 			String currency, 
 			String method,
 			String intent,
@@ -50,7 +51,7 @@ public class PaypalService {
 		for (Cart cart : carts) {		
 			Item item = new Item();
 			float sale = cart.getProduct().getSale();
-			Double price = (Double) unit * cart.getProduct().getPrice() * 1000 * (100 - sale) / 100.0;
+			Double price = (Double) (unit * cart.getProduct().getPrice() * 1000 * (100 - sale) / 100.0) * (1-discount);
 			price = new BigDecimal(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
 		    int quantity = cart.getQuantity();
 		    total += quantity * price;
