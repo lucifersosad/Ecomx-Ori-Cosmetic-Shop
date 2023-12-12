@@ -1,9 +1,13 @@
 package ori.controller.web;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -11,16 +15,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ori.config.scurity.AuthUser;
 import jakarta.validation.Valid;
 import ori.entity.Brand;
 import ori.entity.Cart;
 import ori.entity.Category;
 import ori.entity.Product;
-import ori.entity.Rating;
 import ori.entity.User;
+import ori.model.UserModel;
+import ori.entity.Rating;
 import ori.model.RatingModel;
 import ori.service.IBrandService;
 import ori.service.ICartService;
@@ -31,6 +38,7 @@ import ori.service.IUserService;
 
 @RequestMapping(value = {"", "/", "home"})
 @Controller
+@RequestMapping(value = {"/", "home"})
 public class HomeController {
 	@Autowired
 	ICategoryService categoryService;
