@@ -36,6 +36,12 @@ public class PromotionService implements IPromotionServive{
 	public void deleteById(Integer id) {
 		promoRepository.deleteById(id);
 	}
+
+	@Override
+	public long count() {
+		return promoRepository.count();
+	}
+	
 	
 	
 

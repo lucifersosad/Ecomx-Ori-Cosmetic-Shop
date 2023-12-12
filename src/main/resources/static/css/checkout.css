@@ -4,7 +4,7 @@
 }
 
 .checkout .product-name {
-	line-height: 1.6;	
+	line-height: 1.6;
 }
 
 .checkout .total {
@@ -24,12 +24,12 @@
 	margin-bottom: 20px;
 }
 
-.cart-detail .btn{
+.cart-detail .btn {
 	border: 0;
-	background-color: #ffdbaa!important;
+	background-color: #ffdbaa !important;
 }
 
-@media (max-width: 767.98px) {
+@media ( max-width : 767.98px) {
 	.cart-detail {
 		padding: 1em;
 	}
@@ -44,10 +44,10 @@
 
 .cart-detail h3 {
 	font-size: 1.1em;
-    font-weight: bolder;
-    overflow: hidden;
-    padding-top: 10px;
-    text-transform: uppercase;
+	font-weight: bolder;
+	overflow: hidden;
+	padding-top: 10px;
+	text-transform: uppercase;
 }
 
 .cart-detail ul li {
@@ -77,15 +77,15 @@
 	font-size: 14px;
 	padding: 3px 15px;
 	border-radius: 0;
-	background-color: var(--color-primary);
+	background-color: var(- -color-primary);
 	border-color: #fff;
 	text-transform: uppercase;
 }
 
 .checkout .btn-update:hover {
 	background-color: #fff;
-	color: var(--color-primary);
-	border: 1px solid var(--color-primary);
+	color: var(- -color-primary);
+	border: 1px solid var(- -color-primary);
 }
 
 .colorlib-form {
@@ -95,7 +95,7 @@
 	margin-right: 10px;
 }
 
-@media (max-width: 767.98px) {
+@media ( max-width : 767.98px) {
 	.colorlib-form {
 		padding: 1em;
 	}
@@ -103,17 +103,17 @@
 
 .colorlib-form h3 {
 	font-size: 1.1em;
-    font-weight: bolder;
-    overflow: hidden;
-    padding-top: 10px;
-    text-transform: uppercase;
+	font-weight: bolder;
+	overflow: hidden;
+	padding-top: 10px;
+	text-transform: uppercase;
 }
 
 .colorlib-form label {
 	display: block;
-    font-size: .9em;
-    font-weight: 700;
-    margin-bottom: 0.4em;
+	font-size: .9em;
+	font-weight: 700;
+	margin-bottom: 0.4em;
 }
 
 .colorlib-form .form-group {
@@ -121,18 +121,18 @@
 }
 
 .colorlib-form .form-control {
-    border: 1px solid #ddd !important;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,.1) !important;
-    color: #000 !important;
-    font-weight: 400;
-    font-size: .97em !important;
-    height: 2.507em;
-    max-width: 100%;
-    padding: 0 0.75em;
-    transition: color .3s,border .3s,background .3s,opacity .3s;
-    vertical-align: middle;
-    width: 100%;
-	appearance: none;	
+	border: 1px solid #ddd !important;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1) !important;
+	color: #000 !important;
+	font-weight: 400;
+	font-size: .97em !important;
+	height: 2.507em;
+	max-width: 100%;
+	padding: 0 0.75em;
+	transition: color .3s, border .3s, background .3s, opacity .3s;
+	vertical-align: middle;
+	width: 100%;
+	appearance: none;
 	background: #fff;
 	-webkit-box-shadow: none;
 	box-shadow: none;
@@ -142,8 +142,8 @@
 	-o-appearance: none;
 }
 
-.colorlib-form .form-control:active,
-.colorlib-form .form-control:focus {
+.colorlib-form .form-control:active, .colorlib-form .form-control:focus
+	{
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	border-color: #616161;
@@ -203,3 +203,20 @@
 	color: #000;
 }
 
+#layma {
+	border: 2px solid #b3e6c8;
+	border-radius: 10px;
+	width: 100px;
+	height: 40px;
+	background-color: transparent;
+	color: #b3e6c8;
+	font-size: 16px;
+	cursor: pointer;
+	outline: none;
+	transition: background-color 0.3s, color 0.3s;
+}
+
+#layma:hover {
+	background-color: #8bd8a4;
+	color: #fff;
+}
