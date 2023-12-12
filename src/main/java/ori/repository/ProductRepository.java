@@ -30,4 +30,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	List<Product> findByCategory(Category category);
 	@Query("SELECT p FROM Product p WHERE p.price >= :startPrice AND p.price <= :endPrice")
     List<Product> findProductsByPriceRange(@Param("startPrice") float startPrice, @Param("endPrice") float endPrice);
+	
 }

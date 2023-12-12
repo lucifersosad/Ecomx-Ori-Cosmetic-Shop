@@ -6,7 +6,10 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,14 +37,17 @@ import ori.entity.Brand;
 import ori.entity.Cart;
 import ori.entity.CartKey;
 import ori.entity.Category;
+import ori.entity.OrderDetail;
 import ori.entity.Product;
 import ori.entity.ShoppingSession;
 import ori.entity.ShoppingSessionKey;
 import ori.entity.User;
 import ori.model.ProductModel;
 import ori.model.UserModel;
+import ori.service.IBrandService;
 import ori.service.ICartService;
 import ori.service.ICategoryService;
+import ori.service.IOrderDetailService;
 import ori.service.IProductService;
 import ori.service.IShoppingSessionService;
 import ori.service.IUserService;
@@ -60,14 +66,20 @@ public class ProductWebController {
 	ICartService cartService;
 	@Autowired(required = true)
 	ICategoryService categoryService;
+	@Autowired(required = true)
+	IOrderDetailService orderDetailService;
+	@Autowired(required = true)
+	IBrandService brandService;
 	
 	@GetMapping("/{cateID}/page/{pageNo}")
 	public String viewProduct(
 			ModelMap model,
 			@PathVariable("cateID") Integer cateID,
             @PathVariable("pageNo") Integer pageNo,
+            @RequestParam(name = "orderby", defaultValue = "menu_order") String orderby,
             @RequestParam(name="min_price", defaultValue = "0") int min_price,
-            @RequestParam(name="max_price", defaultValue = "0") int max_price) {	
+            @RequestParam(name="max_price", defaultValue = "0") int max_price,
+            @RequestParam(name="brandID", defaultValue = "0") Integer brandID) {	
 		
 		Optional<Category> optCate1 = categoryService.findById(cateID);
 		if (optCate1.isPresent()) {
@@ -76,7 +88,8 @@ public class ProductWebController {
 		}
 		List<Category> listCate = categoryService.findAll();
 		model.addAttribute("listAllCategory", listCate);	
-		
+		List<Brand> listBrand = brandService.findAll();
+		model.addAttribute("listAllBrand", listBrand);	
 		if (cateID == 0) {
 			int pageSize = 21;
 			int totalProducts = proService.findAll().size(); // Số lượng sản phẩm tổng cộng trong cơ sở dữ liệu
@@ -111,18 +124,42 @@ public class ProductWebController {
 			    pageNo = totalPages; // Đặt pageNo bằng totalPages nếu vượt quá số trang thực tế
 			}
 			Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-			Page<Product> listPro = proService.findAll(pageable);
+			Page<Product> productPage  = proService.findAll(pageable);
+			List<Product> listPro = new ArrayList<>(productPage.getContent()); 
+			if (brandID != 0) {
+				listPro = listPro.stream()
+			            .filter(product -> product.getBrand().getBrandId().equals(brandID))
+			            .collect(Collectors.toList());
+			}
 			if (min_price == 0 && max_price == 0) {
 				model.addAttribute("cateID", cateID);
-				model.addAttribute("countPro", totalProducts);
-				model.addAttribute("listAllProduct", listPro);
+				model.addAttribute("countPro", totalProducts);	
+				
+				if (orderby.equals("menu_order")) {
+					model.addAttribute("listAllProduct", listPro);	
+				}
+				else if (orderby.equals("selling")) {
+					Collections.sort(listPro, Comparator.comparingDouble(Product::getStock));
+					model.addAttribute("listAllProduct", listPro);
+				}
+				else if (orderby.equals("date")) {
+					Collections.reverse(listPro);
+					model.addAttribute("listAllProduct", listPro);
+				}
+				else if (orderby.equals("price")) {
+					Collections.sort(listPro, Comparator.comparingDouble(Product::getPrice));
+					model.addAttribute("listAllProduct", listPro);
+				}
+				else if (orderby.equals("price-desc")) {
+					Collections.sort(listPro, Comparator.comparingDouble(Product::getPrice).reversed());
+					model.addAttribute("listAllProduct", listPro);
+				}
 				model.addAttribute("currentPage", pageNo);
 
 				double minPriceSale = listPro.stream()
 				        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
 				        .min()
 				        .orElse(0);
-
 				// Tính giá bán tối đa sau khi giảm giá
 				double maxPriceSale = listPro.stream()
 				        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
@@ -137,12 +174,41 @@ public class ProductWebController {
 				model.addAttribute("max_form", maxPriceSaleInt);
 			}
 			else {
-				List<Product> filteredList = listPro.getContent().stream()
-					    .filter(product -> product.getPrice() * (100-product.getSale()) / 100 >= min_price && product.getPrice() * (100-product.getSale()) / 100 <= max_price)
-					    .collect(Collectors.toList());
+				List<Product> filteredList = new ArrayList<Product>();
+				if (brandID != 0) {
+					filteredList = listPro.stream()
+							.filter(product -> Math.round(product.getPrice() * (100 - product.getSale()) / 100) >= min_price
+									&& Math.round(product.getPrice() * (100 - product.getSale()) / 100) <= max_price
+									&& product.getBrand().getBrandId().equals(brandID))
+							.collect(Collectors.toList());
+				} else {
+					filteredList = listPro.stream()
+							.filter(product -> Math.round(product.getPrice() * (100 - product.getSale()) / 100) >= min_price
+									&& Math.round(product.getPrice() * (100 - product.getSale()) / 100) <= max_price)
+							.collect(Collectors.toList());
+				}
+				
+				if (orderby.equals("menu_order")) {
+					model.addAttribute("listAllProduct", filteredList);
+				}			
+				else if (orderby.equals("selling")) {
+					Collections.sort(filteredList, Comparator.comparingDouble(Product::getStock));
+					model.addAttribute("listAllProduct", filteredList);
+				}
+				else if (orderby.equals("date")) {
+					Collections.reverse(filteredList);
+					model.addAttribute("listAllProduct", filteredList);
+				}
+				else if (orderby.equals("price")) {
+					Collections.sort(filteredList, Comparator.comparingDouble(Product::getPrice));
+					model.addAttribute("listAllProduct", filteredList);
+				}
+				else if (orderby.equals("price-desc")) {
+					Collections.sort(filteredList, Comparator.comparingDouble(Product::getPrice).reversed());
+					model.addAttribute("listAllProduct", filteredList);
+				}
 				model.addAttribute("cateID", cateID);
 				model.addAttribute("countPro", totalProducts);
-				model.addAttribute("listAllProduct", filteredList);
 				model.addAttribute("currentPage", pageNo);
 
 				double minPriceSale = listPro.stream()
@@ -162,8 +228,6 @@ public class ProductWebController {
 				model.addAttribute("max_price", maxPriceSaleInt);
 				model.addAttribute("min_form", min_price);
 				model.addAttribute("max_form", max_price);
-				System.out.println("=================" + min_price + " " + "========================");
-				System.out.println("=================" + max_price + " " + "========================");
 			}
 			
 		}
@@ -201,13 +265,41 @@ public class ProductWebController {
 				if (pageNo > totalPages) {
 				    pageNo = totalPages; // Đặt pageNo bằng totalPages nếu vượt quá số trang thực tế
 				}
-				if (min_price == 0 && max_price == 0) {
-					
+				if (min_price == 0 && max_price == 0) {					
 					Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-					Page<Product> listPro = proService.findByCategory(optCate.get(),pageable);
+					Page<Product> productPage = proService.findByCategory(optCate.get(),pageable);	
+					List<Product> listPro = new ArrayList<>(productPage.getContent());
+					if (brandID != 0) {
+						listPro = listPro.stream()
+					            .filter(product -> product.getBrand().getBrandId().equals(brandID))
+					            .collect(Collectors.toList());
+					}
 					model.addAttribute("cateID", cateID);
 					model.addAttribute("countPro", totalProducts);
-					model.addAttribute("listAllProduct", listPro);
+					if (orderby.equals("menu_order")) {
+						model.addAttribute("listAllProduct", listPro);
+	
+					}
+					else if (orderby.equals("selling")) {
+						Collections.sort(listPro, Comparator.comparingDouble(Product::getStock));
+						model.addAttribute("listAllProduct", listPro);
+
+					}
+					else if (orderby.equals("date")) {
+						Collections.reverse(listPro);
+						model.addAttribute("listAllProduct", listPro);
+	
+					}
+					else if (orderby.equals("price")) {
+						Collections.sort(listPro, Comparator.comparingDouble(Product::getPrice));
+						model.addAttribute("listAllProduct", listPro);
+
+					}
+					else if (orderby.equals("price-desc")) {
+						Collections.sort(listPro, Comparator.comparingDouble(Product::getPrice).reversed());
+						model.addAttribute("listAllProduct", listPro);
+
+					}
 					model.addAttribute("currentPage", pageNo);
 					double minPriceSale = listPro.stream()
 					        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
@@ -230,12 +322,40 @@ public class ProductWebController {
 				else {					
 					Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
 					Page<Product> listPro = proService.findByCategory(optCate.get(),pageable);
-					List<Product> filteredList = listPro.getContent().stream()
-						    .filter(product -> product.getPrice() * (100-product.getSale()) / 100 >= min_price && product.getPrice() * (100-product.getSale()) / 100 <= max_price)
+					List<Product> filteredList = new ArrayList<Product>();
+					if (brandID != 0) {
+						filteredList = listPro.getContent().stream()
+						    .filter(product -> Math.round(product.getPrice() * (100-product.getSale()) / 100) >= min_price && Math.round(product.getPrice() * (100-product.getSale()) / 100) <= max_price && product.getBrand().getBrandId().equals(brandID))
 						    .collect(Collectors.toList());
+					}
+					else {
+						filteredList = listPro.getContent().stream()
+							    .filter(product -> Math.round(product.getPrice() * (100-product.getSale()) / 100) >= min_price && Math.round(product.getPrice() * (100-product.getSale()) / 100) <= max_price)
+							    .collect(Collectors.toList());
+					}
+
+					if (orderby.equals("menu_order")) {
+						model.addAttribute("listAllProduct", filteredList);
+					}
+					else if (orderby.equals("selling")) {
+						Collections.sort(filteredList, Comparator.comparingDouble(Product::getStock));
+						model.addAttribute("listAllProduct", filteredList);
+					}
+					else if (orderby.equals("date")) {
+						Collections.reverse(filteredList);
+						model.addAttribute("listAllProduct", filteredList);
+					}
+					else if (orderby.equals("price")) {
+						Collections.sort(filteredList, Comparator.comparingDouble(Product::getPrice));
+						model.addAttribute("listAllProduct", filteredList);
+					}
+					else if (orderby.equals("price-desc")) {
+						Collections.sort(filteredList, Comparator.comparingDouble(Product::getPrice).reversed());
+						model.addAttribute("listAllProduct", filteredList);
+					}
 					model.addAttribute("cateID", cateID);
 					model.addAttribute("countPro", totalProducts);
-					model.addAttribute("listAllProduct", filteredList);
+					
 					model.addAttribute("currentPage", pageNo);
 					double minPriceSale = listPro.stream()
 					        .mapToDouble(product -> product.getPrice() * (100 - product.getSale()) / 100)
@@ -257,12 +377,11 @@ public class ProductWebController {
 				}			    
 			}	
 		}
+		model.addAttribute("orderby", orderby);
+		model.addAttribute("brandID", brandID);
 		model.addAttribute("selectedCategoryId", cateID);
 		return "web/product";
 	}
-	
-	
-	
 	@GetMapping("detail/{proId}")
 	public ModelAndView detailProduct(ModelMap model, @PathVariable("proId") Integer proId) {
 	
