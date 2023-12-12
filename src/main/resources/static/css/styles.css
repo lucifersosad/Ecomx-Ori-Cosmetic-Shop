@@ -172,12 +172,8 @@ ul {
 }
 
 .body .btn-ykien {
-	position: absolute;
-	bottom: 15%;
-	right: 5%;
 	border: 1px solid var(--color-primary);
 	background-color: #fff;
 	color: var(--color-primary);
 }
-
  
