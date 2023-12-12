@@ -185,8 +185,19 @@
 	color: #fff !important;
 }
 
+.home .card {
+	height: 100%;
+	border: none;
+	border-top-right-radius: 0;
+	border-right: 2px solid #F5F5F5;
+}
+
+.home .card .mask h6 {
+	margin-bottom: 0;
+}
 .home .card .image {
 	position: relative;
+	
 }
 
 .home .card .image:hover .overlay {

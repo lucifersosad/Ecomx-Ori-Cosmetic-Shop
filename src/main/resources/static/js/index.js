@@ -54,7 +54,8 @@ $(document).on('click', function(event) {
 		var inputValue = parseInt(input.value, 10);
 
 		var proid = input.getAttribute('data-proid');
-
+	    var stock = parseInt(input.getAttribute('data-stock'), 10);
+	    console.log(stock);
 		var currentQuantity = parseInt(row.querySelector('.form-control').value, 10);
 		console.log(currentQuantity);
 		if (target.classList.contains('js-btn-minus')) {
@@ -66,10 +67,12 @@ $(document).on('click', function(event) {
 				updateQuantity(proid, inputValue - 1);
 			}
 		} else if (target.classList.contains('js-btn-plus')) {
-			if (currentQuantity < 1) {
-				inputValue = 0;
+			if (currentQuantity >= stock) {
+				inputValue = stock;
 			}
-			updateQuantity(proid, inputValue + 1);
+			else {
+				updateQuantity(proid, inputValue + 1);
+			}
 		}
 	}
 });
@@ -196,7 +199,12 @@ $(document).ready(function() {
 			});
 
 			if (!response.ok) {
-				throw new Error('Network response was not ok');
+				const errorMessage = await response.text();
+				if (errorMessage.includes('Số lượng sản phẩm trong giỏ hàng lớn hơn số lượng tồn kho.'))
+                	throw new Error('Số lượng sản phẩm trong giỏ hàng lớn hơn số lượng tồn kho.')
+                else {
+					throw new Error('Đăng nhập để tiếp tục');
+				} 
 			}
 
 			const data = await response.text();
@@ -204,7 +212,7 @@ $(document).ready(function() {
 			updateCartQuantity();
 			showSuccess();
 		} catch (error) {
-			showError("Đăng nhập để tiếp tục");
+			showError(error);
 		}
 	});
 });
@@ -257,4 +265,22 @@ $(document).ready(function() {
 		$("#ui-price-max").html(to + ".000đ")
 	}
 });
+
+$(document).ready(function() {
+		$('.quantityInputCart').each(function() {
+		    var $input = $(this);
+		    $input.data('initial-value', $input.val());
+		});
+        $('.quantityInputCart').on('change', function() {
+            var newValue = parseInt($(this).val());
+            var stock = parseInt($(this).data('stock'));
+
+            if (isNaN(newValue) || newValue <= 0 || newValue > stock) {
+                $(this).val($(this).data('initial-value'));
+            } else {
+                console.log("Giá trị mới hợp lệ:", newValue);
+            }
+            window.location.reload();
+        });
+    });
 

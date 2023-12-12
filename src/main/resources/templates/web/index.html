@@ -99,8 +99,8 @@
 					<div class="col-lg-3 col-md-6 col-sm-6" th:each="product : ${products}">
 						<div class="card my-2 shadow-0">
 							<a th:href="@{/web/product/detail/{proId}(proId=${product.proId})}" class="image">
-								<div class="mask" style="height: 50px;">
-									<div class="d-flex justify-content-start align-items-start h-100 m-2">
+								<div class="mask">
+									<div class="d-flex justify-content-start align-items-start h-100">
 										<h6><span class="badge bg-danger pt-1" th:text="${'Sale: ' + product.sale + '%'}"></span></h6>
 									</div>
 								</div>
