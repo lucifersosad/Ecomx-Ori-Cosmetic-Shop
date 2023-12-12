@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import ori.entity.Product;
 import ori.entity.User;
 import ori.model.UserModel;
 import ori.service.IUserService;
@@ -105,7 +106,6 @@ public class UserController {
 	    model.addAttribute("message", "User is not existed!!!!");
 	    return new ModelAndView("forward:/admin/users", model);
 	}
-
 
 
 }

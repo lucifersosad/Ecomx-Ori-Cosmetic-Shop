@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,13 +17,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import ori.config.scurity.AuthUser;
 import ori.entity.Cart;
+import ori.entity.CartKey;
 import ori.entity.Product;
 import ori.entity.User;
 import ori.model.CartModel;
@@ -40,6 +42,8 @@ public class CartController {
 	ICartService cartService;
 	@Autowired(required=true)
 	IProductService productService;
+	@Autowired(required = true)
+	IProductService proService;
 	
 	@GetMapping(value = "backToHome")
 	public String backToHome(ModelMap model) 
@@ -64,6 +68,7 @@ public class CartController {
 		    productModel.setProId(pro.getProId());
 		    productModel.setImage_link(pro.getImage_link());
 		    productModel.setName(pro.getName());
+		    productModel.setStock(pro.getStock());
 		    productModel.setPrice(Math.round(pro.getPrice() * (100 - pro.getSale()) / 100));
 		    cartModel.setQuantity(cart.getQuantity());
 		    double total= cartModel.getQuantity()*productModel.getPrice();
@@ -134,4 +139,5 @@ public class CartController {
 	    }
 	    return proid + " " + qtt;
 	}
+	
 }

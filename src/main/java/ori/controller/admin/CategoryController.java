@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.validation.Valid;
 import ori.entity.Category;
+import ori.entity.Product;
 import ori.model.CategoryModel;
 import ori.service.ICategoryService;
 
@@ -30,11 +33,11 @@ public class CategoryController {
 	ICategoryService categoryService;
 	
 	@RequestMapping("")
-	public String list(ModelMap model) {
-		//gọi hàm findAll() trong service
-		List<Category> list = categoryService.findAll();
-		//chuyển dữ liệu từ list lên biến categories
+	public String list(ModelMap model, @RequestParam(name="pageNo", defaultValue = "1") Integer pageNo) {
+		Page<Category> list = categoryService.getAll(pageNo);
 		model.addAttribute("categories", list);
+		model.addAttribute("totalPage",list.getTotalPages());
+		model.addAttribute("currentPage",pageNo);
 		return "admin/categories/list";
 	}
 

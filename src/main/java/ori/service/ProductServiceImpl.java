@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import ori.entity.Category;
 import ori.entity.Product;
+import ori.entity.User;
 import ori.repository.ProductRepository;
 
 @Service
@@ -69,4 +73,28 @@ public class ProductServiceImpl implements IProductService  {
 	public List<Product> findByCategory(Integer cateId, float proPrice) {
 		return productRepository.findByCategory(cateId, proPrice);
 	}
+	
+	@Override
+	public Page<Product> getAll(Integer pageNo) {
+		Pageable pageable = PageRequest.of(pageNo - 1, 10);
+		return productRepository.findAll(pageable);
+	}
+	@Override
+	public Page<Product> findAll(Pageable pageable) {
+		return productRepository.findAll(pageable);
+	}
+	@Override
+	public Page<Product> findByCategory(Category category, Pageable pageable) {
+		return productRepository.findByCategory(category, pageable);
+	}
+	@Override
+	public List<Product> findByCategory(Category category) {
+		return productRepository.findByCategory(category);
+	}
+	@Override
+	public List<Product> findProductsByPriceRange(float start_price, float end_price) {
+		return productRepository.findProductsByPriceRange(start_price, end_price);
+	}
+	
+	
 }

@@ -134,7 +134,13 @@
 							    <div>
 							        <h6 th:text="'Mã đơn hàng: ' + ${order.orderId}"></h6>
 							        <h6 th:text="'Ngày đặt hàng: ' + ${order.date}"></h6>
-							        <h6 th:text="'Phương thức thanh toán: ' + ${order.shipping_method}"></h5>
+							        <h6 th:text="'Phương thức thanh toán: ' + ${order.payment_method}"></h6>
+							        <h6>
+										Trạng thái đơn hàng: 
+										<span th:class="${order.status != null && order.status == 1 ? 'text-success' : 'text-danger'}" 
+											  th:text="${order.status != null && order.status == 1 ? 'Đơn hàng đã giao' : 'Đơn hàng chưa giao'}"
+										></span>
+									</h6>
 							    </div>
 							    <div th:each="orderDetail : ${listOderDetail}" th:if="${orderDetail.order.orderId == order.orderId}" > 
 							    	<div th:each="product : ${listPro}" th:if="${orderDetail.product.proId == product.proId}">
@@ -144,14 +150,19 @@
 								            </div>
 										 <div>
 											  <p class="title" th:text="${product.name}"></p>
-								                <p class="title" th:text="${product.price +'VND'+ ' SL: ' + orderDetail.quantity} " style="color: rgb(238, 77, 45);"></p>
+								               <p class="title" style="color: rgb(238, 77, 45);"   th:text="${#numbers.formatDecimal(product.price, 0, 0)} + '.000 đ - SL: ' + ${orderDetail.quantity}"></p>
 										 </div>
 								               
 								       
 								        </div>
 									</div>
 								</div>
-								<h6 th:text="'Tổng tiền: ' + ${order.total} +'VND'"></h5>
+								<h5 th:utext="'Tổng tiền: ' + 
+								               ${order.currency eq 'VND' ? 
+								                 #numbers.formatDecimal(order.total, 0, 'POINT', 0, 'POINT') + ' đ' : 
+								                 order.total + ' USD'}">
+								</h5>
+
 							</li>  
 						      <hr>
 						</ul>

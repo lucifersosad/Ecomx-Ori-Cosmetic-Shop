@@ -3,7 +3,7 @@
 	layout:decorate="~{web/layout-default.html}">
 
 <body>
-	
+
 	<!--Thêm dòng này vào-->
 	<div layout:fragment="content" class="home">
 
@@ -98,14 +98,17 @@
 				<div class="row">
 					<div class="col-lg-3 col-md-6 col-sm-6" th:each="product : ${products}">
 						<div class="card my-2 shadow-0">
-							<a th:href="@{/web/product/detail/{proId}(proId=${product.proId})}" class="">
-								<div class="mask" style="height: 50px;">
-									<div class="d-flex justify-content-start align-items-start h-100 m-2">
+							<a th:href="@{/web/product/detail/{proId}(proId=${product.proId})}" class="image">
+								<div class="mask">
+									<div class="d-flex justify-content-start align-items-start h-100">
 										<h6><span class="badge bg-danger pt-1" th:text="${'Sale: ' + product.sale + '%'}"></span></h6>
 									</div>
 								</div>
-								<img th:src="${product.image_link}"
-									class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
+								<img th:src="${product.image_link}" class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
+								<div class="overlay">
+									<span th:attr="data-proid=${product.proId}" class="buyNow">Mua ngay</span>
+									<span th:attr="data-proid=${product.proId}" class="addToCart">Thêm vào giỏ hàng</span>
+								</div>
 							</a>
 							<div class="card-body p-0 pt-3">
 								<a th:href="@{/web/product/detail/{proId}(proId=${product.proId})}">
@@ -115,8 +118,9 @@
 								<p class="card-text mb-0"><strong>Danh mục: </strong>[(${product.category.name})]</p>
 								<p class="card-text mb-0">
 									<strong>Giá:</strong>
-									<span class="text-decoration-line-through" th:text="${#numbers.formatDecimal(product.price, 0, 0)} + '.000 VND'"></span>
-									<span class="text-danger" th:text="${#numbers.formatDecimal(product.price * (100 - product.sale) / 100, 0, 0) } + '.000 VND'"></span>
+									<span th:if="${product.sale == 0}" th:text="${#numbers.formatDecimal(product.price, 0, 0)} + '.000 đ'"></span>
+									<span class="text-decoration-line-through" th:text="${#numbers.formatDecimal(product.price, 0, 0)} + '.000 đ'"></span>
+									<span class="text-danger" th:text="${#numbers.formatDecimal(product.price * (100 - product.sale) / 100, 0, 0) } + '.000 đ'"></span>
 								</p>							
 								<p class="text-muted">[(${product.brand.name})]</p>
 							</div>
@@ -147,6 +151,7 @@
 								<p class="fs-6 text-uppercase text-black featured-box__title">BẢO HÀNH</p>
 								<p>Chính sách bảo hành khi mua sản phẩm có thể đổi trả trong 7 ngày khi chưa sử dụng sản phẩm và còn giữ hóa đơn.</p>
 							</div>
+							
 						</div>
 					</div>
 					<div class="col-md-4 col-12">
@@ -163,52 +168,21 @@
 				</div>
 			</section>
 		</div>
+		<div class="text-end mr-2">
+				<button type="button" class="btn btn-primary btn-ykien" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">GỬI PHẢN HỒI</button>
+		</div>
 		<section class="rating">
 			<div class="container">
 				<div class="rating-carousel">
-					<div class="rating__box">
+					<div class="rating__box" th:each="rating : ${ratings}">
 						<ul class="d-flex px-0 rating__star mb-1">
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
+							<li th:each="i : ${#numbers.sequence(1, rating.rate)}"><i class="fa-solid fa-star"></i></li>
 						</ul>
-						<p class="rating__content mb-1">Tôi đã sử dụng sản phẩm này trong vài tuần và tôi rất ấn tượng. Da tôi trở nên mềm mịn hơn, mờ các vết thâm và tàn nhang. Tôi thật sự rất hạnh phúc với kết quả</p>
+						<p class="rating__content mb-1">[[${rating.content}]]</p>
 						<div class="rating__user">
-			            	<strong class="testimonial-name test_name">Khánh Linh</strong>
+			            	<strong class="testimonial-name test_name">[[${rating.nickname}]]</strong>
 			            	<span class="testimonial-name-divider"> / </span>             
-			            	<span class="testimonial-company test_company">Facebook</span>
-			          	</div>
-					</div>
-					<div class="rating__box">
-						<ul class="d-flex px-0 rating__star mb-1">
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-						</ul>
-						<p class="rating__content mb-1">Sản phẩm này thực sự đáng tiền! Màu sắc của son môi rất tươi sáng và lâu phai. Nó cũng không gây khô môi và có mùi thơm dễ chịu.</p>
-						<div class="rating__user">
-			            	<strong class="testimonial-name test_name">Phương Thảo</strong>
-			            	<span class="testimonial-name-divider"> / </span>             
-			            	<span class="testimonial-company test_company">Facebook</span>
-			          	</div>
-					</div>
-					<div class="rating__box">
-						<ul class="d-flex px-0 rating__star mb-1">
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-							<li><i class="fa-solid fa-star"></i></li>
-						</ul>
-						<p class="rating__content mb-1">Sản phẩm chăm sóc da này thực sự làm cho da tôi cải thiện rõ rệt. Tôi đã có vết nám và sau một thời gian sử dụng, chúng trở nên nhạt đi đáng kể. Tôi cảm thấy tự tin hơn về làn da của mình.</p>
-						<div class="rating__user">
-			            	<strong class="testimonial-name test_name">Vân Anh</strong>
-			            	<span class="testimonial-name-divider"> / </span>             
-			            	<span class="testimonial-company test_company">Facebook</span>
+			            	<span class="testimonial-company test_company">[[${rating.platform}]]</span>
 			          	</div>
 					</div>
 				</div>
