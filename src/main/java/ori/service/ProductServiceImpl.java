@@ -95,6 +95,9 @@ public class ProductServiceImpl implements IProductService  {
 	public List<Product> findProductsByPriceRange(float start_price, float end_price) {
 		return productRepository.findProductsByPriceRange(start_price, end_price);
 	}
-	
-	
+
+	@Override
+	public List<Product> findProductsMostOrder() {
+		return productRepository.findProductsMostOrder();
+	}
 }

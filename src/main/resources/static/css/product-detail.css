@@ -176,3 +176,33 @@
     border-radius: 4px;
     cursor: pointer;
 }
+
+.product-detail .section-product-sale .card-border {
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+
+.product-detail .section-product-sale .card {
+	height: 100%;
+	border: 2px solid var(--color-primary) !important;
+}
+
+.product-detail .section-product-sale .card .mask h6 {
+	margin-bottom: 0;
+}
+.product-detail .section-product-sale .card .image {
+	position: relative;
+	
+}
+
+.product-detail .section-product-sale .card .card-title {
+	color: var(--color-primary);
+	font-size: 15px;
+	line-height: 1.5;
+}
+
+.product-detail .section-product-sale .card .card-body {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}

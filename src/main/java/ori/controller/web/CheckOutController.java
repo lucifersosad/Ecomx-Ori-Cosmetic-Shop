@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -149,11 +150,33 @@ public class CheckOutController {
 	@PostMapping("/DiscountPost")
 	public ResponseEntity<Double> DiscountPost(@RequestParam("promo") String promoCode, HttpSession session) {
 		Promotion promotion = promoService.findpromotionByname(promoCode);
-		double discountRate =0;
-		if(promotion.getIs_active() == 1) {
+		int active = 1;
+		double discountRate = 0;
+		if(promotion != null) {
+			active  = promotion.getIs_active();
+		}
+		else {
+			discountRate = 2;
+			return ResponseEntity.ok(discountRate);
+		}
+		if(active == 0) {
 			discountRate = (double) promotion.getDiscount_rate()/100;
 			session.setAttribute("promoCode", promotion);
 		}
-		return ResponseEntity.ok(discountRate );
+		return ResponseEntity.ok(discountRate);
+	}
+	@GetMapping("/RandomDiscount")
+	public ResponseEntity<String> RandomDiscount(){
+		String discountname = "ori";
+		String countPromotion = String.valueOf(promoService.count()+ 1);
+		int discount_rate = ThreadLocalRandom.current().nextInt(10,101);
+		discountname = discountname + countPromotion + "sale" + String.valueOf(discount_rate);
+		Promotion promo = new Promotion();
+		promo.setName(discountname);
+		promo.setDiscount_rate(discount_rate);
+		promo.setDescription("Giam "+String.valueOf(discount_rate)+"%");
+		promo.setIs_active(0);
+		promoService.save(promo);
+		return ResponseEntity.ok(discountname);
 	}
 }

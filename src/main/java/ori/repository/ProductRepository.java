@@ -30,4 +30,14 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	List<Product> findByCategory(Category category);
 	@Query("SELECT p FROM Product p WHERE p.price >= :startPrice AND p.price <= :endPrice")
     List<Product> findProductsByPriceRange(@Param("startPrice") float startPrice, @Param("endPrice") float endPrice);
+	@Query(value = "SELECT *\r\n"
+			+ "FROM product p\r\n"
+			+ "JOIN (\r\n"
+			+ "  SELECT pro_Id, SUM(quantity) AS total_quantity\r\n"
+			+ "  FROM order_detail\r\n"
+			+ "  GROUP BY pro_id\r\n"
+			+ "  ORDER BY total_quantity DESC\r\n"
+			+ "  limit 8\r\n"
+			+ ") od ON p.proid = od.pro_id;", nativeQuery = true)
+	List<Product> findProductsMostOrder();
 }

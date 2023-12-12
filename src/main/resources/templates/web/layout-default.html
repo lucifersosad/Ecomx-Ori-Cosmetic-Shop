@@ -100,9 +100,8 @@
 		  $('.brand-carousel').slick({
 		    infinite: true,
 		    slidesToShow: 4,
-  			slidesToScroll: 2,
-  			autoplay: true,
-		  	autoplaySpeed: 2000,
+  			slidesToScroll: 4,
+		  	swipeToSlide: true,
 		  });
 		});
 		
@@ -111,8 +110,7 @@
 		    infinite: true,
 		    slidesToShow: 7,
   			slidesToScroll: 3,
-  			autoplay: true,
-		  	autoplaySpeed: 2000,
+		  	swipeToSlide: true,
 		  });
 		});
 		
@@ -122,7 +120,8 @@
 		    infinite: true,
 		    speed: 500,
 		    fade: true,
-		    cssEase: 'linear'
+		    cssEase: 'linear',
+		    swipeToSlide: true,
 		  });
 		});
 		
@@ -131,13 +130,20 @@
 		    infinite: true,
 		    dots: true,
 	  		speed: 500,
+	  		swipeToSlide: true,   
+		  });
+		});
+		
+		$(document).ready(function(){
+		  $('.product-carousel').slick({
+		    infinite: true,
+		    slidesToShow: 5,
+	  		speed: 500,
+	  		arrows: false,
+	  		swipeToSlide: true,
 		  });
 		});
 		
 	</script>
-	
-	<!--<script type="text/javascript" th:src="@{/detailProduct/js/nouislider.min.js}"></script>
-	<script type="text/javascript" th:src="@{/detailProduct/js/jquery.zoom.min.js}"></script>
-	<script type="text/javascript" th:src="@{/detailProduct/js/main.js}"></script>-->
 </body>
 </html>
