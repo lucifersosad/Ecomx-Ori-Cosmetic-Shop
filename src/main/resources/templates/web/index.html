@@ -115,7 +115,7 @@
 					<span class="section-title-main">Nhãn hàng</span>
 					<b></b>
 				</h3>
-				<div class="brand-carousel"> th:href="@{'/web/product/' + ${category.cateId} + '/page/1' }"
+				<div class="brand-carousel">
 					<div class="card" style="width: 16rem;" th:each="brand : ${brands}">
 						<a th:href="@{'/web/product/0/page/1?brandID=' + ${brand.brandId}}" style="width: 100%; height: auto;">
 							<img th:src="${brand.logo}" class="card-img-top" alt="brand_logo" style="aspect-ratio: 16/9; width: 16rem; height: auto; object-fit: contain;">
