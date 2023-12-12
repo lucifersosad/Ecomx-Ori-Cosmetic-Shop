@@ -69,8 +69,11 @@ public class ProductWebController {
             @RequestParam(name="min_price", defaultValue = "0") int min_price,
             @RequestParam(name="max_price", defaultValue = "0") int max_price) {	
 		
-		
-		
+		Optional<Category> optCate1 = categoryService.findById(cateID);
+		if (optCate1.isPresent()) {
+			Category cate = optCate1.get();
+			model.addAttribute("cate", cate);
+		}
 		List<Category> listCate = categoryService.findAll();
 		model.addAttribute("listAllCategory", listCate);	
 		
@@ -254,6 +257,7 @@ public class ProductWebController {
 				}			    
 			}	
 		}
+		model.addAttribute("selectedCategoryId", cateID);
 		return "web/product";
 	}
 	

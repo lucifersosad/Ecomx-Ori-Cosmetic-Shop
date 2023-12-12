@@ -12,7 +12,7 @@
 							<option th:value="@{/web/product/0/page/1}">Select Category</option>
 							<option th:each="t : ${listAllCategory}"
 								th:value="@{'/web/product/' + ${t.cateId} + '/page/' + '1'}" th:text="${t.name}"
-								th:class="${t.cateId == targetactive ? 'selected' : ''}"></option>
+								th:class="${t.cateId == targetactive ? 'selected' : ''}" th:selected="${t.cateId == selectedCategoryId}"></option>
 						</select>
 
 						<!-- Toggle button -->
@@ -37,23 +37,21 @@
 										<div class="accordion-body">
 											<form action="" method="get">
 												<div>
+													<input type="hidden" id="range-price-min" th:value="${min_price}" name="min_price" />
+													<input type="hidden" id="range-price-max" th:value="${max_price}" name ="max_price"/>
+												</div>
+												<div>
 													<input type="text" class="js-range-slider" value="" 
 														data-type="double"
-														th:attr="data-min=${min_form}, data-max=${max_form}, data-from=${min_price}, data-to=${max_price}"
-												        data-skin="round"
-													/>
-													
+														th:attr="data-type='double', data-min=${min_price}, data-max=${max_price}, data-from=${min_form}, data-to=${max_form}, data-skin='round'" />
 												</div>
 												<div class="mb-3 mt-3 d-flex justify-content-between align-items-center">
 													<span>Giá:</span> 
 													<div>
-														<span id="ui-price-min">[[${min_price}]].000đ</span> - <span id="ui-price-max">[[${max_price}]].000đ</span>
+														<span id="ui-price-min">[[${min_form}]].000đ</span> - <span id="ui-price-max">[[${max_form}]].000đ</span>
 													</div>
 												</div>
-												<div>
-													<input type="text" id="range-price-min" th:value="${min_price}" name="min_price" />
-													<input type="text" id="range-price-max" th:value="${max_price}" name ="max_price"/>
-												</div>
+												
 												<button type="submit"
 													class="btn btn-white w-100 border border-secondary">Apply</button>
 											</form>
