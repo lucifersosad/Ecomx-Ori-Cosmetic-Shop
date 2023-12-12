@@ -83,13 +83,12 @@ public class SecurityConfiguration {
         .authorizeHttpRequests(
                 auth -> auth
                         .requestMatchers(antMatcher("/admin/**")).hasAnyAuthority(UserRole.ADMIN.getRoleName())
+                        .requestMatchers(antMatcher("/api/**")).permitAll()
+                        .requestMatchers(antMatcher("/auth/**")).permitAll()
                         .requestMatchers(antMatcher("/cart/**")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())
                         .requestMatchers(antMatcher("/CheckOut/**")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())
                         .requestMatchers(antMatcher("/web/users/**")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())
                         .requestMatchers(antMatcher("/web/product/add-to-cart/**")).hasAnyAuthority(UserRole.USER.getRoleName(), UserRole.ADMIN.getRoleName())
-                        .requestMatchers(antMatcher("/api/**")).permitAll()
-                        .requestMatchers(antMatcher("/auth/sign-up/**")).permitAll()
-                        .requestMatchers(antMatcher("/auth/login1")).permitAll()
                         .requestMatchers(antMatcher("/**")).permitAll()
                         .anyRequest().authenticated()
         ).formLogin(login -> login
@@ -118,8 +117,8 @@ public class SecurityConfiguration {
         )
         .exceptionHandling(e -> e.accessDeniedPage("/403"))
         .sessionManagement(session -> session
-        .maximumSessions(1) // Đặt giới hạn session ở đây, ví dụ là 1 session
-        .expiredUrl("/") // Đường dẫn khi session hết hạn
+        .maximumSessions(1)
+        .expiredUrl("/")
         .maxSessionsPreventsLogin(true)) ;
 
 

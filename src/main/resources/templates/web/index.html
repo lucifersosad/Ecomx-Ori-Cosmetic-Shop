@@ -3,7 +3,7 @@
 	layout:decorate="~{web/layout-default.html}">
 
 <body>
-	
+
 	<!--Thêm dòng này vào-->
 	<div layout:fragment="content" class="home">
 
@@ -99,8 +99,8 @@
 					<div class="col-lg-3 col-md-6 col-sm-6" th:each="product : ${products}">
 						<div class="card my-2 shadow-0">
 							<a th:href="@{/web/product/detail/{proId}(proId=${product.proId})}" class="image">
-								<div class="mask" style="height: 50px;">
-									<div class="d-flex justify-content-start align-items-start h-100 m-2">
+								<div class="mask">
+									<div class="d-flex justify-content-start align-items-start h-100">
 										<h6><span class="badge bg-danger pt-1" th:text="${'Sale: ' + product.sale + '%'}"></span></h6>
 									</div>
 								</div>
@@ -118,6 +118,7 @@
 								<p class="card-text mb-0"><strong>Danh mục: </strong>[(${product.category.name})]</p>
 								<p class="card-text mb-0">
 									<strong>Giá:</strong>
+									<span th:if="${product.sale == 0}" th:text="${#numbers.formatDecimal(product.price, 0, 0)} + '.000 đ'"></span>
 									<span class="text-decoration-line-through" th:text="${#numbers.formatDecimal(product.price, 0, 0)} + '.000 đ'"></span>
 									<span class="text-danger" th:text="${#numbers.formatDecimal(product.price * (100 - product.sale) / 100, 0, 0) } + '.000 đ'"></span>
 								</p>							
@@ -150,6 +151,7 @@
 								<p class="fs-6 text-uppercase text-black featured-box__title">BẢO HÀNH</p>
 								<p>Chính sách bảo hành khi mua sản phẩm có thể đổi trả trong 7 ngày khi chưa sử dụng sản phẩm và còn giữ hóa đơn.</p>
 							</div>
+							
 						</div>
 					</div>
 					<div class="col-md-4 col-12">

@@ -68,6 +68,7 @@ public class CartController {
 		    productModel.setProId(pro.getProId());
 		    productModel.setImage_link(pro.getImage_link());
 		    productModel.setName(pro.getName());
+		    productModel.setStock(pro.getStock());
 		    productModel.setPrice(Math.round(pro.getPrice() * (100 - pro.getSale()) / 100));
 		    cartModel.setQuantity(cart.getQuantity());
 		    double total= cartModel.getQuantity()*productModel.getPrice();
