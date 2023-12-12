@@ -60,10 +60,11 @@ public class PaymentController {
 	}
 
 	@GetMapping("/paypal/create")
-	public RedirectView createPayPalPayment() {
+	public RedirectView createPayPalPayment(@RequestParam(name = "discount", defaultValue = "0") Double discount) {
+		System.out.println("=============================" + discount + "========================================");
 		User user = userService.getUserLogged();
 		RestTemplate restTemplate = new RestTemplate();
-		String apiUrl = "http://localhost:8888/api/payment/paypal/create?userId=" + user.getUserId(); // Thay đổi URL
+		String apiUrl = "http://localhost:8888/api/payment/paypal/create?userId=" + user.getUserId() + "&discount=" + discount; // Thay đổi URL
 																										// API cần gọi
 		ResponseEntity<Response> response = restTemplate.getForEntity(apiUrl, Response.class);
 

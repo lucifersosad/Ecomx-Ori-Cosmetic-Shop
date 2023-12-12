@@ -61,9 +61,13 @@ public class PaypalAPIController {
 	public static final double unit = (double) 0.000041;
 
 	@GetMapping("/create")
-	public ResponseEntity<?> payment(@RequestParam("userId") Integer userId) {
+	public ResponseEntity<?> payment(
+			@RequestParam("userId") Integer userId,
+			@RequestParam("discount") Double discount
+			) {
 		try {
-			Payment payment = service.createPayment(userId, "USD", "PAYPAL", "SALE", "I buy it",
+			System.out.println("=============================" + discount + "========================================");
+			Payment payment = service.createPayment(userId, discount, "USD", "PAYPAL", "SALE", "I buy it",
 					PaypalConfig.CANCEL_URL, PaypalConfig.SUCCESS_URL);
 			for (Links link : payment.getLinks()) {
 				if (link.getRel().equals("approval_url")) {
