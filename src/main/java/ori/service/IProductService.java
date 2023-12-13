@@ -45,4 +45,37 @@ public interface IProductService {
 	List<Product> findProductsByPriceRange(float start_price, float end_price);
 	
 	List<Product> findProductsMostOrder();
+
+	Optional<Product> findByName(String name);
+
+	Page<Product> searchProductByName(String keyword, Pageable pageable);
+
+	List<Product> searchProductByName(String keyword);
+
+
+	Page<Product> sortSearchByStockRangePrice(String keyword, String min_price, String max_price, Pageable pageable);
+
+	Page<Product> sortSearchByPriceDesc(String keyword, Pageable pageable);
+
+	Page<Product> sortSearchByPrice(String keyword, Pageable pageable);
+
+	Page<Product> sortSearchByDate(String keyword, Pageable pageable);
+
+	Page<Product> sortSearchByStock(String keyword, Pageable pageable);
+
+	Page<Product> sortSearchByPriceDescRangePrice(String keyword, String min_price, String max_price, Pageable pageable);
+
+	Page<Product> sortSearchByPriceRangePrice(String keyword, String min_price, String max_price, Pageable pageable);
+
+	Page<Product> sortSearchByDateRangePrice(String keyword, String min_price, String max_price, Pageable pageable);
+
+	Page<Product> searchAllProductByName(String keyword, String min_price, String max_price, Pageable pageable);
+
+	List<Product> findSearchProductsByPriceRange(String keyword, String startPrice, String endPrice);
+
+
+
+
+
+
 }
