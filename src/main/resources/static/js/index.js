@@ -353,22 +353,24 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-		$('.quantityInputCart').each(function() {
-		    var $input = $(this);
-		    $input.data('initial-value', $input.val());
-		});
-        $('.quantityInputCart').on('change', function() {
-            var newValue = parseInt($(this).val());
-            var stock = parseInt($(this).data('stock'));
-            console.log(newValue + " " + stock);
+	$('.quantityInputCart').each(function() {
+		var $input = $(this);
+		$input.data('initial-value', $input.val());
+	});
+	$('.quantityInputCart').on('change', function() {
+		var id = parseInt($(this).data('proid'))
+		var newValue = parseInt($(this).val());
+		var stock = parseInt($(this).data('stock'));
+		console.log(newValue + " " + stock);
 
-            if (isNaN(newValue) || newValue <= 0 || newValue > stock) {
-                $(this).val($(this).data('initial-value'));
-            } else {
-				/*$(this).val(newValue);*/
-                console.log("Giá trị mới hợp lệ:", newValue);
-            }
-            
-        });
-    });
+		if (isNaN(newValue) || newValue <= 0 || newValue > stock) {
+			$(this).val($(this).data('initial-value'));
+		} else {
+			$(this).val(newValue);
+			console.log(id);
+			console.log("Giá trị mới hợp lệ:", newValue);
+			updateQuantity(id, newValue);
+		}
+	});
+});
 
