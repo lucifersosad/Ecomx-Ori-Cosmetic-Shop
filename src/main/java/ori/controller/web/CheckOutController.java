@@ -109,8 +109,6 @@ public class CheckOutController {
 		else {
 			discountRate = 0;
 		}
-		System.out.println("=============================" + discountRate + "========================================");
-		session.removeAttribute("promoCode");
 		//
 		int total = 0;
 		for (Cart cart : carts) {
@@ -159,7 +157,7 @@ public class CheckOutController {
 			discountRate = 2;
 			return ResponseEntity.ok(discountRate);
 		}
-		if(active == 0) {
+		if(active == 1) {
 			discountRate = (double) promotion.getDiscount_rate()/100;
 			session.setAttribute("promoCode", promotion);
 		}
@@ -169,13 +167,13 @@ public class CheckOutController {
 	public ResponseEntity<String> RandomDiscount(){
 		String discountname = "ori";
 		String countPromotion = String.valueOf(promoService.count()+ 1);
-		int discount_rate = ThreadLocalRandom.current().nextInt(10,101);
+		int discount_rate = ThreadLocalRandom.current().nextInt(10,51);
 		discountname = discountname + countPromotion + "sale" + String.valueOf(discount_rate);
 		Promotion promo = new Promotion();
 		promo.setName(discountname);
 		promo.setDiscount_rate(discount_rate);
 		promo.setDescription("Giam "+String.valueOf(discount_rate)+"%");
-		promo.setIs_active(0);
+		promo.setIs_active(1);
 		promoService.save(promo);
 		return ResponseEntity.ok(discountname);
 	}

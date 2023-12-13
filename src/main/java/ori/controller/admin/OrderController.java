@@ -53,7 +53,7 @@ public class OrderController {
 		} catch (Exception e) {
 			model.addAttribute("message", "Cannot delete!!!!");
 		}
-		return new ModelAndView("redirect:/admin/orders", model);
+		return new ModelAndView("forward:/admin/orders", model);
 	}
 	
 	
