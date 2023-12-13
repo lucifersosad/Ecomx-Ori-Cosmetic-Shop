@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.validation.Valid;
@@ -37,6 +38,17 @@ public class ProductController {
 	ICategoryService categoryService;
 	@Autowired(required = true)
 	IBrandService brandService;
+	
+	@GetMapping("/checkExistName")
+	@ResponseBody
+	public int checkName(ModelMap model, @Valid @ModelAttribute("product") ProductModel proModel) {
+		Optional<Product> optPro = productService.findByName(proModel.getName());
+		if (optPro.isPresent()) {
+			return 1;
+		}
+		return 0;
+	}
+	
 	
 	
 	@RequestMapping("")
@@ -96,7 +108,6 @@ public class ProductController {
 	}
 
 	@PostMapping("saveOrUpdate")
-
 	public ModelAndView saveOrUpdate(ModelMap model, @Valid @ModelAttribute("product") ProductModel proModel, BindingResult result) {
 
 		if (result.hasErrors()) {
@@ -105,7 +116,6 @@ public class ProductController {
 
 		}
 		Product entity = new Product();
-
 		BeanUtils.copyProperties(proModel, entity);
 		entity.setCategory(categoryService.findById(proModel.getCateId()).get());
 		entity.setBrand(brandService.findById(proModel.getBrandId()).get());

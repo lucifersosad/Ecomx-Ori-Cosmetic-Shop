@@ -100,4 +100,62 @@ public class ProductServiceImpl implements IProductService  {
 	public List<Product> findProductsMostOrder() {
 		return productRepository.findProductsMostOrder();
 	}
+	@Override
+	public Optional<Product> findByName(String name) {
+		return productRepository.findByName(name);
+	}
+	@Override
+	public Page<Product> searchProductByName(String keyword, Pageable pageable) {
+		return productRepository.searchProductByName(keyword, pageable);
+	}
+	@Override
+	public List<Product> searchProductByName(String keyword) {
+		return productRepository.searchProductByName(keyword);
+	}
+	@Override
+	public Page<Product> sortSearchByStock(String keyword, Pageable pageable) {
+		return productRepository.sortSearchByStock(keyword, pageable);
+	}
+	@Override
+	public Page<Product> sortSearchByDate(String keyword, Pageable pageable) {
+		return productRepository.sortSearchByDate(keyword, pageable);
+	}
+	@Override
+	public Page<Product> sortSearchByPrice(String keyword, Pageable pageable) {
+		return productRepository.sortSearchByPrice(keyword, pageable);
+	}
+	@Override
+	public Page<Product> sortSearchByPriceDesc(String keyword, Pageable pageable) {
+		return productRepository.sortSearchByPriceDesc(keyword, pageable);
+	}
+	@Override
+	public Page<Product> sortSearchByStockRangePrice(String keyword, String min_price, String max_price, Pageable pageable) {
+		return productRepository.sortSearchByStockRangePrice(keyword, min_price, max_price, pageable);
+	}
+	@Override
+	public Page<Product> searchAllProductByName(String keyword, String min_price, String max_price, Pageable pageable) {
+		return productRepository.searchAllProductByName(keyword, min_price, max_price, pageable);
+	}
+	@Override
+	public Page<Product> sortSearchByDateRangePrice(String keyword, String min_price, String max_price,
+			Pageable pageable) {
+		return productRepository.sortSearchByDateRangePrice(keyword, min_price, max_price, pageable);
+	}
+	@Override
+	public Page<Product> sortSearchByPriceRangePrice(String keyword, String min_price, String max_price,
+			Pageable pageable) {
+		return productRepository.sortSearchByPriceRangePrice(keyword, min_price, max_price, pageable);
+	}
+	@Override
+	public Page<Product> sortSearchByPriceDescRangePrice(String keyword, String min_price, String max_price,
+			Pageable pageable) {
+		return productRepository.sortSearchByPriceDescRangePrice(keyword, min_price, max_price, pageable);
+	}
+	@Override
+	public List<Product> findSearchProductsByPriceRange(String keyword, String startPrice, String endPrice) {
+		return productRepository.findSearchProductsByPriceRange(keyword, startPrice, endPrice);
+	}
+	
+	
+	
 }
