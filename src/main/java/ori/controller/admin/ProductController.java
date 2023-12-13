@@ -134,11 +134,15 @@ public class ProductController {
 
 	public ModelAndView delete(ModelMap model, @PathVariable("proId") Integer productId) {
 
-		productService.deleteById(productId);
+		try {
+			productService.deleteById(productId);
 
-		model.addAttribute("message", "Product is deleted!!!!");
+			model.addAttribute("message", "Product is deleted!!!!");
+		} catch (Exception e) {
+			model.addAttribute("message", "Cannot delete!!!!");
+		}
 
-		return new ModelAndView("redirect:/admin/products", model);
+		return new ModelAndView("forward:/admin/products", model);
 
 	}
 }

@@ -86,9 +86,17 @@ public class UserController {
 	}
 	@GetMapping("delete/{userId}")
 	public ModelAndView delet(ModelMap model, @PathVariable("userId") Integer userId) {
-		userService.deleteById(userId);
-		model.addAttribute("message", "User is deleted!!!!");
-		return new ModelAndView("redirect:/admin/users", model);
+		Optional<User> optUser = userService.findById(userId);
+		
+		if (optUser.isPresent()) {
+			User user = optUser.get();
+			user.setIsEnabled(false);
+			userService.save(user);
+			model.addAttribute("user", user);
+			model.addAttribute("message", "Tài khoản đã bị khóa!!!!");
+		}
+		model.addAttribute("message", "Tài khoản đã bị khóa!!!!");
+		return new ModelAndView("forward:/admin/users", model);
 	}
 	@GetMapping("/infor/{email}")
 	public ModelAndView infor(ModelMap model, @PathVariable("email") String email) {

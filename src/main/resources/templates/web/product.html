@@ -100,8 +100,11 @@
 						<nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
 							<ul class="pagination">
 								<li class="page-item">
-									<a class="page-link" th:href="@{'/web/product/' + ${cateID} + '/page/1' + '?brandID=' +${brandID}}">Trang
+									<a th:if="${currentPage != 1}" class="page-link"
+										th:href="@{'/web/product/' + ${cateID} + '/page/1' + '?brandID=' +${brandID}}">Trang
 										đầu</a>
+									<span th:if="${currentPage == 1}" class="page-link">Trang
+										đầu</span>
 								</li>
 								<th:block th:each="i : ${#numbers.sequence(startPage, endPage)}">
 									<li th:class="${i == currentPage ? 'page-item active' : 'page-item'}">
@@ -110,8 +113,9 @@
 									</li>
 								</th:block>
 								<li class="page-item">
-									<a class="page-link"
+									<a th:if="${currentPage != lastPage}" class="page-link"
 										th:href="@{'/web/product/' + ${cateID} + '/page/' + ${lastPage} + '?brandID=' +${brandID}}">Trang cuối</a>
+									<span th:if="${currentPage == lastPage}" class="page-link">Trang cuối</span>
 								</li>
 							</ul>
 						</nav>
