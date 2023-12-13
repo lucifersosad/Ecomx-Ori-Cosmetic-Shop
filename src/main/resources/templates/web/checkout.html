@@ -64,45 +64,45 @@
 
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="fullName">Họ và tên</label> <input type="text"
+									<label for="fullName">Họ và tên*</label> <input type="text"
 										id="fullName" class="form-control"
 										placeholder="Họ và tên của bạn" th:value="${user.fullName}"
-										th:name="fullName" disabled>
+										th:name="fullName" disabled required>
 								</div>
 							</div>
 
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="phone">Số điện thoại</label> <input type="text"
+									<label for="phone">Số điện thoại*</label> <input type="text"
 										id="phone" th:name="phone" class="form-control"
 										th:value="${user.phone}" placeholder="Số điện thoại của bạn"
-										disabled>
+										disabled required>
 								</div>
 							</div>
 
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="city">Tỉnh/Thành phố</label> <input type="text"
+									<label for="city">Tỉnh/Thành phố*</label> <input type="text"
 										id="city" name="city" class="form-control" th:value="${city}"
-										disabled>
+										disabled required>
 								</div>
 							</div>
 
 							<div class="form-group col-md-12">
-								<label for="district">Quận/Huyện</label> <input type="text"
+								<label for="district">Quận/Huyện*</label> <input type="text"
 									id="district" name="district" class="form-control"
-									th:value="${district}" disabled>
+									th:value="${district}" disabled required>
 							</div>
 
 							<div class="form-group col-md-12">
-								<label for="town">Xã/Phường</label> <input type="text" id="town"
-									name="town" class="form-control" th:value="${town}" disabled>
+								<label for="town">Xã/Phường*</label> <input type="text" id="town"
+									name="town" class="form-control" th:value="${town}" disabled required>
 							</div>
 
 							<div class="form-group col-md-12">
-								<label for="fname">Địa chỉ</label> <input type="text"
+								<label for="fname">Địa chỉ*</label> <input type="text"
 									id="address" name="address" class="form-control"
-									th:value="${homeaddress}" disabled>
+									th:value="${homeaddress}" disabled th:required>
 							</div>
 						</div>
 					</form>
@@ -136,10 +136,10 @@
 										<div class="product-info">
 											<div class="row align-items-center">
 												<div class="col-md-9">
-													<div class="quantity product-name">Subtotal</div>
+													<div class="quantity product-name text-body-tertiary">Tạm tính</div>
 												</div>
 												<div class="col-md-3">
-													<div class="total" id="subTotalValue">[[${#numbers.formatDecimal(total,
+													<div class="total text-body-tertiary" id="subTotalValue">[[${#numbers.formatDecimal(total,
 														0, 'POINT', 0, 'POINT')}]].000 đ</div>
 												</div>
 											</div>
@@ -147,30 +147,30 @@
 										<div class="product-info">
 											<div class="row align-items-center">
 												<div class="col-md-9">
-													<div class="quantity product-name">Discount</div>
+													<div class="quantity product-name text-body-tertiary">Giảm giá</div>
 												</div>
 												<div class="col-md-3">
-													<div class="total" id="discountvalue">0 đ</div>
+													<div class="total text-body-tertiary" id="discountvalue">0 đ</div>
 												</div>
 											</div>
 										</div>
 										<div class="product-info" id="codOption" style="display: none">
 											<div class="row align-items-center">
 												<div class="col-md-9">
-													<div class="quantity product-name">Shipping cost</div>
+													<div class="quantity product-name text-body-tertiary">Phí cod</div>
 												</div>
 												<div class="col-md-3">
-													<div class="total" id="codValue">30.000 đ</div>
+													<div class="total text-body-tertiary" id="codValue">30.000 đ</div>
 												</div>
 											</div>
 										</div>
 										<div class="product-info">
 											<div class="row align-items-center">
 												<div class="col-md-9">
-													<div class="quantity product-name">Order Total</div>
+													<div class="quantity product-name fw-bold">Tổng</div>
 												</div>
 												<div class="col-md-3">
-													<div class="total" id="totalValue">[[${#numbers.formatDecimal(total,
+													<div class="total fw-bold" id="totalValue">[[${#numbers.formatDecimal(total,
 														0, 'POINT', 0, 'POINT')}]].000 đ</div>
 												</div>
 											</div>
