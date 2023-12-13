@@ -211,8 +211,6 @@ public class ProductWebController {
 		}
 		return "web/search-product";
 	}
-	
-	
 	@GetMapping("/{cateID}/page/{pageNo}")
 	public String viewProduct(
 			ModelMap model,
@@ -272,6 +270,7 @@ public class ProductWebController {
 				listPro = listPro.stream()
 			            .filter(product -> product.getBrand().getBrandId().equals(brandID))
 			            .collect(Collectors.toList());
+				totalProducts = listPro.size();
 			}
 			if (min_price == 0 && max_price == 0) {
 				model.addAttribute("cateID", cateID);
@@ -350,7 +349,7 @@ public class ProductWebController {
 					model.addAttribute("listAllProduct", filteredList);
 				}
 				model.addAttribute("cateID", cateID);
-				model.addAttribute("countPro", totalProducts);
+				model.addAttribute("countPro", filteredList.size());
 				model.addAttribute("currentPage", pageNo);
 
 				double minPriceSale = listPro.stream()
@@ -417,7 +416,7 @@ public class ProductWebController {
 					            .collect(Collectors.toList());
 					}
 					model.addAttribute("cateID", cateID);
-					model.addAttribute("countPro", totalProducts);
+					model.addAttribute("countPro", listPro.size());
 					if (orderby.equals("menu_order")) {
 						model.addAttribute("listAllProduct", listPro);
 	
@@ -496,7 +495,7 @@ public class ProductWebController {
 						model.addAttribute("listAllProduct", filteredList);
 					}
 					model.addAttribute("cateID", cateID);
-					model.addAttribute("countPro", totalProducts);
+					model.addAttribute("countPro", filteredList.size());
 					
 					model.addAttribute("currentPage", pageNo);
 					double minPriceSale = listPro.stream()
