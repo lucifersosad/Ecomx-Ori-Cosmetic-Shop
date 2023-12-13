@@ -206,3 +206,8 @@
 	flex-direction: column;
 	justify-content: space-between;
 }
+
+.product-detail .btn-quantity-cart:hover {
+	background-color: var(--color-primary);
+	color: #fff;
+}

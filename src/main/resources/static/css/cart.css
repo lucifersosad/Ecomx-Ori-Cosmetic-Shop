@@ -69,3 +69,14 @@
 	border-bottom-color: var(--color-primary) !important;
 	border-right: none !important;
 }
+
+.cart .btn-quantity:active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.cart .btn-back:active {
+    background-color: #fff;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}

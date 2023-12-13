@@ -360,13 +360,15 @@ $(document).ready(function() {
         $('.quantityInputCart').on('change', function() {
             var newValue = parseInt($(this).val());
             var stock = parseInt($(this).data('stock'));
+            console.log(newValue + " " + stock);
 
             if (isNaN(newValue) || newValue <= 0 || newValue > stock) {
                 $(this).val($(this).data('initial-value'));
             } else {
+				$(this).val(newValue);
                 console.log("Giá trị mới hợp lệ:", newValue);
             }
-            window.location.reload();
+            
         });
     });
 
