@@ -59,30 +59,18 @@
 	                <button class="btn btn-outline-primary btn-sm btn-block btn-back">← Tiếp tục xem sản phẩm</button>
 	              </div>
 	            </div>
-	            <div class="row">
-	              <div class="col-md-12">
-	                <label class="text-black h4" for="coupon">Coupon</label>
-	                <p>Enter your coupon code if you have one.</p>
-	              </div>
-	              <div class="col-md-8 mb-3 mb-md-0">
-	                <input type="text" class="form-control py-3" id="coupon" placeholder="Mã ưu đãi">
-	              </div>
-	              <div class="col-md-4">
-	                <button class="btn btn-primary btn-sm px-4 btn-grey">Áp dụng</button>
-	              </div>
-	            </div>
 	          </div>
 	          <div class="col-md-6 pl-5">
 	            <div class="row justify-content-end">
 	              <div class="col-md-7">
 	                <div class="row">
 	                  <div class="col-md-12 text-end border-bottom mb-5">
-	                    <h4 class="text-black text-uppercase">Cart Totals</h4> 
+	                    <h4 class="text-black text-uppercase">Cộng giỏ hàng</h4> 
 	                  </div>
 	                </div>
 	                <div class="row mb-3">
 	                  <div class="col-md-6">
-	                    <span class="text-black">Subtotal</span>
+	                    <span class="text-black">Tạm tính</span>
 	                  </div>
 	                  <div class="col-md-6 text-end">
 	                    <strong class="text-black">[[${#numbers.formatDecimal(total, 0, 'POINT', 0, 'POINT')}]].000 đ</strong>
@@ -90,7 +78,7 @@
 	                </div>
 	                <div class="row mb-5">
 	                  <div class="col-md-6">
-	                    <span class="text-black">Total</span>
+	                    <span class="text-black">Tổng</span>
 	                  </div>
 	                  <div class="col-md-6 text-end">
 	                    <strong class="text-black">[[${#numbers.formatDecimal(total, 0, 'POINT', 0, 'POINT')}]].000 đ</strong>

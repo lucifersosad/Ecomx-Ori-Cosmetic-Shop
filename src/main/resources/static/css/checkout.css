@@ -77,15 +77,15 @@
 	font-size: 14px;
 	padding: 3px 15px;
 	border-radius: 0;
-	background-color: var(- -color-primary);
+	background-color: var(--color-primary);
 	border-color: #fff;
 	text-transform: uppercase;
 }
 
 .checkout .btn-update:hover {
 	background-color: #fff;
-	color: var(- -color-primary);
-	border: 1px solid var(- -color-primary);
+	color: var(--color-primary);
+	border: 1px solid var(--color-primary);
 }
 
 .colorlib-form {
