@@ -20,4 +20,5 @@ public class UserModel {
 	private Boolean active;
 	private Boolean isEdit=false;
 	private String code;
+	private Boolean isEnabled;
 }
