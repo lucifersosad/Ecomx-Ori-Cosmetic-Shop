@@ -365,7 +365,7 @@ $(document).ready(function() {
             if (isNaN(newValue) || newValue <= 0 || newValue > stock) {
                 $(this).val($(this).data('initial-value'));
             } else {
-				$(this).val(newValue);
+				/*$(this).val(newValue);*/
                 console.log("Giá trị mới hợp lệ:", newValue);
             }
             

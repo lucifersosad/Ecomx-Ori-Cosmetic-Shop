@@ -15,12 +15,12 @@ import ori.model.OrderModel;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer>{
 	@Query(value = "SELECT IFNULL(sum(CASE WHEN currency=\"VND\" THEN total\r\n"
-			+ "					WHEN currency = \"USD\" THEN total *23000 END ), 0) as total_month FROM `orders`  \r\n"
+			+ "					WHEN currency = \"USD\" THEN total *24390.243902 END ), 0) as total_month FROM `orders`  \r\n"
 			+ "WHERE MONTH(STR_TO_DATE(date, '%d/%m/%Y %H:%i:%s')) = MONTH(CURRENT_DATE()) \r\n"
 			+ "AND status=1 ;", nativeQuery = true)
     int revenueOnCurrentMonth();
 	@Query(value = "SELECT IFNULL(sum(CASE WHEN currency=\"VND\" THEN total\r\n"
-			+ "					WHEN currency = \"USD\" THEN total *23000 END ), 0) as total_month FROM `orders`  \r\n"
+			+ "					WHEN currency = \"USD\" THEN total *24390.243902 END ), 0) as total_month FROM `orders`  \r\n"
 			+ "WHERE YEAR(STR_TO_DATE(date, '%d/%m/%Y %H:%i:%s')) = YEAR(CURRENT_DATE()) \r\n"
 			+ "AND status=1 ;", nativeQuery = true)
     int revenueOnCurrentYear();
@@ -28,7 +28,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer>{
 			+ "FROM `orders` \r\n", nativeQuery = true)
     int rateCompleted();
 	@Query(value = "SELECT IFNULL(sum(CASE WHEN currency=\"VND\" THEN total\r\n"
-			+ "					WHEN currency = \"USD\" THEN total *23000 END ), 0) as total_month FROM `orders`  \r\n"
+			+ "					WHEN currency = \"USD\" THEN total *24390.243902 END ), 0) as total_month FROM `orders`  \r\n"
 			+ "WHERE QUARTER(STR_TO_DATE(date, '%d/%m/%Y %H:%i:%s')) = QUARTER(CURRENT_DATE()) \r\n"
 			+ "AND status=1 ;", nativeQuery = true)
     int revenueOnCurrentQuarter();
@@ -58,7 +58,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer>{
 	        + "  SELECT 1 AS quarter_number UNION SELECT 2 UNION SELECT 3 UNION SELECT 4\r\n"
 	        + ")\r\n"
 	        + "SELECT  IFNULL(SUM(CASE WHEN o.currency = \"VND\" THEN o.total\r\n"
-	        + "                                      WHEN o.currency = \"USD\" THEN o.total * 23000\r\n"
+	        + "                                      WHEN o.currency = \"USD\" THEN o.total * 24390.243902\r\n"
 	        + "                                 END), 0) AS total_sum\r\n"
 	        + "FROM AllQuarters q\r\n"
 	        + "LEFT JOIN wck.orders o ON QUARTER(STR_TO_DATE(o.date, '%d/%m/%Y %H:%i:%s')) = q.quarter_number\r\n"

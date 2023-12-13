@@ -88,9 +88,13 @@ public class CategoryController {
 
 	@GetMapping("delete/{categoryId}")
 	public ModelAndView delet(ModelMap model, @PathVariable("categoryId") Integer categoryId) {
-		categoryService.deleteById(categoryId);
-		model.addAttribute("message", "Category is deleted!!!!");
-		return new ModelAndView("redirect:/admin/categories", model);
+		try {
+			categoryService.deleteById(categoryId);
+			model.addAttribute("message", "Category is deleted!!!!");
+		} catch (Exception e) {
+			model.addAttribute("message", "Cannot delete!!!!");
+		}
+		return new ModelAndView("forward:/admin/categories", model);
 	}
 //	@GetMapping("search")
 	//

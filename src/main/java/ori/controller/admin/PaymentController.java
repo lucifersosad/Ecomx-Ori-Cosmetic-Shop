@@ -24,18 +24,21 @@ import org.springframework.web.client.RestTemplate;
 
 import org.springframework.web.servlet.view.RedirectView;
 
+import jakarta.servlet.http.HttpSession;
 import ori.config.scurity.AuthUser;
 import ori.entity.Cart;
 import ori.entity.Order;
 import ori.entity.OrderDetail;
 import ori.entity.OrderDetailKey;
 import ori.entity.Product;
+import ori.entity.Promotion;
 import ori.entity.User;
 import ori.model.Response;
 import ori.service.ICartService;
 import ori.service.IOrderDetailService;
 import ori.service.IOrderService;
 import ori.service.IProductService;
+import ori.service.IPromotionServive;
 import ori.service.IUserService;
 
 @Controller
@@ -51,6 +54,8 @@ public class PaymentController {
 	ICartService cartService;
 	@Autowired
 	IProductService productService;
+	@Autowired
+	IPromotionServive promoService;
 
 	@GetMapping("/vnpay/option")
 	public String list(ModelMap model, @Validated @RequestParam("amount") double amount) {
@@ -80,7 +85,8 @@ public class PaymentController {
 
 	@GetMapping("/paypal/success")
 	public String successPayPalPayment(@RequestParam("paymentId") String paymentId,
-			@RequestParam("PayerID") String payerId) {
+			@RequestParam("PayerID") String payerId,
+			HttpSession session) {
 		User user = userService.getUserLogged();
 		RestTemplate restTemplate = new RestTemplate();
 		String apiUrl = "http://localhost:8888/api/payment/paypal/success?paymentId=" + paymentId + "&PayerID="
@@ -93,6 +99,12 @@ public class PaymentController {
 				redirectUrl = (String) responseBody; // Ép kiểu sang String nếu là URL
 				// Chuyển hướng trình duyệt tới URL từ API
 			}
+		}
+		Promotion promotion = (Promotion) session.getAttribute("promoCode");
+		if (promotion != null) {
+			promotion.setIs_active(0);
+			promoService.save(promotion);
+			session.removeAttribute("promoCode");
 		}
 		return redirectUrl;
 	}
@@ -116,7 +128,7 @@ public class PaymentController {
 	}
 
 	@GetMapping("/vnpay/return")
-	public String returnVNPAYPayment(ModelMap model, @RequestParam Map<String, String> queryParams) {
+	public String returnVNPAYPayment(ModelMap model, @RequestParam Map<String, String> queryParams, HttpSession session) {
 		User user = userService.getUserLogged();
 		RestTemplate restTemplate = new RestTemplate();
 		StringBuilder queryString = new StringBuilder();
@@ -137,6 +149,12 @@ public class PaymentController {
 		if (response.getStatusCode().is2xxSuccessful()) {
 			boolean status = response.getBody().getStatus();
 			if (status) {
+				Promotion promotion = (Promotion) session.getAttribute("promoCode");
+				if (promotion != null) {
+					promotion.setIs_active(0);
+					promoService.save(promotion);
+					session.removeAttribute("promoCode");
+				}
 				return "web/vnpay/vnpay_success";
 			} else {
 				Object responseBody = response.getBody().getBody();
@@ -150,7 +168,7 @@ public class PaymentController {
 	}
 
 	@GetMapping("/cod")
-	public String codPayment(@Validated @RequestParam("amount") double amount) {
+	public String codPayment(@Validated @RequestParam("amount") double amount, HttpSession session) {
 		User user = userService.getUserLogged();
 		Order order = new Order();
 		order.setUserId(user);
@@ -182,6 +200,12 @@ public class PaymentController {
 			pro.setStock(pro.getStock() - cart.getQuantity());
 			productService.save(pro);
 			cartService.delete(cart);
+		}
+		Promotion promotion = (Promotion) session.getAttribute("promoCode");
+		if (promotion != null) {
+			promotion.setIs_active(0);
+			promoService.save(promotion);
+			session.removeAttribute("promoCode");
 		}
 		return "web/codSuccess";
 	}
