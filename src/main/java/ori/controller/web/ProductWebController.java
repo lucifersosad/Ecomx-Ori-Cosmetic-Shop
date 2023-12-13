@@ -211,8 +211,6 @@ public class ProductWebController {
 		}
 		return "web/search-product";
 	}
-	
-	
 	@GetMapping("/{cateID}/page/{pageNo}")
 	public String viewProduct(
 			ModelMap model,
@@ -232,39 +230,11 @@ public class ProductWebController {
 		model.addAttribute("listAllCategory", listCate);	
 		List<Brand> listBrand = brandService.findAll();
 		model.addAttribute("listAllBrand", listBrand);	
+		int pageSize = 21;
+		int totalProducts = proService.findAll().size(); // Số lượng sản phẩm tổng cộng trong cơ sở dữ liệu
+		int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
 		if (cateID == 0) {
-			int pageSize = 21;
-			int totalProducts = proService.findAll().size(); // Số lượng sản phẩm tổng cộng trong cơ sở dữ liệu
-			int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
-			
-			int startPage, endPage;
-		    if (totalPages <= 5) {
-		        startPage = 1;
-		        if (totalPages > 0)
-		        	endPage = totalPages;
-		        else {
-					endPage = 1;
-					totalPages = 1;
-				}
-		    } else {
-		        if (pageNo <= 3) {
-		            startPage = 1;
-		            endPage = 5;
-		        } else if (pageNo + 1 >= totalPages) {
-		            startPage = totalPages - 4;
-		            endPage = totalPages;
-		        } else {
-		            startPage = pageNo - 2;
-		            endPage = pageNo + 2;
-		        }
-		    }
-		    
-		    model.addAttribute("startPage", startPage);
-		    model.addAttribute("endPage", endPage);
-		    model.addAttribute("lastPage", totalPages);
-			if (pageNo > totalPages) {
-			    pageNo = totalPages; // Đặt pageNo bằng totalPages nếu vượt quá số trang thực tế
-			}
+
 			Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
 			Page<Product> productPage  = proService.findAll(pageable);
 			List<Product> listPro = new ArrayList<>(productPage.getContent()); 
@@ -272,6 +242,7 @@ public class ProductWebController {
 				listPro = listPro.stream()
 			            .filter(product -> product.getBrand().getBrandId().equals(brandID))
 			            .collect(Collectors.toList());
+				totalProducts = listPro.size();
 			}
 			if (min_price == 0 && max_price == 0) {
 				model.addAttribute("cateID", cateID);
@@ -350,7 +321,7 @@ public class ProductWebController {
 					model.addAttribute("listAllProduct", filteredList);
 				}
 				model.addAttribute("cateID", cateID);
-				model.addAttribute("countPro", totalProducts);
+				model.addAttribute("countPro", filteredList.size());
 				model.addAttribute("currentPage", pageNo);
 
 				double minPriceSale = listPro.stream()
@@ -371,18 +342,46 @@ public class ProductWebController {
 				model.addAttribute("min_form", min_price);
 				model.addAttribute("max_form", max_price);
 			}
-			
+			int startPage, endPage;
+			totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+		    if (totalPages <= 5) {
+		        startPage = 1;
+		        if (totalPages > 0)
+		        	endPage = totalPages;
+		        else {
+					endPage = 1;
+					totalPages = 1;
+				}
+		    } else {
+		        if (pageNo <= 3) {
+		            startPage = 1;
+		            endPage = 5;
+		        } else if (pageNo + 1 >= totalPages) {
+		            startPage = totalPages - 4;
+		            endPage = totalPages;
+		        } else {
+		            startPage = pageNo - 2;
+		            endPage = pageNo + 2;
+		        }
+		    }
+			model.addAttribute("startPage", startPage);
+		    model.addAttribute("endPage", endPage);
+		    model.addAttribute("lastPage", totalPages);
+			if (pageNo > totalPages) {
+			    pageNo = totalPages; // Đặt pageNo bằng totalPages nếu vượt quá số trang thực tế
+			}
 		}
 		else {		
 			Optional<Category> optCate = categoryService.findById(cateID);
 			if (optCate.isPresent()) {
-				int pageSize = 27;
-				int totalProducts = proService.findByCategory(optCate.get()).size(); // Số lượng sản phẩm tổng cộng trong cơ sở dữ liệu
-				int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+				 pageSize = 27;
+				 totalProducts = proService.findByCategory(optCate.get()).size(); // Số lượng sản phẩm tổng cộng trong cơ sở dữ liệu
+				 totalPages = (int) Math.ceil((double) totalProducts / pageSize);
 				
 				int startPage, endPage;
 				if (totalPages <= 5) {
 					startPage = 1;
+					endPage = totalPages;
 					if (totalPages > 0)
 						endPage = totalPages;
 					else {
@@ -417,7 +416,7 @@ public class ProductWebController {
 					            .collect(Collectors.toList());
 					}
 					model.addAttribute("cateID", cateID);
-					model.addAttribute("countPro", totalProducts);
+					model.addAttribute("countPro", listPro.size());
 					if (orderby.equals("menu_order")) {
 						model.addAttribute("listAllProduct", listPro);
 	
@@ -496,7 +495,7 @@ public class ProductWebController {
 						model.addAttribute("listAllProduct", filteredList);
 					}
 					model.addAttribute("cateID", cateID);
-					model.addAttribute("countPro", totalProducts);
+					model.addAttribute("countPro", filteredList.size());
 					
 					model.addAttribute("currentPage", pageNo);
 					double minPriceSale = listPro.stream()
