@@ -44,7 +44,7 @@ ul {
 }
 
 .slick-arrow::before {
-	color: #FBA1B7 !important;
+	color: #1a1a5b !important;
 }
 
 .form-control {
@@ -84,12 +84,12 @@ ul {
 }
 
 .checkout__couppon-btn {
-	color: #FBA1B7;
+	color: #1a1a5b;
 	
 }
 
 .checkout__couppon-card {
-	border: 2px dashed #FBA1B7;
+	border: 2px dashed #1a1a5b;
 	padding: 15px 30px 30px 30px ;	
 }
 
@@ -110,7 +110,7 @@ ul {
     vertical-align: middle;
     color: #212529; }
   .site-blocks-table tbody tr:first-child td {
-    border-top: 1px solid #ee4266 !important; }
+    border-top: 1px solid #2db201 !important; }
 
 .site-block-order-table th {
   border-top: none !important;
@@ -171,6 +171,6 @@ ul {
 }
 
 .footer {
-	background-color: #FFF0F5;
+	background-color: #cecbcb;
 }
  

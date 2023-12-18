@@ -52,11 +52,11 @@
 }
 
 .page-product .overlay span {
-	background-color: #FBA1B7;
+	background-color: #2550ec;
 	display: block;
 	width: 100%;
 	text-align: center;
-	color: #fff;
+	color: #ffffff;
 	text-transform: uppercase;
 }
 
@@ -93,6 +93,6 @@
 }
 
 .irs-handle:hover {
-    background-color: #FFF0F5 !important;
+    background-color: #9acdf1 !important;
 }
 

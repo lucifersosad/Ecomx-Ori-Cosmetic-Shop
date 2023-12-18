@@ -1,5 +1,5 @@
 .custom-navbar {
-	background: #FFF6F6 !important;
+	background: #d5f7fa !important;
 	padding-top: 20px;
 	padding-bottom: 20px; 
 }
@@ -7,7 +7,7 @@
 .custom-navbar .navbar-brand {
 	font-size: 32px;
 	font-weight: 600;
-	color: #FBA1B7
+	color: #1a1a5b
 }
 
 .custom-navbar .navbar-brand>span {
@@ -48,7 +48,7 @@
 		bottom: 0;
 		left: 8px;
 		right: 8px;
-		background: #fba1b7;
+		background: #1a1a5b;
 		height: 5px;
 		opacity: 1;
 		visibility: visible;
@@ -69,7 +69,7 @@
 
 .custom-navbar .custom-navbar-nav li.active a {
 	opacity: 1;
-	color: #FBA1B7 !important
+	color: #1a1a5b !important
 }
 
 .custom-navbar .custom-navbar-nav li.active a:before {
@@ -106,7 +106,7 @@
 }
 
 .custom-navbar .custom-navbar-cta .nav-link:hover {
-	color: #FBA1B7;
+	color: #1a1a5b;
 }
 
 .section-title {
@@ -132,21 +132,21 @@
 	font-size: 27px;
 }
 .featured .col-border {
-	border-right: 1px solid #ececec;
-	border-left: 1px solid #ececec;
+	border-right: 1px solid #cecbcb;
+	border-left: 1px solid #cecbcb;
 }
 .featured-box {
 	padding-bottom: 30px;
 }
 .featured-box .featured-box__icon {
 	font-size: 22px;
-	color: #fff;
+	color: #cecbcb;
 	display: inline-flex;
 	padding: 10px;
 	border-radius: 50%;
 	align-items: center;
 	justify-content: center;
-	background-color: #FBA1B7;
+	background-color: #53535e;
 } 
 .featured-box .featured-box__title {
 	font-weight: 500;
@@ -155,7 +155,7 @@
 }
 .rating {
 	height:  300px;
-	background-color: #FBA1B7;
+	background-color: #53535e;
 	padding-top: 80px;
 	margin-top: 10px;
 }
@@ -168,21 +168,21 @@
 	color: #ffdbaa;
 }
 .rating .rating__content {
-	color: #fff;
+	color: #cecbcb;
 	font-style: italic !important;
 }
 .rating .rating__user {
-	color: #fff;
+	color: #cecbcb;
 }
 .rating .slick-dots .slick-dots li button:before{
-	color: #fff !important;
+	color: #cecbcb !important;
 }
 .rating .slick-dots li.slick-active button:before {
-	color: #fff !important;
+	color: #cecbcb !important;
 }
 .rating .slick-arrow::before {
 	font-size: 35px;
-	color: #fff !important;
+	color: #cecbcb !important;
 }
 
 .home .section-category .card {
@@ -309,7 +309,7 @@
 }
 
 .home .overlay span {
-	background-color: #FBA1B7;
+	background-color: #53535e;
 	display: block;
 	width: 100%;
 	text-align: center;

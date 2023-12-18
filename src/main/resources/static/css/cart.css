@@ -31,15 +31,15 @@
 
 .site-section .btn-primary{
     color: #fff;
-    background-color: #FBA1B7;
-    border-color: #FBA1B7;
+    background-color: #2550ec;
+    border-color: #2550ec;
 }
 
 .site-section .btn-outline-primary{
-	color: #FBA1B7;
+	color: #2a1194;
     background-color: transparent;
     background-image: none;
-    border-color: #FBA1B7;
+    border-color: #2a1194;
 }
 
 .site-section .btn-grey{
